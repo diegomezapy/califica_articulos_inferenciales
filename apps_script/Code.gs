@@ -13,11 +13,11 @@
  */
 
 // ───────────────────── CONFIG ─────────────────────────────────────────────
-const FOLDER_ID    = '16qV-NvEplMmXI0ZELAr6TW0C05fMw-Jq'; // carpeta Drive con los PDFs auditables
-const SHEET_ID     = '';                                  // ← rellenar tras correr setup_inicial()
-const CSV_FILE_ID  = '';                                  // ← rellenar con file ID del CSV en Drive (subido manualmente)
+const FOLDER_ID  = '16qV-NvEplMmXI0ZELAr6TW0C05fMw-Jq';   // carpeta Drive con los PDFs auditables
+const SHEET_ID   = '';                                    // ← rellenar tras correr setup_inicial()
+const CSV_URL    = 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/articulos_auditables_346.csv';
 
-const HOJA_AUDITABLES   = 'auditables';
+const HOJA_AUDITABLES     = 'auditables';
 const HOJA_CALIFICACIONES = 'calificaciones';
 
 // ───────────────────── ENTRYPOINT WEB ─────────────────────────────────────
@@ -36,25 +36,26 @@ function include(filename) {
 
 // ───────────────────── SETUP INICIAL ──────────────────────────────────────
 /**
- * Crea un Google Sheet nuevo con dos hojas: auditables (346 registros del
- * CSV) y calificaciones (vacía). Imprime el SHEET_ID en el log para que se
- * pegue en la constante de arriba.
+ * Crea un Google Sheet nuevo con dos hojas: "auditables" (346 registros
+ * descargados desde el CSV publicado en el repo de GitHub) y "calificaciones"
+ * (vacía, append-only). Imprime el SHEET_ID en el log para pegar en la
+ * constante de arriba.
  */
 function setup_inicial() {
-  if (!CSV_FILE_ID) {
-    throw new Error('Falta CSV_FILE_ID. Subir articulos_auditables_346.csv a Drive y pegar su ID.');
-  }
   const ss = SpreadsheetApp.create('califica_articulos_inferenciales — calificaciones');
   Logger.log('SHEET creado: ' + ss.getId() + ' (pega este ID en SHEET_ID)');
 
-  // Hoja auditables
-  const csvBlob = DriveApp.getFileById(CSV_FILE_ID).getBlob().getDataAsString('UTF-8');
-  const data    = Utilities.parseCsv(csvBlob);
-  const hojaA   = ss.getSheets()[0].setName(HOJA_AUDITABLES);
+  // Hoja auditables — descarga directa del CSV en GitHub (raw)
+  const resp = UrlFetchApp.fetch(CSV_URL, { muteHttpExceptions: true });
+  if (resp.getResponseCode() !== 200) {
+    throw new Error('No se pudo descargar el CSV: HTTP ' + resp.getResponseCode());
+  }
+  const data  = Utilities.parseCsv(resp.getContentText('UTF-8'));
+  const hojaA = ss.getSheets()[0].setName(HOJA_AUDITABLES);
   hojaA.getRange(1, 1, data.length, data[0].length).setValues(data);
   hojaA.setFrozenRows(1);
 
-  // Hoja calificaciones
+  // Hoja calificaciones (append-only, una fila por evaluación humana)
   const hojaC = ss.insertSheet(HOJA_CALIFICACIONES);
   hojaC.getRange(1, 1, 1, 12).setValues([[
     'timestamp', 'pdf_id', 'pdf_nombre',
@@ -64,8 +65,8 @@ function setup_inicial() {
   ]]);
   hojaC.setFrozenRows(1);
 
-  Logger.log('Auditables filas: ' + (data.length - 1));
-  Logger.log('Pegar SHEET_ID arriba y volver a desplegar la web app.');
+  Logger.log('Auditables cargados: ' + (data.length - 1) + ' filas');
+  Logger.log('Pegá el SHEET_ID arriba en Code.gs y volvé a publicar la web app.');
   return ss.getId();
 }
 

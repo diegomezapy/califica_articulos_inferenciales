@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<base target="_top">
+<?!= include('styles'); ?>
+</head>
+<body>
+
+<header>
+  <h1>Estadísticas — acuerdo humano vs IA</h1>
+  <a href="?">← Volver a calificar</a>
+</header>
+
+<main style="grid-template-columns: 1fr; height: auto; overflow: auto;">
+  <div id="root">
+    <div class="pdf-empty"><span class="loading"></span></div>
+  </div>
+</main>
+
+<script>
+  google.script.run
+    .withSuccessHandler(render)
+    .withFailureHandler(err => alert('Error: ' + err.message))
+    .getEstadisticas();
+
+  function pct(x) { return (x == null) ? '—' : (x * 100).toFixed(1) + '%'; }
+  function num(x) { return (x == null) ? '—' : x.toFixed(3); }
+
+  function render(s) {
+    if (!s.n) {
+      document.getElementById('root').innerHTML =
+        '<div class="pdf-empty">Aún no calificaste ningún artículo.</div>';
+      return;
+    }
+    const tarjetas = (label, valor, hint) => `
+      <div class="stat-card">
+        <div class="num">${valor}</div>
+        <div class="lbl">${label}</div>
+        ${hint ? '<div style="font-size:11px;color:var(--muted);margin-top:6px;">' + hint + '</div>' : ''}
+      </div>`;
+
+    const matrizHTML = renderMatriz(s.matriz, s.labels);
+
+    document.getElementById('root').innerHTML = `
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px;">
+        ${tarjetas('Calificados', s.n)}
+        ${tarjetas('Acuerdo en A', pct(s.acuerdoA), 'Muestreo no probab.')}
+        ${tarjetas('Acuerdo en B', pct(s.acuerdoB), 'Advierte límites')}
+        ${tarjetas('Acuerdo en C', pct(s.acuerdoC), 'Extrapola a población')}
+        ${tarjetas('Acuerdo en D', pct(s.acuerdoD), 'Veredicto integral')}
+        ${tarjetas('Cohen\\'s κ (D)', num(s.kappa), 'Acuerdo corregido por azar')}
+      </div>
+
+      <div style="background: var(--card); border:1px solid var(--line); border-radius:8px; padding:16px; margin-top:16px;">
+        <h3 style="margin: 0 0 10px;">Matriz de confusión — Veredicto (D)</h3>
+        ${matrizHTML}
+        <div style="font-size:12px; color: var(--muted); margin-top: 10px;">
+          Filas = humano (vos). Columnas = IA. Diagonal en verde = acuerdos.
+        </div>
+      </div>
+
+      <div style="font-size:13px; color:var(--muted); margin-top:16px;">
+        Interpretación de κ (Landis & Koch, 1977): &lt; 0 desacuerdo | 0–0,20 leve | 0,21–0,40 aceptable |
+        0,41–0,60 moderado | 0,61–0,80 sustancial | 0,81–1,00 casi perfecto.
+      </div>
+    `;
+  }
+
+  function renderMatriz(M, labels) {
+    let h = '<table class="matriz"><thead><tr><th></th>';
+    labels.forEach(l => h += '<th>' + l + '<br><span style="font-size:10px;">(IA)</span></th>');
+    h += '</tr></thead><tbody>';
+    for (let i = 0; i < labels.length; i++) {
+      h += '<tr><th>' + labels[i] + '<br><span style="font-size:10px;">(humano)</span></th>';
+      for (let j = 0; j < labels.length; j++) {
+        const cls = (i === j) ? 'diag' : '';
+        h += '<td class="' + cls + '">' + M[i][j] + '</td>';
+      }
+      h += '</tr>';
+    }
+    h += '</tbody></table>';
+    return h;
+  }
+</script>
+</body>
+</html>

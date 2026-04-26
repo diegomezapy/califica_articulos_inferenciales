@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<base target="_top">
+<?!= include('styles'); ?>
+</head>
+<body>
+
+<header>
+  <h1>Califica artículos inferenciales — doble ciego</h1>
+  <span class="progreso" id="progreso">cargando…</span>
+  <a href="?page=stats" target="_blank">Ver estadísticas →</a>
+</header>
+
+<main>
+
+  <section class="pdf-panel" id="pdfPanel">
+    <div class="pdf-empty"><span class="loading"></span></div>
+  </section>
+
+  <section class="form-panel" id="formPanel">
+    <div class="pdf-empty"><span class="loading"></span></div>
+  </section>
+
+</main>
+
+<script>
+  let actual = null;          // PDF actualmente mostrado
+  let yaSubmitido = false;    // bloquea doble submit
+
+  function mostrarSiguiente() {
+    yaSubmitido = false;
+    document.getElementById('pdfPanel').innerHTML = '<div class="pdf-empty"><span class="loading"></span></div>';
+    document.getElementById('formPanel').innerHTML = '<div class="pdf-empty"><span class="loading"></span></div>';
+    google.script.run
+      .withSuccessHandler(renderPDF)
+      .withFailureHandler(err => alert('Error: ' + err.message))
+      .getSiguientePDF();
+  }
+
+  function renderPDF(data) {
+    actual = data;
+    document.getElementById('progreso').textContent =
+      data.calificados + ' / ' + data.total + ' calificados';
+
+    if (data.fin) {
+      document.getElementById('pdfPanel').innerHTML =
+        '<div class="pdf-empty"><h2>¡Listo!</h2><p>Calificaste los ' + data.total + ' artículos.</p>' +
+        '<p><a href="?page=stats">Ver estadísticas finales</a></p></div>';
+      document.getElementById('formPanel').innerHTML = '';
+      return;
+    }
+
+    // Panel PDF
+    if (data.drive_preview_url) {
+      document.getElementById('pdfPanel').innerHTML =
+        '<iframe src="' + data.drive_preview_url + '" allow="autoplay"></iframe>';
+    } else {
+      document.getElementById('pdfPanel').innerHTML =
+        '<div class="pdf-empty"><p>PDF no encontrado en Drive: <code>' + data.pdf_nombre + '</code></p>' +
+        '<button class="btn-skip" onclick="omitir()">Omitir y siguiente →</button></div>';
+    }
+
+    // Panel formulario
+    document.getElementById('formPanel').innerHTML = renderForm(data);
+  }
+
+  function renderForm(d) {
+    return `
+      <h2>Calificación humana</h2>
+      <div class="meta">
+        PDF <b>${d.pdf_id} / ${d.total}</b> · ${escape_(d.revista || '')} · ${escape_(d.pais || '')} · ${escape_(d.macroarea || '')} · ${escape_(d.anio || '')}
+      </div>
+      <div class="titulo">${escape_(d.titulo || d.pdf_nombre)}</div>
+
+      <form id="frm" onsubmit="event.preventDefault(); submitForm();">
+        <fieldset>
+          <legend>A — Muestreo no probabilístico
+            <span class="desc">¿Conveniencia, voluntarios, bola de nieve, intencional, consecutivo?</span></legend>
+          <div class="opts">
+            <label><input type="radio" name="A" value="1" required><span>Sí</span></label>
+            <label><input type="radio" name="A" value="0"><span>No</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>B — Advierte límites del muestreo
+            <span class="desc">¿En cualquier parte del texto reconoce la limitación?</span></legend>
+          <div class="opts">
+            <label><input type="radio" name="B" value="1" required><span>Sí</span></label>
+            <label><input type="radio" name="B" value="0"><span>No</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>C — Extrapola a una población más amplia
+            <span class="desc">¿Generaliza a un país, profesión, grupo etario, etc.?</span></legend>
+          <div class="opts">
+            <label><input type="radio" name="C" value="1" required><span>Sí</span></label>
+            <label><input type="radio" name="C" value="0"><span>No</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>D — Veredicto integral
+            <span class="desc">Tu juicio final, independientemente de la regla A &amp; C automática.</span></legend>
+          <div class="opts" style="flex-direction: column;">
+            <label><input type="radio" name="D" value="FF clasica" required><span>Falla fuerte clásica (no advierten + generalizan)</span></label>
+            <label><input type="radio" name="D" value="FF con reconocimiento"><span>Falla fuerte con reconocimiento (advierten pero generalizan igual)</span></label>
+            <label><input type="radio" name="D" value="Debilidad importante"><span>Debilidad importante</span></label>
+            <label><input type="radio" name="D" value="Sin falla relevante"><span>Sin falla relevante</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Notas (opcional)</legend>
+          <textarea name="notas" placeholder="Justificación o comentarios"></textarea>
+        </fieldset>
+
+        <div class="acciones">
+          <button type="submit" class="btn-primary" id="btnSubmit">Enviar y ver contraste IA</button>
+        </div>
+      </form>
+
+      <div id="contraste"></div>
+    `;
+  }
+
+  function submitForm() {
+    if (yaSubmitido) return;
+    const frm = document.getElementById('frm');
+    const fd = new FormData(frm);
+    const payload = {
+      pdf_id: actual.pdf_id,
+      A: fd.get('A'),
+      B: fd.get('B'),
+      C: fd.get('C'),
+      D: fd.get('D'),
+      notas: fd.get('notas') || ''
+    };
+    if (!payload.A || !payload.B || !payload.C || !payload.D) {
+      alert('Completá los 4 campos.');
+      return;
+    }
+    yaSubmitido = true;
+    document.getElementById('btnSubmit').disabled = true;
+    document.getElementById('btnSubmit').innerHTML = '<span class="loading"></span> Guardando…';
+    google.script.run
+      .withSuccessHandler(renderContraste)
+      .withFailureHandler(err => { alert('Error: ' + err.message); yaSubmitido = false; })
+      .submitCalificacion(payload);
+  }
+
+  function renderContraste(c) {
+    const fila = (lbl, h, i, ok) => `
+      <div class="row">
+        <span class="lbl">${lbl}</span>
+        <span>Humano: <b>${h}</b></span>
+        <span>IA: <b>${i}</b></span>
+        <span class="${ok ? 'badge-ok' : 'badge-no'}">${ok ? '✓' : '✗'}</span>
+      </div>`;
+    document.getElementById('contraste').innerHTML = `
+      <div class="contraste">
+        <h3>Contraste con IA</h3>
+        ${fila('A', c.A_humano, c.A_ia, c.A_match)}
+        ${fila('B', c.B_humano, c.B_ia, c.B_match)}
+        ${fila('C', c.C_humano, c.C_ia, c.C_match)}
+        ${fila('D', c.D_humano, c.D_ia, c.D_match)}
+        ${c.motivo_ia ? '<div class="motivo-ia"><b>Motivo IA:</b> ' + escape_(c.motivo_ia) + '</div>' : ''}
+        <div class="acciones">
+          <button class="btn-primary" onclick="mostrarSiguiente()">Siguiente PDF →</button>
+        </div>
+      </div>`;
+  }
+
+  function omitir() { mostrarSiguiente(); }
+
+  function escape_(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  // Arranque
+  mostrarSiguiente();
+</script>
+</body>
+</html>

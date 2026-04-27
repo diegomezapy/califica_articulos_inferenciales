@@ -201,11 +201,83 @@ function _buscarPDFEnDrive(pdfNombre) {
   const c = cache.get(k);
   if (c) return c;
 
+  // 1) Intento directo: archivo dentro de FOLDER_ID
   const folder = DriveApp.getFolderById(FOLDER_ID);
-  const files  = folder.getFilesByName(pdfNombre);
-  if (!files.hasNext()) return '';
-  const id  = files.next().getId();
-  const url = 'https://drive.google.com/file/d/' + id + '/preview';
-  cache.put(k, url, 21600); // 6 h
-  return url;
+  let files = folder.getFilesByName(pdfNombre);
+  if (files.hasNext()) {
+    const id = files.next().getId();
+    const url = 'https://drive.google.com/file/d/' + id + '/preview';
+    cache.put(k, url, 21600);
+    return url;
+  }
+
+  // 2) Búsqueda recursiva en subcarpetas
+  const idRecursivo = _buscarRecursivo(folder, pdfNombre);
+  if (idRecursivo) {
+    const url = 'https://drive.google.com/file/d/' + idRecursivo + '/preview';
+    cache.put(k, url, 21600);
+    return url;
+  }
+
+  // 3) Búsqueda global por nombre (todo el Drive del usuario, incluye shared drives)
+  // Última red de seguridad: si el archivo está fuera del FOLDER_ID por alguna razón.
+  const it = DriveApp.getFilesByName(pdfNombre);
+  if (it.hasNext()) {
+    const id = it.next().getId();
+    const url = 'https://drive.google.com/file/d/' + id + '/preview';
+    cache.put(k, url, 21600);
+    return url;
+  }
+
+  return '';
+}
+
+function _buscarRecursivo(folder, pdfNombre) {
+  const subs = folder.getFolders();
+  while (subs.hasNext()) {
+    const sub = subs.next();
+    const f = sub.getFilesByName(pdfNombre);
+    if (f.hasNext()) return f.next().getId();
+    const id = _buscarRecursivo(sub, pdfNombre);
+    if (id) return id;
+  }
+  return '';
+}
+
+/**
+ * Función diagnóstica: imprime en el log qué hay en la carpeta y dónde.
+ * Ejecutar manualmente desde el editor si los PDFs no se encuentran.
+ */
+function diagnostico_carpeta() {
+  const folder = DriveApp.getFolderById(FOLDER_ID);
+  Logger.log('Carpeta: ' + folder.getName() + ' (' + folder.getId() + ')');
+
+  let nFiles = 0;
+  const itF = folder.getFiles();
+  while (itF.hasNext() && nFiles < 5) {
+    const f = itF.next();
+    Logger.log('  archivo: ' + f.getName());
+    nFiles++;
+  }
+  if (itF.hasNext()) Logger.log('  (más archivos no listados)');
+  Logger.log('Total archivos directos: ' + (nFiles >= 5 ? '≥5' : nFiles));
+
+  let nSubs = 0;
+  const itS = folder.getFolders();
+  while (itS.hasNext()) {
+    const s = itS.next();
+    nSubs++;
+    let cnt = 0;
+    const itFS = s.getFiles();
+    while (itFS.hasNext()) { itFS.next(); cnt++; }
+    Logger.log('  subcarpeta: ' + s.getName() + ' (' + cnt + ' archivos)');
+  }
+  Logger.log('Total subcarpetas: ' + nSubs);
+
+  // Probar la búsqueda con un PDF de ejemplo
+  const muestra = '00033_Praxis_Educativa_2025.pdf';
+  Logger.log('---');
+  Logger.log('Probando búsqueda de: ' + muestra);
+  const url = _buscarPDFEnDrive(muestra);
+  Logger.log('Resultado: ' + (url ? 'ENCONTRADO ' + url : 'NO ENCONTRADO'));
 }

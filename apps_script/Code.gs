@@ -14,7 +14,7 @@
 
 // ───────────────────── CONFIG ─────────────────────────────────────────────
 const FOLDER_ID  = '16qV-NvEplMmXI0ZELAr6TW0C05fMw-Jq';   // carpeta Drive con los PDFs auditables
-const SHEET_ID   = '';                                    // ← rellenar tras correr setup_inicial()
+const SHEET_ID   = '1TU66HYq5_3jiIJ9kLTL-DLrC7Jrhdr3amSACxVnWwPU';
 const CSV_URL    = 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/articulos_auditables_346.csv';
 
 const HOJA_AUDITABLES     = 'auditables';

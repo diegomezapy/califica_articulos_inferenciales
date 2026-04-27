@@ -1,24 +1,39 @@
 /**
  * califica_articulos_inferenciales — backend Apps Script
  *
- * Flujo doble ciego:
- * 1. La app muestra un PDF auditable (de los 346) sin revelar la calificación IA.
- * 2. El humano califica A, B, C y un veredicto integral (D).
- * 3. Tras submit, se muestra el contraste con la IA y se calcula el acuerdo.
- *
- * Setup obligatorio antes del primer uso:
- *   1) Editar las constantes FOLDER_ID, SHEET_ID y CSV_FILE_ID abajo.
- *   2) Ejecutar setup_inicial() una sola vez para crear el Sheet y poblar
- *      la hoja "auditables" con los 346 registros del CSV.
+ * Flujo doble ciego, multi-revisor:
+ * 1. La app pide al revisor que se identifique con un nombre (persistido en localStorage).
+ * 2. Muestra un PDF auditable sin revelar la calificación IA.
+ * 3. El humano califica A, B, C y un veredicto integral (D), incluyendo "No evaluable".
+ * 4. Tras submit, se muestra el contraste con la IA y se guarda con el nombre del revisor.
+ * 5. El mismo PDF puede ser calificado por múltiples revisores; el dashboard
+ *    contrasta IA vs humanos (todos), y entre humanos (kappa pairwise).
  */
 
 // ───────────────────── CONFIG ─────────────────────────────────────────────
-const FOLDER_ID  = '16qV-NvEplMmXI0ZELAr6TW0C05fMw-Jq';   // carpeta Drive con los PDFs auditables
+const FOLDER_ID  = '16qV-NvEplMmXI0ZELAr6TW0C05fMw-Jq';
 const SHEET_ID   = '1TU66HYq5_3jiIJ9kLTL-DLrC7Jrhdr3amSACxVnWwPU';
 const CSV_URL    = 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/articulos_auditables_346.csv';
 
 const HOJA_AUDITABLES     = 'auditables';
 const HOJA_CALIFICACIONES = 'calificaciones';
+const HOJA_COMPARACION    = 'comparacion';
+
+// Columnas de la hoja calificaciones (orden fijo)
+const COLS_CAL = ['timestamp', 'pdf_id', 'pdf_nombre',
+                  'A_humano', 'B_humano', 'C_humano', 'D_humano',
+                  'notas', 'A_ia', 'B_ia', 'C_ia', 'veredicto_ia',
+                  'revisor'];
+
+// Categorías válidas para D (incluye "No evaluable" para casos donde el humano
+// determina que el PDF no debió haber sido auditado)
+const CATEGORIAS_D = [
+  'FF clasica',
+  'FF con reconocimiento',
+  'Debilidad importante',
+  'Sin falla relevante',
+  'No evaluable'
+];
 
 // ───────────────────── ENTRYPOINT WEB ─────────────────────────────────────
 function doGet(e) {
@@ -34,18 +49,11 @@ function include(filename) {
   return HtmlService.createHtmlOutputFromFile(filename).getContent();
 }
 
-// ───────────────────── SETUP INICIAL ──────────────────────────────────────
-/**
- * Crea un Google Sheet nuevo con dos hojas: "auditables" (346 registros
- * descargados desde el CSV publicado en el repo de GitHub) y "calificaciones"
- * (vacía, append-only). Imprime el SHEET_ID en el log para pegar en la
- * constante de arriba.
- */
+// ───────────────────── SETUP / MIGRACIÓN ─────────────────────────────────
 function setup_inicial() {
   const ss = SpreadsheetApp.create('califica_articulos_inferenciales — calificaciones');
   Logger.log('SHEET creado: ' + ss.getId() + ' (pega este ID en SHEET_ID)');
 
-  // Hoja auditables — descarga directa del CSV en GitHub (raw)
   const resp = UrlFetchApp.fetch(CSV_URL, { muteHttpExceptions: true });
   if (resp.getResponseCode() !== 200) {
     throw new Error('No se pudo descargar el CSV: HTTP ' + resp.getResponseCode());
@@ -55,44 +63,84 @@ function setup_inicial() {
   hojaA.getRange(1, 1, data.length, data[0].length).setValues(data);
   hojaA.setFrozenRows(1);
 
-  // Hoja calificaciones (append-only, una fila por evaluación humana)
   const hojaC = ss.insertSheet(HOJA_CALIFICACIONES);
-  hojaC.getRange(1, 1, 1, 12).setValues([[
-    'timestamp', 'pdf_id', 'pdf_nombre',
-    'A_humano', 'B_humano', 'C_humano', 'D_humano',
-    'notas',
-    'A_ia', 'B_ia', 'C_ia', 'veredicto_ia'
-  ]]);
+  hojaC.getRange(1, 1, 1, COLS_CAL.length).setValues([COLS_CAL]);
   hojaC.setFrozenRows(1);
+
+  ss.insertSheet(HOJA_COMPARACION);
+  actualizar_hoja_comparacion();
 
   Logger.log('Auditables cargados: ' + (data.length - 1) + ' filas');
   Logger.log('Pegá el SHEET_ID arriba en Code.gs y volvé a publicar la web app.');
   return ss.getId();
 }
 
+/**
+ * Migración: si la hoja calificaciones existente NO tiene la columna "revisor",
+ * la agrega al final y rellena las filas existentes con "(anonimo)".
+ * Idempotente: si ya está, no hace nada.
+ */
+function migrar_agregar_columna_revisor() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+  const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  if (head.indexOf('revisor') !== -1) {
+    Logger.log('Ya existe columna revisor. Sin cambios.');
+    return;
+  }
+  const newCol = head.length + 1;
+  sh.getRange(1, newCol).setValue('revisor');
+  const nFilas = sh.getLastRow() - 1;
+  if (nFilas > 0) {
+    const fill = Array(nFilas).fill(['(anonimo)']);
+    sh.getRange(2, newCol, nFilas, 1).setValues(fill);
+  }
+  Logger.log('Columna revisor agregada. Filas migradas: ' + nFilas);
+}
+
 // ───────────────────── API SERVER → CLIENTE ──────────────────────────────
 /**
- * Devuelve el siguiente PDF pendiente de calificar (no presente en
- * la hoja calificaciones). Devuelve también totales para el contador.
+ * Devuelve el siguiente PDF pendiente PARA ESE REVISOR (no presente en
+ * la hoja calificaciones con revisor=X). Devuelve también cuántas
+ * evaluaciones de OTROS revisores tiene ese PDF.
  */
-function getSiguientePDF() {
+function getSiguientePDF(revisor) {
+  if (!revisor || !String(revisor).trim()) {
+    throw new Error('Falta nombre de revisor.');
+  }
+  revisor = String(revisor).trim();
+
   const ss = SpreadsheetApp.openById(SHEET_ID);
   const auditables = _leerHoja(ss, HOJA_AUDITABLES);
-  const ya = new Set(_leerHoja(ss, HOJA_CALIFICACIONES).map(r => String(r.pdf_id)));
+  const calificaciones = _leerHoja(ss, HOJA_CALIFICACIONES);
 
-  const pendientes = auditables.filter(r => !ya.has(String(r.pdf_id)));
+  const yoYaCalifique = new Set(
+    calificaciones.filter(r => String(r.revisor) === revisor)
+                  .map(r => String(r.pdf_id))
+  );
+  const evalsPorPdf = {};
+  calificaciones.forEach(r => {
+    const k = String(r.pdf_id);
+    if (!evalsPorPdf[k]) evalsPorPdf[k] = [];
+    evalsPorPdf[k].push(String(r.revisor));
+  });
+
+  const pendientes = auditables.filter(r => !yoYaCalifique.has(String(r.pdf_id)));
   const total = auditables.length;
   const calificados = total - pendientes.length;
 
   if (pendientes.length === 0) {
-    return { fin: true, total: total, calificados: calificados };
+    return { fin: true, total: total, calificados: calificados, revisor: revisor };
   }
-  const r = pendientes[0]; // próximo en orden
+  const r = pendientes[0];
   const drive_url = _buscarPDFEnDrive(r.pdf_nombre);
+  const otrosRevisores = (evalsPorPdf[String(r.pdf_id)] || [])
+                          .filter(rv => rv !== revisor);
   return {
     fin: false,
     total: total,
     calificados: calificados,
+    revisor: revisor,
     pdf_id: r.pdf_id,
     pdf_nombre: r.pdf_nombre,
     revista: r.revista,
@@ -100,16 +148,25 @@ function getSiguientePDF() {
     macroarea: r.macroarea,
     anio: r.anio,
     titulo: r.titulo,
-    drive_preview_url: drive_url
-    // NOTA: NO se devuelven A_ia, B_ia, C_ia, veredicto_ia → doble ciego
+    drive_preview_url: drive_url,
+    eval_otros_count: otrosRevisores.length,
+    eval_otros_revisores: otrosRevisores
+    // NOTA: no se devuelven A_ia, B_ia, C_ia, veredicto_ia → doble ciego
   };
 }
 
 /**
- * Recibe la calificación humana y persiste. Después devuelve el contraste
- * con la calificación IA para mostrar al usuario.
+ * Recibe la calificación humana, la persiste con el revisor indicado,
+ * y devuelve el contraste con la calificación IA.
  */
 function submitCalificacion(payload) {
+  if (!payload.revisor || !String(payload.revisor).trim()) {
+    throw new Error('Falta revisor.');
+  }
+  if (CATEGORIAS_D.indexOf(payload.D) === -1) {
+    throw new Error('Veredicto D inválido: ' + payload.D);
+  }
+
   const ss = SpreadsheetApp.openById(SHEET_ID);
   const auditables = _leerHoja(ss, HOJA_AUDITABLES);
   const reg = auditables.find(r => String(r.pdf_id) === String(payload.pdf_id));
@@ -125,10 +182,10 @@ function submitCalificacion(payload) {
     payload.C,
     payload.D,
     payload.notas || '',
-    reg.A_ia, reg.B_ia, reg.C_ia, reg.veredicto_ia
+    reg.A_ia, reg.B_ia, reg.C_ia, reg.veredicto_ia,
+    String(payload.revisor).trim()
   ]);
 
-  // Contraste con IA
   return {
     A_humano: payload.A, A_ia: reg.A_ia, A_match: String(payload.A) === String(reg.A_ia),
     B_humano: payload.B, B_ia: reg.B_ia, B_match: String(payload.B) === String(reg.B_ia),
@@ -139,8 +196,14 @@ function submitCalificacion(payload) {
   };
 }
 
+/** Devuelve la URL del Sheet para el botón "Ir al libro". */
+function getURLSheet() {
+  return 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/edit';
+}
+
 /**
- * Estadísticas para el dashboard: acuerdo simple, kappa, matriz de confusión.
+ * Estadísticas: acuerdo IA vs cada revisor, kappa vs IA, kappa entre
+ * humanos (pairwise) cuando hay PDFs con ≥2 revisores.
  */
 function getEstadisticas() {
   const ss = SpreadsheetApp.openById(SHEET_ID);
@@ -148,60 +211,157 @@ function getEstadisticas() {
   const n = cal.length;
   if (n === 0) return { n: 0 };
 
-  const acuerdo = (key_h, key_i) => cal.filter(r => String(r[key_h]) === String(r[key_i])).length / n;
-  const acuerdoA = acuerdo('A_humano', 'A_ia');
-  const acuerdoB = acuerdo('B_humano', 'B_ia');
-  const acuerdoC = acuerdo('C_humano', 'C_ia');
-  const acuerdoD = acuerdo('D_humano', 'veredicto_ia');
+  const revisores = Array.from(new Set(cal.map(r => String(r.revisor || '(anonimo)')))).sort();
+  const labelsD = CATEGORIAS_D.slice();
 
-  // Cohen's kappa para D (variable categórica de 4 valores)
-  const labels = ['FF clasica', 'FF con reconocimiento', 'Debilidad importante', 'Sin falla relevante'];
-  const M = labels.map(() => labels.map(() => 0));
-  cal.forEach(r => {
-    const i = labels.indexOf(r.D_humano);
-    const j = labels.indexOf(r.veredicto_ia);
-    if (i >= 0 && j >= 0) M[i][j] += 1;
+  // Por revisor: acuerdo simple por dimensión, kappa vs IA en D, matriz
+  const porRevisor = revisores.map(rv => {
+    const filas = cal.filter(r => String(r.revisor) === rv);
+    const acu = (kh, ki) => filas.filter(r => String(r[kh]) === String(r[ki])).length / filas.length;
+    return {
+      revisor: rv,
+      n: filas.length,
+      acuerdoA: acu('A_humano', 'A_ia'),
+      acuerdoB: acu('B_humano', 'B_ia'),
+      acuerdoC: acu('C_humano', 'C_ia'),
+      acuerdoD: acu('D_humano', 'veredicto_ia'),
+      kappaD: _kappa(filas.map(r => [r.D_humano, r.veredicto_ia]), labelsD),
+      matriz: _matrizConfusion(filas, 'D_humano', 'veredicto_ia', labelsD)
+    };
   });
-  const totalM = M.flat().reduce((s, x) => s + x, 0);
-  let pO = 0; for (let k = 0; k < labels.length; k++) pO += M[k][k];
-  pO = totalM ? pO / totalM : 0;
-  let pE = 0;
-  for (let k = 0; k < labels.length; k++) {
-    const fila = M[k].reduce((s, x) => s + x, 0) / totalM;
-    const col  = M.map(r => r[k]).reduce((s, x) => s + x, 0) / totalM;
-    pE += fila * col;
+
+  // Kappa entre humanos: pares de revisores que hayan calificado el mismo PDF
+  const kappasHumanos = [];
+  for (let i = 0; i < revisores.length; i++) {
+    for (let j = i + 1; j < revisores.length; j++) {
+      const a = revisores[i], b = revisores[j];
+      const filasA = cal.filter(r => String(r.revisor) === a);
+      const filasB = cal.filter(r => String(r.revisor) === b);
+      const mapA = {}; filasA.forEach(r => { mapA[r.pdf_id] = r.D_humano; });
+      const mapB = {}; filasB.forEach(r => { mapB[r.pdf_id] = r.D_humano; });
+      const pares = [];
+      Object.keys(mapA).forEach(pid => { if (mapB[pid]) pares.push([mapA[pid], mapB[pid]]); });
+      if (pares.length >= 2) {
+        kappasHumanos.push({
+          revisorA: a, revisorB: b,
+          n: pares.length,
+          kappa: _kappa(pares, labelsD),
+          matriz: _matrizPares(pares, labelsD)
+        });
+      }
+    }
   }
-  const kappa = pE === 1 ? null : (pO - pE) / (1 - pE);
 
   return {
     n: n,
-    acuerdoA: acuerdoA,
-    acuerdoB: acuerdoB,
-    acuerdoC: acuerdoC,
-    acuerdoD: acuerdoD,
-    kappa: kappa,
-    matriz: M,
-    labels: labels
+    revisores: revisores,
+    porRevisor: porRevisor,
+    kappasHumanos: kappasHumanos,
+    labelsD: labelsD
   };
+}
+
+/**
+ * Construye/actualiza la hoja "comparacion" con una fila por PDF y una
+ * columna por revisor + IA. Útil para revisar visualmente desde el Sheet.
+ */
+function actualizar_hoja_comparacion() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const auditables = _leerHoja(ss, HOJA_AUDITABLES);
+  const cal = _leerHoja(ss, HOJA_CALIFICACIONES);
+
+  const revisores = Array.from(new Set(cal.map(r => String(r.revisor || '(anonimo)')))).sort();
+  const head = ['pdf_id', 'pdf_nombre', 'titulo', 'IA_veredicto']
+                 .concat(revisores.map(r => 'humano: ' + r))
+                 .concat(['n_humanos', 'acuerdo_total']);
+
+  // Indexar calificaciones por (pdf_id, revisor)
+  const idx = {};
+  cal.forEach(r => {
+    const k = String(r.pdf_id);
+    if (!idx[k]) idx[k] = {};
+    idx[k][String(r.revisor)] = r.D_humano;
+  });
+
+  const filas = auditables.map(a => {
+    const k = String(a.pdf_id);
+    const cells = [a.pdf_id, a.pdf_nombre, a.titulo, a.veredicto_ia];
+    let nHumanos = 0;
+    const valoresHumanos = [];
+    revisores.forEach(rv => {
+      const v = (idx[k] || {})[rv] || '';
+      cells.push(v);
+      if (v) { nHumanos++; valoresHumanos.push(v); }
+    });
+    const todosIguales = (nHumanos > 0) &&
+                         valoresHumanos.every(v => v === a.veredicto_ia);
+    cells.push(nHumanos);
+    cells.push(todosIguales ? 'TODOS_OK' : (nHumanos === 0 ? '' : 'REVISAR'));
+    return cells;
+  });
+
+  let sh = ss.getSheetByName(HOJA_COMPARACION);
+  if (!sh) sh = ss.insertSheet(HOJA_COMPARACION);
+  sh.clear();
+  sh.getRange(1, 1, 1, head.length).setValues([head]);
+  if (filas.length) sh.getRange(2, 1, filas.length, head.length).setValues(filas);
+  sh.setFrozenRows(1);
+  sh.setFrozenColumns(2);
+  Logger.log('Hoja comparacion actualizada. Filas: ' + filas.length + '. Revisores: ' + revisores.join(', '));
 }
 
 // ───────────────────── HELPERS ────────────────────────────────────────────
 function _leerHoja(ss, nombre) {
   const sh = ss.getSheetByName(nombre);
-  const v  = sh.getDataRange().getValues();
+  if (!sh) return [];
+  const v = sh.getDataRange().getValues();
   if (v.length < 2) return [];
   const head = v[0];
   return v.slice(1).map(row => Object.fromEntries(head.map((h, i) => [h, row[i]])));
 }
 
+function _matrizConfusion(filas, keyA, keyB, labels) {
+  const M = labels.map(() => labels.map(() => 0));
+  filas.forEach(r => {
+    const i = labels.indexOf(r[keyA]);
+    const j = labels.indexOf(r[keyB]);
+    if (i >= 0 && j >= 0) M[i][j] += 1;
+  });
+  return M;
+}
+
+function _matrizPares(pares, labels) {
+  const M = labels.map(() => labels.map(() => 0));
+  pares.forEach(([a, b]) => {
+    const i = labels.indexOf(a);
+    const j = labels.indexOf(b);
+    if (i >= 0 && j >= 0) M[i][j] += 1;
+  });
+  return M;
+}
+
+/** Cohen's kappa entre dos vectores de etiquetas (pares [a, b]). */
+function _kappa(pares, labels) {
+  const M = _matrizPares(pares, labels);
+  const total = M.flat().reduce((s, x) => s + x, 0);
+  if (!total) return null;
+  let pO = 0; for (let k = 0; k < labels.length; k++) pO += M[k][k];
+  pO /= total;
+  let pE = 0;
+  for (let k = 0; k < labels.length; k++) {
+    const fila = M[k].reduce((s, x) => s + x, 0) / total;
+    const col  = M.map(r => r[k]).reduce((s, x) => s + x, 0) / total;
+    pE += fila * col;
+  }
+  return pE === 1 ? null : (pO - pE) / (1 - pE);
+}
+
 function _buscarPDFEnDrive(pdfNombre) {
-  // Cache de búsquedas para evitar pegarle a Drive repetidas veces
   const cache = CacheService.getScriptCache();
   const k = 'pdf:' + pdfNombre;
   const c = cache.get(k);
   if (c) return c;
 
-  // 1) Intento directo: archivo dentro de FOLDER_ID
   const folder = DriveApp.getFolderById(FOLDER_ID);
   let files = folder.getFilesByName(pdfNombre);
   if (files.hasNext()) {
@@ -210,17 +370,12 @@ function _buscarPDFEnDrive(pdfNombre) {
     cache.put(k, url, 21600);
     return url;
   }
-
-  // 2) Búsqueda recursiva en subcarpetas
   const idRecursivo = _buscarRecursivo(folder, pdfNombre);
   if (idRecursivo) {
     const url = 'https://drive.google.com/file/d/' + idRecursivo + '/preview';
     cache.put(k, url, 21600);
     return url;
   }
-
-  // 3) Búsqueda global por nombre (todo el Drive del usuario, incluye shared drives)
-  // Última red de seguridad: si el archivo está fuera del FOLDER_ID por alguna razón.
   const it = DriveApp.getFilesByName(pdfNombre);
   if (it.hasNext()) {
     const id = it.next().getId();
@@ -228,7 +383,6 @@ function _buscarPDFEnDrive(pdfNombre) {
     cache.put(k, url, 21600);
     return url;
   }
-
   return '';
 }
 
@@ -244,40 +398,18 @@ function _buscarRecursivo(folder, pdfNombre) {
   return '';
 }
 
-/**
- * Función diagnóstica: imprime en el log qué hay en la carpeta y dónde.
- * Ejecutar manualmente desde el editor si los PDFs no se encuentran.
- */
 function diagnostico_carpeta() {
   const folder = DriveApp.getFolderById(FOLDER_ID);
   Logger.log('Carpeta: ' + folder.getName() + ' (' + folder.getId() + ')');
-
   let nFiles = 0;
   const itF = folder.getFiles();
-  while (itF.hasNext() && nFiles < 5) {
-    const f = itF.next();
-    Logger.log('  archivo: ' + f.getName());
-    nFiles++;
-  }
-  if (itF.hasNext()) Logger.log('  (más archivos no listados)');
-  Logger.log('Total archivos directos: ' + (nFiles >= 5 ? '≥5' : nFiles));
-
+  while (itF.hasNext() && nFiles < 5) { itF.next(); nFiles++; }
+  if (itF.hasNext()) Logger.log('Total archivos directos: >5 (truncado)');
+  else Logger.log('Total archivos directos: ' + nFiles);
   let nSubs = 0;
   const itS = folder.getFolders();
-  while (itS.hasNext()) {
-    const s = itS.next();
-    nSubs++;
-    let cnt = 0;
-    const itFS = s.getFiles();
-    while (itFS.hasNext()) { itFS.next(); cnt++; }
-    Logger.log('  subcarpeta: ' + s.getName() + ' (' + cnt + ' archivos)');
-  }
+  while (itS.hasNext()) { itS.next(); nSubs++; }
   Logger.log('Total subcarpetas: ' + nSubs);
-
-  // Probar la búsqueda con un PDF de ejemplo
-  const muestra = '00033_Praxis_Educativa_2025.pdf';
-  Logger.log('---');
-  Logger.log('Probando búsqueda de: ' + muestra);
-  const url = _buscarPDFEnDrive(muestra);
-  Logger.log('Resultado: ' + (url ? 'ENCONTRADO ' + url : 'NO ENCONTRADO'));
+  const m = '00033_Praxis_Educativa_2025.pdf';
+  Logger.log('Buscar muestra ' + m + ' → ' + (_buscarPDFEnDrive(m) || 'NO ENCONTRADO'));
 }

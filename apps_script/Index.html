@@ -9,7 +9,12 @@
 <header>
   <h1>Califica artículos inferenciales — doble ciego</h1>
   <span class="progreso" id="progreso">cargando…</span>
-  <a href="?page=stats" target="_blank">Ver estadísticas →</a>
+  <span class="revisor-label" id="revisorLabel"></span>
+  <span class="header-links">
+    <a id="lnkSheet" href="#" target="_blank">📊 Libro de resultados</a>
+    <a href="?page=stats" target="_blank">📈 Estadísticas</a>
+    <a href="#" id="lnkCambiarRevisor">cambiar revisor</a>
+  </span>
 </header>
 
 <main>
@@ -25,49 +30,93 @@
 </main>
 
 <script>
-  let actual = null;          // PDF actualmente mostrado
-  let yaSubmitido = false;    // bloquea doble submit
+  const STORAGE_KEY = 'cai_revisor';
+  let actual = null;
+  let yaSubmitido = false;
+
+  function getRevisor() {
+    return localStorage.getItem(STORAGE_KEY) || '';
+  }
+  function setRevisor(nombre) {
+    localStorage.setItem(STORAGE_KEY, String(nombre).trim());
+    document.getElementById('revisorLabel').textContent = '👤 ' + nombre;
+  }
+  function pedirRevisor() {
+    const actual = getRevisor();
+    let nombre = prompt(
+      'Identifícate como revisor (nombre corto o iniciales).\n' +
+      'Tus calificaciones se guardarán bajo este nombre.',
+      actual || ''
+    );
+    if (!nombre || !nombre.trim()) {
+      if (actual) return actual;
+      alert('Necesitamos un identificador del revisor para continuar.');
+      return pedirRevisor();
+    }
+    nombre = nombre.trim();
+    setRevisor(nombre);
+    return nombre;
+  }
+
+  document.getElementById('lnkCambiarRevisor').addEventListener('click', e => {
+    e.preventDefault();
+    pedirRevisor();
+    mostrarSiguiente();
+  });
+
+  // Cargar URL del Sheet en el botón
+  google.script.run.withSuccessHandler(url => {
+    document.getElementById('lnkSheet').href = url;
+  }).getURLSheet();
 
   function mostrarSiguiente() {
     yaSubmitido = false;
+    const rev = getRevisor() || pedirRevisor();
+    setRevisor(rev);
+
     document.getElementById('pdfPanel').innerHTML = '<div class="pdf-empty"><span class="loading"></span></div>';
     document.getElementById('formPanel').innerHTML = '<div class="pdf-empty"><span class="loading"></span></div>';
     google.script.run
       .withSuccessHandler(renderPDF)
       .withFailureHandler(err => alert('Error: ' + err.message))
-      .getSiguientePDF();
+      .getSiguientePDF(rev);
   }
 
   function renderPDF(data) {
     actual = data;
     document.getElementById('progreso').textContent =
-      data.calificados + ' / ' + data.total + ' calificados';
+      data.calificados + ' / ' + data.total + ' calificados por ' + data.revisor;
 
     if (data.fin) {
       document.getElementById('pdfPanel').innerHTML =
-        '<div class="pdf-empty"><h2>¡Listo!</h2><p>Calificaste los ' + data.total + ' artículos.</p>' +
-        '<p><a href="?page=stats">Ver estadísticas finales</a></p></div>';
+        '<div class="pdf-empty"><h2>¡Listo!</h2><p>Calificaste los ' + data.total + ' artículos como <b>' + data.revisor + '</b>.</p>' +
+        '<p><a href="?page=stats">Ver estadísticas</a></p></div>';
       document.getElementById('formPanel').innerHTML = '';
       return;
     }
 
-    // Panel PDF
     if (data.drive_preview_url) {
       document.getElementById('pdfPanel').innerHTML =
         '<iframe src="' + data.drive_preview_url + '" allow="autoplay"></iframe>';
     } else {
       document.getElementById('pdfPanel').innerHTML =
-        '<div class="pdf-empty"><p>PDF no encontrado en Drive: <code>' + data.pdf_nombre + '</code></p>' +
-        '<button class="btn-skip" onclick="omitir()">Omitir y siguiente →</button></div>';
+        '<div class="pdf-empty"><p>PDF no encontrado en Drive: <code>' + escape_(data.pdf_nombre) + '</code></p>' +
+        '<button class="btn-skip" onclick="mostrarSiguiente()">Omitir y siguiente →</button></div>';
     }
 
-    // Panel formulario
     document.getElementById('formPanel').innerHTML = renderForm(data);
   }
 
   function renderForm(d) {
+    const aviso = d.eval_otros_count > 0
+      ? '<div class="aviso-otros">📝 Este PDF ya tiene <b>' + d.eval_otros_count +
+        '</b> evaluación(es) previa(s) de: ' + d.eval_otros_revisores.map(escape_).join(', ') +
+        '. Tu evaluación se guardará en paralelo, sin afectar las anteriores.</div>'
+      : '';
+
     return `
       <h2>Calificación humana</h2>
+      ${aviso}
       <div class="meta">
         PDF <b>${d.pdf_id} / ${d.total}</b> · ${escape_(d.revista || '')} · ${escape_(d.pais || '')} · ${escape_(d.macroarea || '')} · ${escape_(d.anio || '')}
       </div>
@@ -103,12 +152,13 @@
 
         <fieldset>
           <legend>D — Veredicto integral
-            <span class="desc">Tu juicio final, independientemente de la regla A &amp; C automática.</span></legend>
+            <span class="desc">Tu juicio final. "No evaluable" = el artículo no debió haber sido auditado.</span></legend>
           <div class="opts" style="flex-direction: column;">
             <label><input type="radio" name="D" value="FF clasica" required><span>Falla fuerte clásica (no advierten + generalizan)</span></label>
             <label><input type="radio" name="D" value="FF con reconocimiento"><span>Falla fuerte con reconocimiento (advierten pero generalizan igual)</span></label>
             <label><input type="radio" name="D" value="Debilidad importante"><span>Debilidad importante</span></label>
             <label><input type="radio" name="D" value="Sin falla relevante"><span>Sin falla relevante</span></label>
+            <label><input type="radio" name="D" value="No evaluable"><span>No evaluable (este PDF no debió ser auditado)</span></label>
           </div>
         </fieldset>
 
@@ -132,6 +182,7 @@
     const fd = new FormData(frm);
     const payload = {
       pdf_id: actual.pdf_id,
+      revisor: getRevisor(),
       A: fd.get('A'),
       B: fd.get('B'),
       C: fd.get('C'),
@@ -143,25 +194,41 @@
       return;
     }
     yaSubmitido = true;
-    document.getElementById('btnSubmit').disabled = true;
-    document.getElementById('btnSubmit').innerHTML = '<span class="loading"></span> Guardando…';
+    const btn = document.getElementById('btnSubmit');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading"></span> Guardando…';
+
     google.script.run
-      .withSuccessHandler(renderContraste)
-      .withFailureHandler(err => { alert('Error: ' + err.message); yaSubmitido = false; })
+      .withSuccessHandler(c => { restaurarBoton(btn); renderContraste(c); })
+      .withFailureHandler(err => {
+        alert('Error: ' + err.message);
+        yaSubmitido = false;
+        restaurarBoton(btn);
+      })
       .submitCalificacion(payload);
+  }
+
+  function restaurarBoton(btn) {
+    if (!btn) return;
+    btn.disabled = false;
+    btn.innerHTML = 'Enviar y ver contraste IA';
   }
 
   function renderContraste(c) {
     const fila = (lbl, h, i, ok) => `
       <div class="row">
         <span class="lbl">${lbl}</span>
-        <span>Humano: <b>${h}</b></span>
-        <span>IA: <b>${i}</b></span>
+        <span>Humano: <b>${escape_(h)}</b></span>
+        <span>IA: <b>${escape_(i)}</b></span>
         <span class="${ok ? 'badge-ok' : 'badge-no'}">${ok ? '✓' : '✗'}</span>
       </div>`;
+
+    // Esconder el formulario; mostrar solo el contraste
+    const frm = document.getElementById('frm');
+    if (frm) frm.style.display = 'none';
     document.getElementById('contraste').innerHTML = `
       <div class="contraste">
-        <h3>Contraste con IA</h3>
+        <h3>Contraste con IA · revisor <b>${escape_(getRevisor())}</b></h3>
         ${fila('A', c.A_humano, c.A_ia, c.A_match)}
         ${fila('B', c.B_humano, c.B_ia, c.B_match)}
         ${fila('C', c.C_humano, c.C_ia, c.C_match)}
@@ -173,8 +240,6 @@
       </div>`;
   }
 
-  function omitir() { mostrarSiguiente(); }
-
   function escape_(s) {
     return String(s == null ? '' : s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -182,6 +247,7 @@
   }
 
   // Arranque
+  setRevisor(getRevisor() || pedirRevisor());
   mostrarSiguiente();
 </script>
 </body>

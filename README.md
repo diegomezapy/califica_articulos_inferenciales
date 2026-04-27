@@ -1,5 +1,8 @@
 # califica_articulos_inferenciales
 
+> **🌐 App pública:** <https://script.google.com/macros/s/AKfycby-SQDUuxxpHl2ApM3xosLbFrxAvxxyZY7yFRhU7fytgqn_NS1MO0uqq5piKcHTc1fLvg/exec>
+> _(Cualquier usuario con cuenta de Google. Identifícate como revisor al entrar; las calificaciones se guardan por nombre)._
+
 App web de evaluación humana **doble ciego** para los 346 artículos auditables del estudio
 **Errores Inferenciales Críticos en Estudios Cuantitativos Sudamericanos** (DOAJ 2025).
 

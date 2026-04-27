@@ -48,7 +48,25 @@
 
 </main>
 
+<div id="debugBar" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#fef2f2;border-top:2px solid #b91c1c;padding:8px;font-family:monospace;font-size:12px;color:#7f1d1d;z-index:9999;max-height:30vh;overflow:auto;"></div>
 <script>
+  // Barra de debug: solo se hace visible si hay un error o si la URL trae ?debug=1
+  const _DEBUG_FORCE = /[?&]debug=1/.test(location.search);
+  function _dbg(msg, level) {
+    try {
+      const bar = document.getElementById('debugBar');
+      if (level === 'err' || _DEBUG_FORCE) bar.style.display = 'block';
+      const t = new Date().toLocaleTimeString();
+      const color = level === 'err' ? '#b91c1c' : (level === 'ok' ? '#15803d' : '#1e40af');
+      bar.innerHTML += '<div style="color:' + color + '">[' + t + '] ' + msg + '</div>';
+      bar.scrollTop = bar.scrollHeight;
+    } catch (_) {}
+    if (level === 'err') console.error(msg);
+    else console.log(msg);
+  }
+  window.addEventListener('error', e => _dbg('JS error: ' + e.message + ' (' + e.filename + ':' + e.lineno + ')', 'err'));
+  window.addEventListener('unhandledrejection', e => _dbg('Promise rejection: ' + (e.reason && e.reason.message || e.reason), 'err'));
+
   const STORAGE_KEY = 'cai_revisor';
   let actual = null;
   let yaSubmitido = false;
@@ -114,21 +132,42 @@
   });
 
   function cargarLista() {
-    setRevisor(getRevisor() || pedirRevisor());
+    const rev = getRevisor() || pedirRevisor();
+    setRevisor(rev);
     document.getElementById('listaPdfs').innerHTML =
-      '<li class="lista-loading"><span class="loading"></span> cargando…</li>';
-    google.script.run
-      .withSuccessHandler(d => {
-        listaCompleta = d.items;
-        document.getElementById('progreso').textContent =
-          d.calificados_por_mi + ' / ' + d.total + ' calificados por ' + d.revisor;
-        renderLista();
-        // Cargar el primer pendiente automáticamente
-        const primerPendiente = listaCompleta.find(x => !x.yo_califique);
-        if (primerPendiente) cargarPDF(primerPendiente.pdf_id);
-      })
-      .withFailureHandler(err => alert('Error: ' + err.message))
-      .getListaPDFs(getRevisor());
+      '<li class="lista-loading"><span class="loading"></span> cargando 346 PDFs…</li>';
+    _dbg('cargarLista() revisor=' + rev);
+    try {
+      google.script.run
+        .withSuccessHandler(d => {
+          try {
+            _dbg('getListaPDFs OK: total=' + (d && d.total) + ' items=' + (d && d.items && d.items.length), 'ok');
+            if (!d || !d.items) {
+              document.getElementById('listaPdfs').innerHTML =
+                '<li class="lista-loading">Respuesta vacía del servidor.</li>';
+              return;
+            }
+            listaCompleta = d.items;
+            document.getElementById('progreso').textContent =
+              d.calificados_por_mi + ' / ' + d.total + ' calificados por ' + d.revisor;
+            renderLista();
+            const primerPendiente = listaCompleta.find(x => !x.yo_califique);
+            if (primerPendiente) cargarPDF(primerPendiente.pdf_id);
+            else if (listaCompleta.length) cargarPDF(listaCompleta[0].pdf_id);
+          } catch (e) {
+            _dbg('Error en handler success: ' + e.message + '\n' + e.stack, 'err');
+          }
+        })
+        .withFailureHandler(err => {
+          _dbg('getListaPDFs FALLO: ' + (err && err.message || String(err)), 'err');
+          document.getElementById('listaPdfs').innerHTML =
+            '<li class="lista-loading" style="color:#b91c1c;">Error al cargar la lista:<br>' +
+            escape_(err && err.message || String(err)) + '</li>';
+        })
+        .getListaPDFs(rev);
+    } catch (e) {
+      _dbg('Error al invocar getListaPDFs: ' + e.message, 'err');
+    }
   }
 
   function listaVisibles() {
@@ -205,7 +244,7 @@
     } else {
       document.getElementById('pdfPanel').innerHTML =
         '<div class="pdf-empty"><p>PDF no encontrado en Drive: <code>' + escape_(d.pdf_nombre) + '</code></p>' +
-        '<button class="btn-skip" onclick="document.getElementById(\\'btnSaltar\\').click();">Saltar →</button></div>';
+        '<button class="btn-skip" onclick="document.getElementById(&quot;btnSaltar&quot;).click();">Saltar →</button></div>';
     }
 
     document.getElementById('formPanel').innerHTML = renderForm(d);
@@ -359,8 +398,14 @@
   }
 
   // Arranque
-  setRevisor(getRevisor() || pedirRevisor());
-  cargarLista();
+  try {
+    _dbg('Arranque: DOM cargado, esperando click en revisor');
+    setRevisor(getRevisor() || pedirRevisor());
+    _dbg('Revisor establecido: ' + getRevisor());
+    cargarLista();
+  } catch (e) {
+    _dbg('Error en arranque: ' + e.message, 'err');
+  }
 </script>
 </body>
 </html>

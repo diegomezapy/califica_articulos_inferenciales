@@ -112,42 +112,68 @@ function getListaPDFs(revisor) {
   revisor = String(revisor).trim();
 
   const ss = SpreadsheetApp.openById(SHEET_ID);
-  const auditables = _leerHoja(ss, HOJA_AUDITABLES);
-  const calificaciones = _leerHoja(ss, HOJA_CALIFICACIONES);
 
-  const yoCal = new Set(
-    calificaciones.filter(r => String(r.revisor) === revisor)
-                  .map(r => String(r.pdf_id))
-  );
+  // Lectura rápida de auditables: solo columnas necesarias
+  const shA = ss.getSheetByName(HOJA_AUDITABLES);
+  if (!shA) throw new Error('Hoja auditables no encontrada en el Sheet.');
+  const lastRowA = shA.getLastRow();
+  const lastColA = shA.getLastColumn();
+  if (lastRowA < 2) {
+    return { revisor: revisor, total: 0, calificados_por_mi: 0, items: [] };
+  }
+  const headA = shA.getRange(1, 1, 1, lastColA).getValues()[0];
+  const idxA = {
+    pdf_id:    headA.indexOf('pdf_id'),
+    pdf_nombre: headA.indexOf('pdf_nombre'),
+    revista:   headA.indexOf('revista'),
+    pais:      headA.indexOf('pais'),
+    macroarea: headA.indexOf('macroarea'),
+    anio:      headA.indexOf('anio'),
+    titulo:    headA.indexOf('titulo')
+  };
+  const valoresA = shA.getRange(2, 1, lastRowA - 1, lastColA).getValues();
+
+  // Lectura de calificaciones (solo pdf_id y revisor)
+  const yoCal = new Set();
   const evalsPorPdf = {};
-  calificaciones.forEach(r => {
-    const k = String(r.pdf_id);
-    if (!evalsPorPdf[k]) evalsPorPdf[k] = new Set();
-    evalsPorPdf[k].add(String(r.revisor));
-  });
+  const shC = ss.getSheetByName(HOJA_CALIFICACIONES);
+  if (shC && shC.getLastRow() > 1) {
+    const headC = shC.getRange(1, 1, 1, shC.getLastColumn()).getValues()[0];
+    const idxPdf = headC.indexOf('pdf_id');
+    const idxRev = headC.indexOf('revisor');
+    const valoresC = shC.getRange(2, 1, shC.getLastRow() - 1, shC.getLastColumn()).getValues();
+    for (var i = 0; i < valoresC.length; i++) {
+      const row = valoresC[i];
+      const pid = String(row[idxPdf]);
+      const rev = idxRev >= 0 ? String(row[idxRev] || '(anonimo)').trim() : '(anonimo)';
+      if (rev === revisor) yoCal.add(pid);
+      if (!evalsPorPdf[pid]) evalsPorPdf[pid] = new Set();
+      evalsPorPdf[pid].add(rev);
+    }
+  }
 
-  const lista = auditables.map(r => {
-    const k = String(r.pdf_id);
-    const todos = Array.from(evalsPorPdf[k] || []);
+  const items = valoresA.map(row => {
+    const pid = String(row[idxA.pdf_id]);
+    const todos = evalsPorPdf[pid] ? Array.from(evalsPorPdf[pid]) : [];
     const otros = todos.filter(rv => rv !== revisor);
     return {
-      pdf_id: r.pdf_id,
-      pdf_nombre: r.pdf_nombre,
-      revista: r.revista,
-      pais: r.pais,
-      macroarea: r.macroarea,
-      anio: r.anio,
-      titulo: r.titulo,
-      yo_califique: yoCal.has(k),
+      pdf_id:    row[idxA.pdf_id],
+      pdf_nombre: String(row[idxA.pdf_nombre] || ''),
+      revista:   String(row[idxA.revista] || ''),
+      pais:      String(row[idxA.pais] || ''),
+      macroarea: String(row[idxA.macroarea] || ''),
+      anio:      String(row[idxA.anio] || ''),
+      titulo:    String(row[idxA.titulo] || ''),
+      yo_califique: yoCal.has(pid),
       eval_otros_count: otros.length
     };
   });
 
   return {
     revisor: revisor,
-    total: lista.length,
-    calificados_por_mi: lista.filter(x => x.yo_califique).length,
-    items: lista
+    total: items.length,
+    calificados_por_mi: items.filter(x => x.yo_califique).length,
+    items: items
   };
 }
 
@@ -461,6 +487,25 @@ function _buscarRecursivo(folder, pdfNombre) {
     if (id) return id;
   }
   return '';
+}
+
+/**
+ * Diagnostico de getListaPDFs: ejecutalo desde el editor para ver
+ * cuanto tarda y si hay algun error.
+ */
+function diagnostico_lista() {
+  const t0 = Date.now();
+  try {
+    const r = getListaPDFs('test');
+    const ms = Date.now() - t0;
+    Logger.log('OK en ' + ms + 'ms');
+    Logger.log('total: ' + r.total + ', calificados_por_mi: ' + r.calificados_por_mi);
+    Logger.log('primer item: ' + JSON.stringify(r.items[0]));
+    Logger.log('ultimo item: ' + JSON.stringify(r.items[r.items.length - 1]));
+  } catch (e) {
+    Logger.log('ERROR: ' + e.message);
+    Logger.log(e.stack);
+  }
 }
 
 function diagnostico_carpeta() {

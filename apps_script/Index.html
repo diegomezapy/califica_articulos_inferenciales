@@ -325,40 +325,68 @@
   }
 
   function submitForm() {
-    if (yaSubmitido) return;
-    const fd = new FormData(document.getElementById('frm'));
-    const payload = {
-      pdf_id: actual.pdf_id,
-      revisor: getRevisor(),
-      A: fd.get('A'), B: fd.get('B'), C: fd.get('C'), D: fd.get('D'),
-      notas: fd.get('notas') || ''
-    };
-    if (!payload.A || !payload.B || !payload.C || !payload.D) {
-      alert('Completá los 4 campos.'); return;
-    }
-    yaSubmitido = true;
-    const btn = document.getElementById('btnSubmit');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loading"></span> Guardando…';
+    _dbg('submitForm() invocado');
+    try {
+      if (yaSubmitido) { _dbg('Ya submit en curso, ignoro'); return; }
+      const frm = document.getElementById('frm');
+      if (!frm) { _dbg('No existe #frm', 'err'); return; }
+      if (!actual || !actual.pdf_id) { _dbg('actual.pdf_id vacío: ' + JSON.stringify(actual), 'err'); return; }
 
-    google.script.run
-      .withSuccessHandler(c => {
-        restaurarBoton(btn);
-        renderContraste(c);
-        // Refrescar la lista para reflejar que ya califiqué
-        google.script.run.withSuccessHandler(d => {
-          listaCompleta = d.items;
-          document.getElementById('progreso').textContent =
-            d.calificados_por_mi + ' / ' + d.total + ' calificados por ' + d.revisor;
-          renderLista();
-        }).getListaPDFs(getRevisor());
-      })
-      .withFailureHandler(err => {
-        alert('Error: ' + err.message);
-        yaSubmitido = false;
-        restaurarBoton(btn);
-      })
-      .submitCalificacion(payload);
+      const fd = new FormData(frm);
+      const payload = {
+        pdf_id: actual.pdf_id,
+        revisor: getRevisor(),
+        A: fd.get('A'), B: fd.get('B'), C: fd.get('C'), D: fd.get('D'),
+        notas: fd.get('notas') || ''
+      };
+      _dbg('payload: ' + JSON.stringify(payload));
+
+      if (!payload.revisor) {
+        _dbg('Revisor vacío', 'err'); alert('Falta identificador del revisor.'); return;
+      }
+      if (!payload.A || !payload.B || !payload.C || !payload.D) {
+        _dbg('Campos faltantes: A=' + payload.A + ' B=' + payload.B + ' C=' + payload.C + ' D=' + payload.D, 'err');
+        alert('Completá los 4 campos (A, B, C y D).'); return;
+      }
+
+      yaSubmitido = true;
+      const btn = document.getElementById('btnSubmit');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="loading"></span> Guardando…';
+      }
+      _dbg('Llamando submitCalificacion...');
+
+      google.script.run
+        .withSuccessHandler(c => {
+          _dbg('submitCalificacion OK', 'ok');
+          try {
+            restaurarBoton(btn);
+            renderContraste(c);
+            google.script.run.withSuccessHandler(d => {
+              if (!d || !d.items) return;
+              listaCompleta = d.items;
+              document.getElementById('progreso').textContent =
+                d.calificados_por_mi + ' / ' + d.total + ' calificados por ' + d.revisor;
+              renderLista();
+            }).withFailureHandler(e => _dbg('Refresh lista FALLO: ' + (e.message || e), 'err'))
+              .getListaPDFs(getRevisor());
+          } catch (e2) {
+            _dbg('Error renderizando contraste: ' + e2.message, 'err');
+          }
+        })
+        .withFailureHandler(err => {
+          const msg = err && err.message || String(err);
+          _dbg('submitCalificacion FALLO: ' + msg, 'err');
+          alert('Error al guardar: ' + msg);
+          yaSubmitido = false;
+          restaurarBoton(btn);
+        })
+        .submitCalificacion(payload);
+    } catch (e) {
+      _dbg('Excepción en submitForm: ' + e.message + '\n' + e.stack, 'err');
+      alert('Excepción inesperada: ' + e.message);
+    }
   }
 
   function restaurarBoton(btn) {

@@ -11,20 +11,39 @@
   <span class="progreso" id="progreso">cargando…</span>
   <span class="revisor-label" id="revisorLabel"></span>
   <span class="header-links">
-    <a id="lnkSheet" href="#" target="_blank">📊 Libro de resultados</a>
+    <a id="lnkSheet" href="#" target="_blank">📊 Libro</a>
     <a href="?page=stats" target="_blank">📈 Estadísticas</a>
     <a href="#" id="lnkCambiarRevisor">cambiar revisor</a>
   </span>
 </header>
 
-<main>
+<main class="main-3col">
+
+  <aside class="lista-panel" id="listaPanel">
+    <div class="lista-toolbar">
+      <input type="search" id="searchPdf" placeholder="Buscar por revista, área, año, título…" />
+      <div class="filtros">
+        <button data-filter="todos" class="active">Todos</button>
+        <button data-filter="pendientes">Pendientes</button>
+        <button data-filter="calificados">Calificados</button>
+        <button data-filter="con_otros">Con otros</button>
+      </div>
+      <div class="acciones-rapidas">
+        <button class="btn-skip-link" id="btnAnterior">← Anterior</button>
+        <button class="btn-skip-link" id="btnSaltar">Saltar →</button>
+      </div>
+    </div>
+    <ul class="lista-pdfs" id="listaPdfs">
+      <li class="lista-loading"><span class="loading"></span> cargando…</li>
+    </ul>
+  </aside>
 
   <section class="pdf-panel" id="pdfPanel">
-    <div class="pdf-empty"><span class="loading"></span></div>
+    <div class="pdf-empty">Elegí un artículo de la lista o esperá a que cargue el primer pendiente…</div>
   </section>
 
   <section class="form-panel" id="formPanel">
-    <div class="pdf-empty"><span class="loading"></span></div>
+    <div class="pdf-empty">—</div>
   </section>
 
 </main>
@@ -33,92 +52,181 @@
   const STORAGE_KEY = 'cai_revisor';
   let actual = null;
   let yaSubmitido = false;
+  let listaCompleta = [];
+  let filtroActual = 'todos';
+  let busquedaActual = '';
 
-  function getRevisor() {
-    return localStorage.getItem(STORAGE_KEY) || '';
-  }
-  function setRevisor(nombre) {
-    localStorage.setItem(STORAGE_KEY, String(nombre).trim());
-    document.getElementById('revisorLabel').textContent = '👤 ' + nombre;
+  function getRevisor() { return localStorage.getItem(STORAGE_KEY) || ''; }
+  function setRevisor(n) {
+    localStorage.setItem(STORAGE_KEY, String(n).trim());
+    document.getElementById('revisorLabel').textContent = '👤 ' + n;
   }
   function pedirRevisor() {
-    const actual = getRevisor();
-    let nombre = prompt(
-      'Identifícate como revisor (nombre corto o iniciales).\n' +
-      'Tus calificaciones se guardarán bajo este nombre.',
-      actual || ''
-    );
-    if (!nombre || !nombre.trim()) {
-      if (actual) return actual;
-      alert('Necesitamos un identificador del revisor para continuar.');
+    const a = getRevisor();
+    let n = prompt('Identifícate como revisor (nombre corto o iniciales).\nTus calificaciones se guardarán bajo este nombre.', a || '');
+    if (!n || !n.trim()) {
+      if (a) return a;
+      alert('Necesitamos un identificador del revisor.');
       return pedirRevisor();
     }
-    nombre = nombre.trim();
-    setRevisor(nombre);
-    return nombre;
+    n = n.trim();
+    setRevisor(n);
+    return n;
   }
 
   document.getElementById('lnkCambiarRevisor').addEventListener('click', e => {
     e.preventDefault();
     pedirRevisor();
-    mostrarSiguiente();
+    cargarLista();
   });
-
-  // Cargar URL del Sheet en el botón
   google.script.run.withSuccessHandler(url => {
     document.getElementById('lnkSheet').href = url;
   }).getURLSheet();
 
-  function mostrarSiguiente() {
+  // Filtros y búsqueda
+  document.querySelectorAll('.filtros button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.filtros button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      filtroActual = b.dataset.filter;
+      renderLista();
+    });
+  });
+  document.getElementById('searchPdf').addEventListener('input', e => {
+    busquedaActual = e.target.value.trim().toLowerCase();
+    renderLista();
+  });
+
+  // Botones siguiente/anterior
+  document.getElementById('btnSaltar').addEventListener('click', () => {
+    if (!actual) return;
+    const visibles = listaVisibles();
+    const idx = visibles.findIndex(x => String(x.pdf_id) === String(actual.pdf_id));
+    const siguiente = visibles[idx + 1] || visibles[0];
+    if (siguiente) cargarPDF(siguiente.pdf_id);
+  });
+  document.getElementById('btnAnterior').addEventListener('click', () => {
+    if (!actual) return;
+    const visibles = listaVisibles();
+    const idx = visibles.findIndex(x => String(x.pdf_id) === String(actual.pdf_id));
+    const anterior = visibles[idx - 1] || visibles[visibles.length - 1];
+    if (anterior) cargarPDF(anterior.pdf_id);
+  });
+
+  function cargarLista() {
+    setRevisor(getRevisor() || pedirRevisor());
+    document.getElementById('listaPdfs').innerHTML =
+      '<li class="lista-loading"><span class="loading"></span> cargando…</li>';
+    google.script.run
+      .withSuccessHandler(d => {
+        listaCompleta = d.items;
+        document.getElementById('progreso').textContent =
+          d.calificados_por_mi + ' / ' + d.total + ' calificados por ' + d.revisor;
+        renderLista();
+        // Cargar el primer pendiente automáticamente
+        const primerPendiente = listaCompleta.find(x => !x.yo_califique);
+        if (primerPendiente) cargarPDF(primerPendiente.pdf_id);
+      })
+      .withFailureHandler(err => alert('Error: ' + err.message))
+      .getListaPDFs(getRevisor());
+  }
+
+  function listaVisibles() {
+    return listaCompleta.filter(x => {
+      if (filtroActual === 'pendientes' && x.yo_califique) return false;
+      if (filtroActual === 'calificados' && !x.yo_califique) return false;
+      if (filtroActual === 'con_otros' && x.eval_otros_count === 0) return false;
+      if (busquedaActual) {
+        const t = (x.pdf_nombre + ' ' + x.revista + ' ' + x.pais + ' ' +
+                   x.macroarea + ' ' + x.anio + ' ' + x.titulo).toLowerCase();
+        if (t.indexOf(busquedaActual) === -1) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderLista() {
+    const visibles = listaVisibles();
+    const ul = document.getElementById('listaPdfs');
+    if (visibles.length === 0) {
+      ul.innerHTML = '<li class="lista-loading">Sin resultados.</li>';
+      return;
+    }
+    const idActual = actual ? String(actual.pdf_id) : '';
+    ul.innerHTML = visibles.map(x => {
+      const cls = [];
+      if (x.yo_califique) cls.push('estado-califique');
+      else if (x.eval_otros_count > 0) cls.push('estado-otros');
+      else cls.push('estado-pendiente');
+      if (String(x.pdf_id) === idActual) cls.push('activo');
+      const ico = x.yo_califique ? '✓' : (x.eval_otros_count > 0 ? '•' : '○');
+      const otros = x.eval_otros_count > 0 ? ' <span class="badge-otros">' + x.eval_otros_count + '</span>' : '';
+      return `<li class="${cls.join(' ')}" data-id="${x.pdf_id}">
+        <span class="lista-ico">${ico}</span>
+        <span class="lista-id">#${x.pdf_id}</span>
+        <span class="lista-info">
+          <span class="lista-rev">${escape_(x.revista || '—')}</span>
+          <span class="lista-meta">${escape_(x.pais || '')} · ${escape_(x.macroarea || '')} · ${escape_(x.anio || '')}</span>
+        </span>
+        ${otros}
+      </li>`;
+    }).join('');
+    ul.querySelectorAll('li[data-id]').forEach(li => {
+      li.addEventListener('click', () => cargarPDF(li.dataset.id));
+    });
+  }
+
+  function cargarPDF(pdfId) {
     yaSubmitido = false;
     const rev = getRevisor() || pedirRevisor();
-    setRevisor(rev);
-
-    document.getElementById('pdfPanel').innerHTML = '<div class="pdf-empty"><span class="loading"></span></div>';
-    document.getElementById('formPanel').innerHTML = '<div class="pdf-empty"><span class="loading"></span></div>';
+    document.getElementById('pdfPanel').innerHTML =
+      '<div class="pdf-empty"><span class="loading"></span></div>';
+    document.getElementById('formPanel').innerHTML =
+      '<div class="pdf-empty"><span class="loading"></span></div>';
     google.script.run
       .withSuccessHandler(renderPDF)
       .withFailureHandler(err => alert('Error: ' + err.message))
-      .getSiguientePDF(rev);
+      .getPDF(pdfId, rev);
   }
 
-  function renderPDF(data) {
-    actual = data;
-    document.getElementById('progreso').textContent =
-      data.calificados + ' / ' + data.total + ' calificados por ' + data.revisor;
+  function renderPDF(d) {
+    actual = d;
 
-    if (data.fin) {
+    if (d.fin) {
       document.getElementById('pdfPanel').innerHTML =
-        '<div class="pdf-empty"><h2>¡Listo!</h2><p>Calificaste los ' + data.total + ' artículos como <b>' + data.revisor + '</b>.</p>' +
-        '<p><a href="?page=stats">Ver estadísticas</a></p></div>';
+        '<div class="pdf-empty"><h2>¡Sin pendientes!</h2><p>Calificaste todos los artículos como <b>' + escape_(d.revisor) + '</b>.</p></div>';
       document.getElementById('formPanel').innerHTML = '';
       return;
     }
 
-    if (data.drive_preview_url) {
+    if (d.drive_preview_url) {
       document.getElementById('pdfPanel').innerHTML =
-        '<iframe src="' + data.drive_preview_url + '" allow="autoplay"></iframe>';
+        '<iframe src="' + d.drive_preview_url + '" allow="autoplay"></iframe>';
     } else {
       document.getElementById('pdfPanel').innerHTML =
-        '<div class="pdf-empty"><p>PDF no encontrado en Drive: <code>' + escape_(data.pdf_nombre) + '</code></p>' +
-        '<button class="btn-skip" onclick="mostrarSiguiente()">Omitir y siguiente →</button></div>';
+        '<div class="pdf-empty"><p>PDF no encontrado en Drive: <code>' + escape_(d.pdf_nombre) + '</code></p>' +
+        '<button class="btn-skip" onclick="document.getElementById(\\'btnSaltar\\').click();">Saltar →</button></div>';
     }
 
-    document.getElementById('formPanel').innerHTML = renderForm(data);
+    document.getElementById('formPanel').innerHTML = renderForm(d);
+    renderLista(); // refrescar resaltado del activo
   }
 
   function renderForm(d) {
     const aviso = d.eval_otros_count > 0
       ? '<div class="aviso-otros">📝 Este PDF ya tiene <b>' + d.eval_otros_count +
         '</b> evaluación(es) previa(s) de: ' + d.eval_otros_revisores.map(escape_).join(', ') +
-        '. Tu evaluación se guardará en paralelo, sin afectar las anteriores.</div>'
+        '. Tu evaluación se guarda en paralelo.</div>'
+      : '';
+    const yaCal = d.yo_califique
+      ? '<div class="aviso-yo">⚠️ Ya calificaste este PDF antes. Si volvés a enviar, se agrega una nueva fila (no sobrescribe).</div>'
       : '';
 
     return `
       <h2>Calificación humana</h2>
-      ${aviso}
+      ${aviso}${yaCal}
       <div class="meta">
-        PDF <b>${d.pdf_id} / ${d.total}</b> · ${escape_(d.revista || '')} · ${escape_(d.pais || '')} · ${escape_(d.macroarea || '')} · ${escape_(d.anio || '')}
+        PDF <b>#${d.pdf_id}</b> · ${escape_(d.revista || '')} · ${escape_(d.pais || '')} · ${escape_(d.macroarea || '')} · ${escape_(d.anio || '')}
       </div>
       <div class="titulo">${escape_(d.titulo || d.pdf_nombre)}</div>
 
@@ -169,6 +277,7 @@
 
         <div class="acciones">
           <button type="submit" class="btn-primary" id="btnSubmit">Enviar y ver contraste IA</button>
+          <button type="button" class="btn-skip" onclick="document.getElementById('btnSaltar').click();">Saltar este →</button>
         </div>
       </form>
 
@@ -178,20 +287,15 @@
 
   function submitForm() {
     if (yaSubmitido) return;
-    const frm = document.getElementById('frm');
-    const fd = new FormData(frm);
+    const fd = new FormData(document.getElementById('frm'));
     const payload = {
       pdf_id: actual.pdf_id,
       revisor: getRevisor(),
-      A: fd.get('A'),
-      B: fd.get('B'),
-      C: fd.get('C'),
-      D: fd.get('D'),
+      A: fd.get('A'), B: fd.get('B'), C: fd.get('C'), D: fd.get('D'),
       notas: fd.get('notas') || ''
     };
     if (!payload.A || !payload.B || !payload.C || !payload.D) {
-      alert('Completá los 4 campos.');
-      return;
+      alert('Completá los 4 campos.'); return;
     }
     yaSubmitido = true;
     const btn = document.getElementById('btnSubmit');
@@ -199,7 +303,17 @@
     btn.innerHTML = '<span class="loading"></span> Guardando…';
 
     google.script.run
-      .withSuccessHandler(c => { restaurarBoton(btn); renderContraste(c); })
+      .withSuccessHandler(c => {
+        restaurarBoton(btn);
+        renderContraste(c);
+        // Refrescar la lista para reflejar que ya califiqué
+        google.script.run.withSuccessHandler(d => {
+          listaCompleta = d.items;
+          document.getElementById('progreso').textContent =
+            d.calificados_por_mi + ' / ' + d.total + ' calificados por ' + d.revisor;
+          renderLista();
+        }).getListaPDFs(getRevisor());
+      })
       .withFailureHandler(err => {
         alert('Error: ' + err.message);
         yaSubmitido = false;
@@ -222,8 +336,6 @@
         <span>IA: <b>${escape_(i)}</b></span>
         <span class="${ok ? 'badge-ok' : 'badge-no'}">${ok ? '✓' : '✗'}</span>
       </div>`;
-
-    // Esconder el formulario; mostrar solo el contraste
     const frm = document.getElementById('frm');
     if (frm) frm.style.display = 'none';
     document.getElementById('contraste').innerHTML = `
@@ -235,7 +347,7 @@
         ${fila('D', c.D_humano, c.D_ia, c.D_match)}
         ${c.motivo_ia ? '<div class="motivo-ia"><b>Motivo IA:</b> ' + escape_(c.motivo_ia) + '</div>' : ''}
         <div class="acciones">
-          <button class="btn-primary" onclick="mostrarSiguiente()">Siguiente PDF →</button>
+          <button class="btn-primary" onclick="document.getElementById('btnSaltar').click();">Siguiente →</button>
         </div>
       </div>`;
   }
@@ -248,7 +360,7 @@
 
   // Arranque
   setRevisor(getRevisor() || pedirRevisor());
-  mostrarSiguiente();
+  cargarLista();
 </script>
 </body>
 </html>

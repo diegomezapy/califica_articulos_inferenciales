@@ -100,11 +100,12 @@ function migrar_agregar_columna_revisor() {
 
 // ───────────────────── API SERVER → CLIENTE ──────────────────────────────
 /**
- * Devuelve el siguiente PDF pendiente PARA ESE REVISOR (no presente en
- * la hoja calificaciones con revisor=X). Devuelve también cuántas
- * evaluaciones de OTROS revisores tiene ese PDF.
+ * Devuelve la lista completa de los 346 PDFs con metadatos cortos y
+ * estado por revisor: si yo (revisor) ya lo califiqué y cuántos otros
+ * lo evaluaron. NO incluye URL de Drive (se carga on-demand al elegir
+ * un PDF) para mantener la lista liviana.
  */
-function getSiguientePDF(revisor) {
+function getListaPDFs(revisor) {
   if (!revisor || !String(revisor).trim()) {
     throw new Error('Falta nombre de revisor.');
   }
@@ -114,7 +115,58 @@ function getSiguientePDF(revisor) {
   const auditables = _leerHoja(ss, HOJA_AUDITABLES);
   const calificaciones = _leerHoja(ss, HOJA_CALIFICACIONES);
 
-  const yoYaCalifique = new Set(
+  const yoCal = new Set(
+    calificaciones.filter(r => String(r.revisor) === revisor)
+                  .map(r => String(r.pdf_id))
+  );
+  const evalsPorPdf = {};
+  calificaciones.forEach(r => {
+    const k = String(r.pdf_id);
+    if (!evalsPorPdf[k]) evalsPorPdf[k] = new Set();
+    evalsPorPdf[k].add(String(r.revisor));
+  });
+
+  const lista = auditables.map(r => {
+    const k = String(r.pdf_id);
+    const todos = Array.from(evalsPorPdf[k] || []);
+    const otros = todos.filter(rv => rv !== revisor);
+    return {
+      pdf_id: r.pdf_id,
+      pdf_nombre: r.pdf_nombre,
+      revista: r.revista,
+      pais: r.pais,
+      macroarea: r.macroarea,
+      anio: r.anio,
+      titulo: r.titulo,
+      yo_califique: yoCal.has(k),
+      eval_otros_count: otros.length
+    };
+  });
+
+  return {
+    revisor: revisor,
+    total: lista.length,
+    calificados_por_mi: lista.filter(x => x.yo_califique).length,
+    items: lista
+  };
+}
+
+/**
+ * Devuelve los datos de un PDF específico por pdf_id (o el primero
+ * pendiente si no se pasa pdf_id), con la URL preview de Drive.
+ * No expone la calificación IA → doble ciego.
+ */
+function getPDF(pdf_id, revisor) {
+  if (!revisor || !String(revisor).trim()) {
+    throw new Error('Falta nombre de revisor.');
+  }
+  revisor = String(revisor).trim();
+
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const auditables = _leerHoja(ss, HOJA_AUDITABLES);
+  const calificaciones = _leerHoja(ss, HOJA_CALIFICACIONES);
+
+  const yoCal = new Set(
     calificaciones.filter(r => String(r.revisor) === revisor)
                   .map(r => String(r.pdf_id))
   );
@@ -125,34 +177,47 @@ function getSiguientePDF(revisor) {
     evalsPorPdf[k].push(String(r.revisor));
   });
 
-  const pendientes = auditables.filter(r => !yoYaCalifique.has(String(r.pdf_id)));
-  const total = auditables.length;
-  const calificados = total - pendientes.length;
-
-  if (pendientes.length === 0) {
-    return { fin: true, total: total, calificados: calificados, revisor: revisor };
+  let target;
+  if (pdf_id != null && String(pdf_id) !== '') {
+    target = auditables.find(r => String(r.pdf_id) === String(pdf_id));
+    if (!target) throw new Error('pdf_id no encontrado: ' + pdf_id);
+  } else {
+    target = auditables.find(r => !yoCal.has(String(r.pdf_id)));
+    if (!target) {
+      return {
+        fin: true,
+        total: auditables.length,
+        calificados: yoCal.size,
+        revisor: revisor
+      };
+    }
   }
-  const r = pendientes[0];
-  const drive_url = _buscarPDFEnDrive(r.pdf_nombre);
-  const otrosRevisores = (evalsPorPdf[String(r.pdf_id)] || [])
-                          .filter(rv => rv !== revisor);
+
+  const drive_url = _buscarPDFEnDrive(target.pdf_nombre);
+  const otros = (evalsPorPdf[String(target.pdf_id)] || []).filter(rv => rv !== revisor);
+
   return {
     fin: false,
-    total: total,
-    calificados: calificados,
+    total: auditables.length,
+    calificados: yoCal.size,
     revisor: revisor,
-    pdf_id: r.pdf_id,
-    pdf_nombre: r.pdf_nombre,
-    revista: r.revista,
-    pais: r.pais,
-    macroarea: r.macroarea,
-    anio: r.anio,
-    titulo: r.titulo,
+    pdf_id: target.pdf_id,
+    pdf_nombre: target.pdf_nombre,
+    revista: target.revista,
+    pais: target.pais,
+    macroarea: target.macroarea,
+    anio: target.anio,
+    titulo: target.titulo,
     drive_preview_url: drive_url,
-    eval_otros_count: otrosRevisores.length,
-    eval_otros_revisores: otrosRevisores
-    // NOTA: no se devuelven A_ia, B_ia, C_ia, veredicto_ia → doble ciego
+    yo_califique: yoCal.has(String(target.pdf_id)),
+    eval_otros_count: otros.length,
+    eval_otros_revisores: otros
   };
+}
+
+/** Alias retrocompatible: devuelve el primer PDF pendiente del revisor. */
+function getSiguientePDF(revisor) {
+  return getPDF(null, revisor);
 }
 
 /**

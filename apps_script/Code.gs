@@ -124,6 +124,42 @@ function _adminEndpoint(p) {
       if (keep.length) sh.getRange(2, 1, keep.length, sh.getLastColumn()).setValues(keep);
       out.borradas = vals.length - keep.length;
       out.quedan = keep.length;
+    } else if (p.fn === 'clean_revisor') {
+      // Borra filas de un revisor especifico (p.ej. claude) para reimportar limpio
+      if (!p.revisor) { out.error = 'Falta parametro revisor'; }
+      else {
+        const target = String(p.revisor).trim();
+        const ss = SpreadsheetApp.openById(SHEET_ID);
+        const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+        const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+        const idxRev = head.indexOf('revisor');
+        const lastRow = sh.getLastRow();
+        const vals = sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).getValues();
+        const keep = vals.filter(row => String(row[idxRev] || '').trim() !== target);
+        sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).clearContent();
+        if (keep.length) sh.getRange(2, 1, keep.length, sh.getLastColumn()).setValues(keep);
+        out.borradas = vals.length - keep.length;
+        out.quedan = keep.length;
+        out.revisor = target;
+      }
+    } else if (p.fn === 'reimportar_claude') {
+      // Atomico: borra filas claude existentes y reimporta el CSV corregido
+      const ss = SpreadsheetApp.openById(SHEET_ID);
+      const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+      const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+      const idxRev = head.indexOf('revisor');
+      const lastRow = sh.getLastRow();
+      const vals = sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).getValues();
+      const keep = vals.filter(row => String(row[idxRev] || '').trim() !== 'claude');
+      sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).clearContent();
+      if (keep.length) sh.getRange(2, 1, keep.length, sh.getLastColumn()).setValues(keep);
+      out.claude_borradas = vals.length - keep.length;
+      const r = importarEvaluacionesIA(
+        'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_claude_piloto.csv',
+        'claude'
+      );
+      out.importadas = r.ok;
+      out.saltadas = r.skipped;
     } else {
       out.error = 'fn desconocida: ' + p.fn;
     }

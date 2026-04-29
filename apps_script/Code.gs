@@ -37,12 +37,102 @@ const CATEGORIAS_D = [
 
 // ───────────────────── ENTRYPOINT WEB ─────────────────────────────────────
 function doGet(e) {
+  // Endpoint admin: solo accesible con token compartido entre el codigo
+  // del proyecto y el llamador (yo, el agente). Permite ejecutar funciones
+  // de mantenimiento via HTTP sin abrir el editor. Token rotable.
+  if (e && e.parameter && e.parameter.action === 'admin') {
+    return _adminEndpoint(e.parameter);
+  }
   const page = (e && e.parameter && e.parameter.page) || 'index';
   const tpl = HtmlService.createTemplateFromFile(page === 'stats' ? 'DashboardStats' : 'Index');
   return tpl.evaluate()
     .setTitle('Califica artículos inferenciales')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+const ADMIN_TOKEN = 'cai_admin_x9k2pq_2026';
+
+function _adminEndpoint(p) {
+  if (p.token !== ADMIN_TOKEN) {
+    return ContentService.createTextOutput(JSON.stringify({error:'token invalido'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  const out = {};
+  try {
+    if (p.fn === 'unificar') {
+      unificar_revisor(p.revisor || 'DIEGO MEZA');
+      out.ok = true; out.fn = 'unificar';
+    } else if (p.fn === 'importar_pilotos') {
+      importar_pilotos_claude_y_gemini2();
+      out.ok = true; out.fn = 'importar_pilotos';
+    } else if (p.fn === 'setup_completo') {
+      unificar_revisor(p.revisor || 'DIEGO MEZA');
+      importar_pilotos_claude_y_gemini2();
+      out.ok = true; out.fn = 'setup_completo';
+    } else if (p.fn === 'diagnostico') {
+      const ss = SpreadsheetApp.openById(SHEET_ID);
+      const cal = _leerHoja(ss, HOJA_CALIFICACIONES);
+      const revisores = {};
+      cal.forEach(r => { const v = String(r.revisor||'(vacio)'); revisores[v] = (revisores[v]||0)+1; });
+      out.total = cal.length; out.por_revisor = revisores;
+      const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+      out.header = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+      out.lastRow = sh.getLastRow();
+      out.lastCol = sh.getLastColumn();
+      const ult5 = sh.getRange(Math.max(2, sh.getLastRow()-4), 1, 5, sh.getLastColumn()).getValues();
+      out.ultimas5_filas = ult5;
+    } else if (p.fn === 'fix_revisor') {
+      // Repara revisor vacio en filas de claude/gemini_v2 segun pdf_nombre
+      const ss = SpreadsheetApp.openById(SHEET_ID);
+      const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+      const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+      const idxRev = head.indexOf('revisor');
+      const idxNotas = head.indexOf('notas');
+      const idxD = head.indexOf('D_humano');
+      const lastRow = sh.getLastRow();
+      const vals = sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).getValues();
+      let cambios = 0;
+      // Heuristica: si revisor esta vacio, mirar las notas para distinguir claude vs gemini
+      // Las notas de claude empiezan con "Estudio" o "..." y son largas. Gemini son cortas tipicamente.
+      // Mejor: re-importar las dos bases pero borrando primero las filas con revisor vacio.
+      out.error = 'fix_revisor desactivado por seguridad. Use clean_imports y reimporte.';
+    } else if (p.fn === 'fix_estructura') {
+      // Elimina la columna 13 (la "vacia") para corregir el desalineo causado
+      // por una migracion previa. Las filas existentes pierden el separador,
+      // y el revisor pasa de columna 14 a 13.
+      const ss = SpreadsheetApp.openById(SHEET_ID);
+      const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+      const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+      const idxVacio = head.indexOf('');
+      if (idxVacio < 0) { out.info = 'no hay columna vacia'; }
+      else {
+        sh.deleteColumn(idxVacio + 1); // 1-indexed
+        out.borrada = idxVacio + 1;
+        out.head_nuevo = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+      }
+    } else if (p.fn === 'clean_imports') {
+      // Borra filas con revisor vacio en la hoja calificaciones
+      const ss = SpreadsheetApp.openById(SHEET_ID);
+      const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+      const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+      const idxRev = head.indexOf('revisor');
+      const lastRow = sh.getLastRow();
+      const vals = sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).getValues();
+      const keep = vals.filter(row => String(row[idxRev] || '').trim() !== '');
+      sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).clearContent();
+      if (keep.length) sh.getRange(2, 1, keep.length, sh.getLastColumn()).setValues(keep);
+      out.borradas = vals.length - keep.length;
+      out.quedan = keep.length;
+    } else {
+      out.error = 'fn desconocida: ' + p.fn;
+    }
+  } catch (ex) {
+    out.error = ex.message;
+    out.stack = ex.stack;
+  }
+  return ContentService.createTextOutput(JSON.stringify(out))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 function include(filename) {
@@ -523,6 +613,52 @@ function diagnostico_lista() {
  * Lista los pdf_ids ya calificados por humanos (cualquier revisor).
  * Útil para identificar los PDFs que debe evaluar Claude/GPT en el piloto.
  */
+/**
+ * Renombra todas las filas con revisor "(anonimo)" al nombre dado.
+ * Útil para unificar calificaciones que se hicieron antes de identificarse.
+ * Idempotente: si ya no quedan "(anonimo)", no hace nada.
+ */
+function unificar_revisor(nombreReal) {
+  if (!nombreReal || !String(nombreReal).trim()) {
+    throw new Error('Pasale tu nombre real, ej: unificar_revisor("DIEGO MEZA")');
+  }
+  nombreReal = String(nombreReal).trim();
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+  const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  const idx = head.indexOf('revisor');
+  if (idx < 0) throw new Error('Falta columna revisor. Correr migrar_agregar_columna_revisor primero.');
+  const lastRow = sh.getLastRow();
+  if (lastRow < 2) { Logger.log('Sin filas a migrar.'); return; }
+  const rng = sh.getRange(2, idx + 1, lastRow - 1, 1);
+  const vals = rng.getValues();
+  let cambios = 0;
+  for (let i = 0; i < vals.length; i++) {
+    const v = String(vals[i][0] || '').trim();
+    if (v === '(anonimo)' || v === '') {
+      vals[i][0] = nombreReal;
+      cambios++;
+    }
+  }
+  if (cambios > 0) rng.setValues(vals);
+  Logger.log('Filas migradas a "' + nombreReal + '": ' + cambios);
+}
+
+/**
+ * Importa de un saque las dos bases del piloto (Claude y Gemini v2)
+ * desde el repo público de GitHub.
+ */
+function importar_pilotos_claude_y_gemini2() {
+  importarEvaluacionesIA(
+    'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_claude_piloto.csv',
+    'claude'
+  );
+  importarEvaluacionesIA(
+    'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_gemini_v2_piloto.csv',
+    'gemini_v2'
+  );
+}
+
 function listarPdfIdsCalificados() {
   const ss = SpreadsheetApp.openById(SHEET_ID);
   const cal = _leerHoja(ss, HOJA_CALIFICACIONES);

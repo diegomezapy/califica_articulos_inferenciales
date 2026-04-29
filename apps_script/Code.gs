@@ -508,6 +508,121 @@ function diagnostico_lista() {
   }
 }
 
+/**
+ * Análisis exhaustivo de concordancia humano vs IA sobre las calificaciones
+ * realizadas hasta el momento. Imprime al log:
+ *   - n total y por revisor
+ *   - acuerdo bruto y Cohen's kappa por dimensión (A, B, C, D)
+ *   - matriz de confusión D (humano filas, IA columnas)
+ *   - distribución direccional de los desacuerdos
+ *   - listado de PDFs con desacuerdo en D y motivo IA
+ *
+ * Ejecutar manualmente desde el editor para diagnóstico.
+ */
+function diagnostico_acuerdo() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const cal = _leerHoja(ss, HOJA_CALIFICACIONES);
+  Logger.log('Total filas calificaciones: ' + cal.length);
+  if (!cal.length) { Logger.log('Aún no hay calificaciones. Volvé luego de calificar algunas.'); return; }
+
+  // Por revisor
+  const revisores = Array.from(new Set(cal.map(r => String(r.revisor || '(anonimo)'))));
+  Logger.log('Revisores: ' + revisores.join(', '));
+  revisores.forEach(rv => {
+    const filas = cal.filter(r => String(r.revisor) === rv);
+    Logger.log('  ' + rv + ': ' + filas.length + ' calificadas');
+  });
+
+  // Helper: kappa
+  function kappa(pares, labels) {
+    if (!pares.length) return null;
+    const M = labels.map(() => labels.map(() => 0));
+    pares.forEach(p => {
+      const i = labels.indexOf(p[0]); const j = labels.indexOf(p[1]);
+      if (i >= 0 && j >= 0) M[i][j]++;
+    });
+    const tot = M.flat().reduce((s,x) => s+x, 0);
+    if (!tot) return null;
+    let pO = 0; for (let k = 0; k < labels.length; k++) pO += M[k][k];
+    pO /= tot;
+    let pE = 0;
+    for (let k = 0; k < labels.length; k++) {
+      const fi = M[k].reduce((s,x)=>s+x,0)/tot;
+      const co = M.map(r=>r[k]).reduce((s,x)=>s+x,0)/tot;
+      pE += fi*co;
+    }
+    return pE === 1 ? null : (pO - pE) / (1 - pE);
+  }
+
+  // Acuerdo y kappa por dimension binaria (A, B, C)
+  Logger.log('---- ACUERDO POR DIMENSIÓN BINARIA ----');
+  ['A','B','C'].forEach(dim => {
+    const pares = cal.map(r => [String(r[dim+'_humano']), String(r[dim+'_ia'])]);
+    const ok = pares.filter(p => p[0] === p[1]).length;
+    const pct = (100*ok/pares.length).toFixed(1);
+    const k = kappa(pares, ['0','1']);
+    Logger.log(dim + ': ' + ok + '/' + pares.length + ' = ' + pct + '%  kappa=' + (k!=null?k.toFixed(3):'n/a'));
+  });
+
+  // D (categórico de 5)
+  Logger.log('---- ACUERDO EN VEREDICTO INTEGRAL D ----');
+  const labelsD = ['FF clasica','FF con reconocimiento','Debilidad importante','Sin falla relevante','No evaluable'];
+  const paresD = cal.map(r => [String(r.D_humano), String(r.veredicto_ia)]);
+  const okD = paresD.filter(p => p[0] === p[1]).length;
+  Logger.log('D: ' + okD + '/' + paresD.length + ' = ' + (100*okD/paresD.length).toFixed(1) + '%  kappa=' + (kappa(paresD, labelsD)||0).toFixed(3));
+
+  // Matriz de confusión D
+  Logger.log('---- MATRIZ D (filas humano, columnas IA) ----');
+  const M = labelsD.map(() => labelsD.map(() => 0));
+  paresD.forEach(p => {
+    const i = labelsD.indexOf(p[0]); const j = labelsD.indexOf(p[1]);
+    if (i >= 0 && j >= 0) M[i][j]++;
+  });
+  Logger.log('etiquetas: ' + labelsD.join(' | '));
+  for (let i = 0; i < labelsD.length; i++) {
+    Logger.log(labelsD[i].padEnd(28) + ' -> ' + M[i].map(x => String(x).padStart(4)).join(' '));
+  }
+
+  // Sesgo direccional: ¿en qué dirección se equivoca la IA según el humano?
+  Logger.log('---- SESGO DIRECCIONAL (cuando humano e IA discrepan en D) ----');
+  const desacuerdos = paresD.filter(p => p[0] !== p[1]);
+  Logger.log('Desacuerdos: ' + desacuerdos.length + ' de ' + paresD.length);
+  const grav = {'FF clasica':4,'FF con reconocimiento':3,'Debilidad importante':2,'Sin falla relevante':1,'No evaluable':0};
+  let iaSobreestima = 0, iaSubestima = 0;
+  desacuerdos.forEach(p => {
+    const dh = grav[p[0]] || 0, di = grav[p[1]] || 0;
+    if (di > dh) iaSobreestima++;
+    if (di < dh) iaSubestima++;
+  });
+  Logger.log('IA juzga MÁS grave que humano: ' + iaSobreestima);
+  Logger.log('IA juzga MENOS grave que humano: ' + iaSubestima);
+
+  // Caso especial: humano marcó "No evaluable" → IA falla en filtro de aplicabilidad
+  const noEvalHumano = cal.filter(r => String(r.D_humano) === 'No evaluable').length;
+  Logger.log('---- ARTÍCULOS QUE HUMANO MARCÓ "No evaluable" pero IA clasificó como aplicable: ' + noEvalHumano);
+
+  // Listar primeros 10 desacuerdos en D con motivo IA
+  Logger.log('---- PRIMEROS 10 DESACUERDOS EN D (con motivo IA) ----');
+  const auditables = _leerHoja(ss, HOJA_AUDITABLES);
+  const motivoMap = {};
+  auditables.forEach(a => motivoMap[String(a.pdf_id)] = a.motivo_ia);
+  let cnt = 0;
+  for (const r of cal) {
+    if (String(r.D_humano) !== String(r.veredicto_ia)) {
+      cnt++;
+      Logger.log('PDF ' + r.pdf_id + ' (' + r.pdf_nombre + ')');
+      Logger.log('  humano: ' + r.D_humano + '  ↔  IA: ' + r.veredicto_ia);
+      Logger.log('  binarios humano: A=' + r.A_humano + ' B=' + r.B_humano + ' C=' + r.C_humano);
+      Logger.log('  binarios IA   : A=' + r.A_ia + ' B=' + r.B_ia + ' C=' + r.C_ia);
+      const m = motivoMap[String(r.pdf_id)];
+      if (m) Logger.log('  motivo IA: ' + String(m).substring(0, 280));
+      if (r.notas) Logger.log('  notas humano: ' + String(r.notas).substring(0, 200));
+      Logger.log('');
+      if (cnt >= 10) break;
+    }
+  }
+}
+
 function diagnostico_carpeta() {
   const folder = DriveApp.getFolderById(FOLDER_ID);
   Logger.log('Carpeta: ' + folder.getName() + ' (' + folder.getId() + ')');

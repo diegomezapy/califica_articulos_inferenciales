@@ -17,6 +17,30 @@
   header a { color: var(--primary); text-decoration: none; font-size: 13px; }
   header a:hover { text-decoration: underline; }
 
+  .popover-revisores {
+    position: fixed; top: 50px; right: 12px; z-index: 1000;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12); width: min(520px, 96vw); max-height: 70vh;
+    overflow: auto; padding: 0;
+  }
+  .popover-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; border-bottom: 1px solid var(--line); background: #fafbfc;
+    position: sticky; top: 0;
+  }
+  .popover-head a { color: var(--muted); font-size: 14px; text-decoration: none; }
+  .popover-head a:hover { color: var(--no); }
+  .popover-vacio { padding: 16px; color: var(--muted); font-size: 13px; }
+  .tbl-revisores { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .tbl-revisores th, .tbl-revisores td {
+    padding: 6px 10px; border-bottom: 1px solid var(--line); text-align: left;
+  }
+  .tbl-revisores th { background: #fafbfc; font-weight: 600; color: var(--muted); font-size: 12px; }
+  .tbl-revisores td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tbl-revisores th.num { text-align: right; }
+  .tbl-revisores td.ts { color: var(--muted); font-size: 11px; white-space: nowrap; }
+  .tbl-revisores tr.es-yo td { background: #ecfdf5; font-weight: 600; }
+
   .aviso-otros { background: #fef9c3; border: 1px solid #fde047; border-radius: 6px;
                  padding: 8px 10px; font-size: 12px; margin-bottom: 10px; color: #713f12; }
 

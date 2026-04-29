@@ -11,11 +11,20 @@
   <span class="progreso" id="progreso">cargando…</span>
   <span class="revisor-label" id="revisorLabel"></span>
   <span class="header-links">
+    <a href="#" id="lnkRevisores">👥 Revisores</a>
     <a id="lnkSheet" href="#" target="_blank">📊 Libro</a>
     <a href="?page=stats" target="_blank">📈 Estadísticas</a>
     <a href="#" id="lnkCambiarRevisor">cambiar revisor</a>
   </span>
 </header>
+
+<div id="popoverRevisores" class="popover-revisores" style="display:none;">
+  <div class="popover-head">
+    <b>Revisores activos</b>
+    <a href="#" id="cerrarRevisores">✕</a>
+  </div>
+  <div id="popoverRevisoresBody"><span class="loading"></span> cargando…</div>
+</div>
 
 <main class="main-3col">
 
@@ -100,6 +109,53 @@
   google.script.run.withSuccessHandler(url => {
     document.getElementById('lnkSheet').href = url;
   }).getURLSheet();
+
+  // Popover de revisores
+  function cargarRevisores() {
+    const body = document.getElementById('popoverRevisoresBody');
+    body.innerHTML = '<span class="loading"></span> cargando…';
+    google.script.run
+      .withSuccessHandler(d => {
+        if (!d || !d.revisores || !d.revisores.length) {
+          body.innerHTML = '<div class="popover-vacio">Sin calificaciones todavía.</div>';
+          return;
+        }
+        const yo = (getRevisor() || '').trim();
+        const filas = d.revisores.map(r => {
+          const pct = d.total_pdfs ? (100 * r.pdfs_unicos / d.total_pdfs).toFixed(1) : '0.0';
+          const esYo = r.revisor === yo;
+          return `<tr${esYo ? ' class="es-yo"' : ''}>
+            <td>${esYo ? '👤 ' : ''}${escape_(r.revisor)}</td>
+            <td class="num">${r.n}</td>
+            <td class="num">${r.pdfs_unicos}</td>
+            <td class="num">${pct}%</td>
+            <td class="ts">${escape_(r.ultima || '')}</td>
+          </tr>`;
+        }).join('');
+        body.innerHTML = `
+          <table class="tbl-revisores">
+            <thead>
+              <tr><th>revisor</th><th class="num">filas</th><th class="num">PDFs</th><th class="num">% de ${d.total_pdfs}</th><th>última</th></tr>
+            </thead>
+            <tbody>${filas}</tbody>
+          </table>`;
+      })
+      .withFailureHandler(err => {
+        body.innerHTML = '<div class="popover-vacio" style="color:#b91c1c;">Error: ' + escape_(err && err.message || String(err)) + '</div>';
+      })
+      .getResumenRevisores();
+  }
+  document.getElementById('lnkRevisores').addEventListener('click', e => {
+    e.preventDefault();
+    const pop = document.getElementById('popoverRevisores');
+    const visible = pop.style.display !== 'none';
+    pop.style.display = visible ? 'none' : 'block';
+    if (!visible) cargarRevisores();
+  });
+  document.getElementById('cerrarRevisores').addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('popoverRevisores').style.display = 'none';
+  });
 
   // Filtros y búsqueda
   document.querySelectorAll('.filtros button').forEach(b => {
@@ -371,6 +427,10 @@
               renderLista();
             }).withFailureHandler(e => _dbg('Refresh lista FALLO: ' + (e.message || e), 'err'))
               .getListaPDFs(getRevisor());
+            // Refrescar popover si está visible
+            if (document.getElementById('popoverRevisores').style.display !== 'none') {
+              cargarRevisores();
+            }
           } catch (e2) {
             _dbg('Error renderizando contraste: ' + e2.message, 'err');
           }

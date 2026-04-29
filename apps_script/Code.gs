@@ -419,6 +419,44 @@ function getURLSheet() {
 }
 
 /**
+ * Resumen por revisor para el panel de la app: nombre, total de filas
+ * (calificaciones), PDFs únicos calificados y última fecha. Ordenado
+ * por total desc.
+ */
+function getResumenRevisores() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+  if (!sh || sh.getLastRow() < 2) return { total_pdfs: 0, revisores: [] };
+  const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  const idx = {
+    pdf_id: head.indexOf('pdf_id'),
+    revisor: head.indexOf('revisor'),
+    timestamp: head.indexOf('timestamp')
+  };
+  const vals = sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).getValues();
+  const map = {};
+  vals.forEach(row => {
+    const r = String(row[idx.revisor] || '').trim();
+    if (!r) return;
+    if (!map[r]) map[r] = { revisor: r, n: 0, pdfs: new Set(), ultima: null };
+    map[r].n++;
+    map[r].pdfs.add(String(row[idx.pdf_id]));
+    const ts = row[idx.timestamp];
+    if (ts && (!map[r].ultima || ts > map[r].ultima)) map[r].ultima = ts;
+  });
+  // PDFs auditables totales (denominador)
+  const shA = ss.getSheetByName(HOJA_AUDITABLES);
+  const totalPdfs = shA ? Math.max(0, shA.getLastRow() - 1) : 0;
+  const revisores = Object.values(map).map(x => ({
+    revisor: x.revisor,
+    n: x.n,
+    pdfs_unicos: x.pdfs.size,
+    ultima: x.ultima ? Utilities.formatDate(new Date(x.ultima), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm') : ''
+  })).sort((a, b) => b.n - a.n);
+  return { total_pdfs: totalPdfs, revisores: revisores };
+}
+
+/**
  * Estadísticas: acuerdo IA vs cada revisor, kappa vs IA, kappa entre
  * humanos (pairwise) cuando hay PDFs con ≥2 revisores.
  */

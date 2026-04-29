@@ -1,0 +1,13 @@
+pdf_id,A,B,C,D,notas,revisor
+1,0,0,0,No evaluable,El artículo no usa inferencia estadística explícita; describe hallazgos de una muestra sin generalizar estadísticamente a una población mayor.,gemini_v2
+2,1,0,1,FF clasica,Muestreo no probabilístico de invernaderos (conveniencia/intencional) con extrapolación explícita de prevalencia e incidencia a todo el Cinturón Hortícola Platense sin advertir la limitación.,gemini_v2
+3,1,0,1,FF clasica,"Muestreo no probabilístico (conveniencia en escuelas públicas) con extrapolación explícita de prevalencias y relaciones a la población escolar del cinturón productivo de La Plata, sin advertir la limi",gemini_v2
+4,1,1,1,FF con reconocimiento,"Muestreo por conveniencia en escuelas públicas, con extrapolación implícita a la población escolar del periurbano de La Plata, a pesar de reconocer el tipo de muestreo.",gemini_v2
+5,0,0,0,No evaluable,"Los datos provienen de censos domiciliarios exhaustivos en las 11 localidades estudiadas, no de un muestreo inferencial para representar una población mayor.",gemini_v2
+6,1,1,1,FF con reconocimiento,"Muestreo no probabilístico (encuesta online voluntaria) y extrapolación a la población general de perros, aunque se reconoce la limitación del tamaño de la muestra para la inferencia estadística.",gemini_v2
+7,1,0,1,FF clasica,Muestreo no probabilístico (conveniencia) de 30 yeguas y extrapolación explícita de hallazgos sobre la microflora vaginal a la población general de yeguas sin advertir las limitaciones.,gemini_v2
+8,1,0,1,FF clasica,"Muestreo por conveniencia (10 propiedades, 161 animales). Extrapola hallazgos a la región de Placas y usa inferencia estadística sin advertir limitaciones del muestreo no probabilístico.",gemini_v2
+9,1,0,1,FF clasica,Muestreo por conveniencia de 20 gatos de clínicas y extrapolación explícita a la población general de gatos machos castrados sin advertir claramente las limitaciones del muestreo.,gemini_v2
+43,1,1,1,FF con reconocimiento,"El estudio usa denuncias de una línea de ayuda (muestreo no probabilístico). Aunque reconoce dificultades de reporte, extrapola conclusiones sobre la probabilidad de violencia a mujeres en Bogotá.",gemini_v2
+56,1,1,1,FF con reconocimiento,"Muestreo no probabilístico (conveniencia) con extrapolación a población mayor, aunque se reconoce la limitación del muestreo.",gemini_v2
+74,1,1,1,FF con reconocimiento,"Muestreo de conveniencia (desembarques) y extrapolación a la población de peces, aunque se advierte sobre el tamaño limitado de la muestra.",gemini_v2

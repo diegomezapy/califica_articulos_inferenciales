@@ -519,6 +519,74 @@ function diagnostico_lista() {
  *
  * Ejecutar manualmente desde el editor para diagnóstico.
  */
+/**
+ * Lista los pdf_ids ya calificados por humanos (cualquier revisor).
+ * Útil para identificar los PDFs que debe evaluar Claude/GPT en el piloto.
+ */
+function listarPdfIdsCalificados() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const cal = _leerHoja(ss, HOJA_CALIFICACIONES);
+  const pares = cal.map(r => ({pdf_id: r.pdf_id, pdf_nombre: r.pdf_nombre, revisor: r.revisor}));
+  Logger.log('Total: ' + pares.length);
+  Logger.log('JSON: ' + JSON.stringify(pares));
+  return pares;
+}
+
+/**
+ * Importa evaluaciones desde un CSV publicado en una URL pública (ej. raw.githubusercontent.com).
+ * El CSV debe tener columnas: pdf_id, A, B, C, D, notas (opcional), revisor (opcional).
+ * Si revisor no está en el CSV, se usa el parámetro defaultRevisor.
+ */
+function importarEvaluacionesIA(url, defaultRevisor) {
+  if (!url) throw new Error('Falta URL del CSV');
+  if (!defaultRevisor) throw new Error('Falta defaultRevisor');
+
+  const resp = UrlFetchApp.fetch(url, {muteHttpExceptions: true});
+  if (resp.getResponseCode() !== 200) throw new Error('HTTP ' + resp.getResponseCode());
+  const data = Utilities.parseCsv(resp.getContentText('UTF-8'));
+  const head = data[0];
+  const idx = {};
+  ['pdf_id','A','B','C','D','notas','revisor'].forEach(k => idx[k] = head.indexOf(k));
+  if (idx.pdf_id < 0 || idx.A < 0 || idx.B < 0 || idx.C < 0 || idx.D < 0) {
+    throw new Error('CSV debe tener al menos columnas: pdf_id, A, B, C, D');
+  }
+
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const auditables = _leerHoja(ss, HOJA_AUDITABLES);
+  const audByPid = {};
+  auditables.forEach(a => audByPid[String(a.pdf_id)] = a);
+  const hojaC = ss.getSheetByName(HOJA_CALIFICACIONES);
+
+  let ok = 0, skipped = 0;
+  for (let i = 1; i < data.length; i++) {
+    const row = data[i];
+    if (!row[idx.pdf_id]) continue;
+    const pid = String(row[idx.pdf_id]);
+    const a = audByPid[pid];
+    if (!a) { skipped++; continue; }
+    const D = String(row[idx.D] || '').trim();
+    if (CATEGORIAS_D.indexOf(D) === -1) {
+      Logger.log('Veredicto invalido en fila ' + i + ': ' + D);
+      skipped++; continue;
+    }
+    const revisor = (idx.revisor >= 0 && row[idx.revisor]) ? String(row[idx.revisor]).trim() : defaultRevisor;
+    hojaC.appendRow([
+      new Date(),
+      a.pdf_id, a.pdf_nombre,
+      String(row[idx.A]).trim(),
+      String(row[idx.B]).trim(),
+      String(row[idx.C]).trim(),
+      D,
+      idx.notas >= 0 ? String(row[idx.notas] || '').trim() : '',
+      a.A_ia, a.B_ia, a.C_ia, a.veredicto_ia,
+      revisor
+    ]);
+    ok++;
+  }
+  Logger.log('Importadas: ' + ok + '. Saltadas: ' + skipped);
+  return {ok: ok, skipped: skipped};
+}
+
 function diagnostico_acuerdo() {
   const ss = SpreadsheetApp.openById(SHEET_ID);
   const cal = _leerHoja(ss, HOJA_CALIFICACIONES);

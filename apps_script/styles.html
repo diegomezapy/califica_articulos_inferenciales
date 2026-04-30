@@ -142,6 +142,38 @@
   .badge-no { color: var(--no); font-weight: 700; }
   .motivo-ia { font-size: 12px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
 
+  .tu-eval {
+    font-size: 12px; color: var(--muted); background: #f8fafc;
+    border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px;
+    margin-bottom: 10px;
+  }
+  .comparacion-revisores {
+    width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed;
+  }
+  .comparacion-revisores th, .comparacion-revisores td {
+    border-bottom: 1px solid var(--line); padding: 6px 5px; vertical-align: middle;
+  }
+  .comparacion-revisores th {
+    color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .03em;
+    background: #f8fafc; text-align: center;
+  }
+  .comparacion-revisores th:first-child,
+  .comparacion-revisores td:first-child { text-align: left; width: 34%; }
+  .comparacion-revisores td { text-align: center; }
+  .comparacion-revisores td:first-child span {
+    display: block; color: var(--muted); font-size: 10.5px; margin-top: 1px;
+  }
+  .comparacion-revisores td.match { color: var(--ok); background: #f0fdf4; }
+  .comparacion-revisores td.mismatch { color: var(--no); background: #fef2f2; }
+  .comparacion-revisores td.match span,
+  .comparacion-revisores td.mismatch span {
+    display: block; font-weight: 700; line-height: 1;
+  }
+  .comparacion-revisores td.score { font-weight: 700; }
+  .comparacion-revisores td.score.ok { color: var(--ok); }
+  .comparacion-revisores td.score.warn { color: var(--warn); }
+  .comparacion-revisores td.score.no { color: var(--no); }
+
   .stat-card { background: var(--card); border: 1px solid var(--line); border-radius: 8px;
                padding: 16px; text-align: center; }
   .stat-card .num { font-size: 28px; font-weight: 700; color: var(--primary); }

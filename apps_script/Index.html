@@ -371,7 +371,7 @@
         </fieldset>
 
         <div class="acciones">
-          <button type="submit" class="btn-primary" id="btnSubmit">Enviar y ver contraste IA</button>
+          <button type="submit" class="btn-primary" id="btnSubmit">Enviar y comparar</button>
           <button type="button" class="btn-skip" onclick="document.getElementById('btnSaltar').click();">Saltar este →</button>
         </div>
       </form>
@@ -452,31 +452,62 @@
   function restaurarBoton(btn) {
     if (!btn) return;
     btn.disabled = false;
-    btn.innerHTML = 'Enviar y ver contraste IA';
+    btn.innerHTML = 'Enviar y comparar';
   }
 
   function renderContraste(c) {
-    const fila = (lbl, h, i, ok) => `
-      <div class="row">
-        <span class="lbl">${lbl}</span>
-        <span>Humano: <b>${escape_(h)}</b></span>
-        <span>IA: <b>${escape_(i)}</b></span>
-        <span class="${ok ? 'badge-ok' : 'badge-no'}">${ok ? '✓' : '✗'}</span>
-      </div>`;
     const frm = document.getElementById('frm');
     if (frm) frm.style.display = 'none';
+    const comparaciones = c.comparaciones || [];
+    const filas = comparaciones.map(r => {
+      const tipo = r.tipo === 'ia_base' ? 'IA base' : (r.tipo === 'modelo' ? 'Modelo' : 'Humano');
+      return `<tr>
+        <td>
+          <b>${escape_(nombreRevisor(r.revisor))}</b>
+          <span>${escape_(tipo)}</span>
+        </td>
+        ${celdaValor(r.A, r.A_match)}
+        ${celdaValor(r.B, r.B_match)}
+        ${celdaValor(r.C, r.C_match)}
+        ${celdaValor(r.D, r.D_match)}
+        <td class="score ${r.coincidencias === 4 ? 'ok' : (r.coincidencias >= 2 ? 'warn' : 'no')}">${r.coincidencias}/4</td>
+      </tr>`;
+    }).join('');
     document.getElementById('contraste').innerHTML = `
       <div class="contraste">
-        <h3>Contraste con IA · revisor <b>${escape_(getRevisor())}</b></h3>
-        ${fila('A', c.A_humano, c.A_ia, c.A_match)}
-        ${fila('B', c.B_humano, c.B_ia, c.B_match)}
-        ${fila('C', c.C_humano, c.C_ia, c.C_match)}
-        ${fila('D', c.D_humano, c.D_ia, c.D_match)}
-        ${c.motivo_ia ? '<div class="motivo-ia"><b>Motivo IA:</b> ' + escape_(c.motivo_ia) + '</div>' : ''}
+        <h3>Comparación contra IA y revisores · <b>${escape_(getRevisor())}</b></h3>
+        <div class="tu-eval">
+          Tu evaluación: A=<b>${escape_(c.A_humano)}</b> · B=<b>${escape_(c.B_humano)}</b> ·
+          C=<b>${escape_(c.C_humano)}</b> · D=<b>${escape_(c.D_humano)}</b>
+        </div>
+        <table class="comparacion-revisores">
+          <thead>
+            <tr>
+              <th>Referencia</th><th>A</th><th>B</th><th>C</th><th>D</th><th>Coinc.</th>
+            </tr>
+          </thead>
+          <tbody>${filas || '<tr><td colspan="6">Sin comparadores previos.</td></tr>'}</tbody>
+        </table>
+        ${c.motivo_ia ? '<div class="motivo-ia"><b>Motivo IA base:</b> ' + escape_(c.motivo_ia) + '</div>' : ''}
         <div class="acciones">
           <button class="btn-primary" onclick="document.getElementById('btnSaltar').click();">Siguiente →</button>
         </div>
       </div>`;
+  }
+
+  function celdaValor(v, ok) {
+    return `<td class="${ok ? 'match' : 'mismatch'}"><b>${escape_(v)}</b><span>${ok ? '✓' : '✗'}</span></td>`;
+  }
+
+  function nombreRevisor(r) {
+    return {
+      'IA base': 'IA base',
+      codex_gpt: 'Codex/GPT',
+      gemini_flash: 'Gemini 2.5 Flash',
+      gemini_v2: 'Gemini piloto',
+      claude_haiku: 'Claude Haiku',
+      claude: 'Claude piloto'
+    }[r] || r;
   }
 
   function escape_(s) {

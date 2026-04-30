@@ -484,7 +484,7 @@ function getSiguientePDF(revisor) {
 
 /**
  * Recibe la calificación humana, la persiste con el revisor indicado,
- * y devuelve el contraste con la calificación IA.
+ * y devuelve el contraste con la IA base y con otros revisores del mismo PDF.
  */
 function submitCalificacion(payload) {
   if (!payload.revisor || !String(payload.revisor).trim()) {
@@ -496,6 +496,7 @@ function submitCalificacion(payload) {
 
   const ss = SpreadsheetApp.openById(SHEET_ID);
   const auditables = _leerHoja(ss, HOJA_AUDITABLES);
+  const calificaciones = _leerHoja(ss, HOJA_CALIFICACIONES);
   const reg = auditables.find(r => String(r.pdf_id) === String(payload.pdf_id));
   if (!reg) throw new Error('pdf_id no encontrado: ' + payload.pdf_id);
 
@@ -513,14 +514,65 @@ function submitCalificacion(payload) {
     String(payload.revisor).trim()
   ]);
 
+  const humano = {
+    A: String(payload.A),
+    B: String(payload.B),
+    C: String(payload.C),
+    D: String(payload.D)
+  };
+  const comparaciones = [{
+    revisor: 'IA base',
+    tipo: 'ia_base',
+    A: String(reg.A_ia),
+    B: String(reg.B_ia),
+    C: String(reg.C_ia),
+    D: String(reg.veredicto_ia),
+    notas: reg.motivo_ia || ''
+  }];
+
+  const previas = calificaciones
+    .filter(r => String(r.pdf_id) === String(payload.pdf_id))
+    .map(r => ({
+      revisor: String(r.revisor || '(anonimo)'),
+      tipo: _tipoRevisor_(String(r.revisor || '')),
+      A: String(r.A_humano),
+      B: String(r.B_humano),
+      C: String(r.C_humano),
+      D: String(r.D_humano),
+      notas: String(r.notas || '')
+    }));
+
+  // Mantener una fila por revisor, tomando la ultima previa si hay duplicados.
+  const porRevisor = {};
+  previas.forEach(r => { porRevisor[r.revisor] = r; });
+  Object.keys(porRevisor).sort().forEach(k => comparaciones.push(porRevisor[k]));
+
+  comparaciones.forEach(r => {
+    r.A_match = r.A === humano.A;
+    r.B_match = r.B === humano.B;
+    r.C_match = r.C === humano.C;
+    r.D_match = r.D === humano.D;
+    r.coincidencias = [r.A_match, r.B_match, r.C_match, r.D_match].filter(Boolean).length;
+  });
+
   return {
     A_humano: payload.A, A_ia: reg.A_ia, A_match: String(payload.A) === String(reg.A_ia),
     B_humano: payload.B, B_ia: reg.B_ia, B_match: String(payload.B) === String(reg.B_ia),
     C_humano: payload.C, C_ia: reg.C_ia, C_match: String(payload.C) === String(reg.C_ia),
     D_humano: payload.D, D_ia: reg.veredicto_ia, D_match: payload.D === reg.veredicto_ia,
     motivo_ia: reg.motivo_ia,
-    confianza_ia: reg.confianza_ia
+    confianza_ia: reg.confianza_ia,
+    comparaciones: comparaciones
   };
+}
+
+function _tipoRevisor_(revisor) {
+  const r = String(revisor || '').toLowerCase();
+  if (r === 'codex_gpt' || r === 'gemini_flash' || r === 'gemini_v2' ||
+      r === 'claude_haiku' || r === 'claude') {
+    return 'modelo';
+  }
+  return 'humano';
 }
 
 /** Devuelve la URL del Sheet para el botón "Ir al libro". */

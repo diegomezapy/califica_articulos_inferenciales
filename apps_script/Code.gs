@@ -142,6 +142,24 @@ function _adminEndpoint(p) {
         out.quedan = keep.length;
         out.revisor = target;
       }
+    } else if (p.fn === 'importar_claude_haiku_346') {
+      // Borra filas claude_haiku previas y reimporta el CSV de los 346
+      const ss = SpreadsheetApp.openById(SHEET_ID);
+      const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+      const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+      const idxRev = head.indexOf('revisor');
+      const lastRow = sh.getLastRow();
+      const vals = sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).getValues();
+      const keep = vals.filter(row => String(row[idxRev] || '').trim() !== 'claude_haiku');
+      sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).clearContent();
+      if (keep.length) sh.getRange(2, 1, keep.length, sh.getLastColumn()).setValues(keep);
+      out.claude_haiku_borradas = vals.length - keep.length;
+      const r = importarEvaluacionesIA(
+        'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_claude_haiku_346.csv',
+        'claude_haiku'
+      );
+      out.importadas = r.ok;
+      out.saltadas = r.skipped;
     } else if (p.fn === 'reimportar_claude') {
       // Atomico: borra filas claude existentes y reimporta el CSV corregido
       const ss = SpreadsheetApp.openById(SHEET_ID);

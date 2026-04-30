@@ -256,6 +256,35 @@ function include(filename) {
   return HtmlService.createHtmlOutputFromFile(filename).getContent();
 }
 
+function importar_modelos_346() {
+  const modelos = [
+    {
+      revisor: 'codex_gpt',
+      url: 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_codex_gpt.csv'
+    },
+    {
+      revisor: 'gemini_flash',
+      url: 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_gemini_flash.csv'
+    },
+    {
+      revisor: 'claude_haiku',
+      url: 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_claude_haiku_346.csv'
+    }
+  ];
+  const out = {};
+  modelos.forEach(m => {
+    const borradas = _borrarFilasRevisor_(m.revisor);
+    const r = importarEvaluacionesIA(m.url, m.revisor);
+    out[m.revisor] = {
+      borradas: borradas,
+      importadas: r.ok,
+      saltadas: r.skipped
+    };
+  });
+  actualizar_hoja_comparacion();
+  return out;
+}
+
 // ───────────────────── SETUP / MIGRACIÓN ─────────────────────────────────
 function setup_inicial() {
   const ss = SpreadsheetApp.create('califica_articulos_inferenciales — calificaciones');

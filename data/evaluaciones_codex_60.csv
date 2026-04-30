@@ -1,0 +1,61 @@
+pdf_id,A,B,C,D,notas,revisor
+1,0,0,0,No evaluable,No computar en concordancia hasta recuperar texto/PDF articulo completo.,codex_gpt
+2,1,0,1,FF clasica,Prospeccion no probabilistica con lectura regional.,codex_gpt
+3,1,0,1,FF clasica,Inferencia sanitaria territorial desde muestra escolar sin marco probabilistico explicito.,codex_gpt
+4,1,0,1,FF clasica,"Aunque es una base grande, no hay evidencia de diseno probabilistico.",codex_gpt
+5,0,0,0,Sin falla relevante,Censo/registro local; no cae en falla de muestreo no probabilistico.,codex_gpt
+6,1,1,0,Debilidad importante,"Muestreo voluntario, pero extrapolacion limitada y reconocida.",codex_gpt
+7,1,1,0,Debilidad importante,IA parece convertir descripcion microbiologica en inferencia poblacional; no lo veo como A&C.,codex_gpt
+8,1,0,1,FF clasica,Seleccion dirigida de propiedades con lectura regional.,codex_gpt
+9,0,0,0,Sin falla relevante,No debe codificarse como falla de muestreo no probabilistico; es estudio experimental pequeno.,codex_gpt
+10,1,0,1,FF clasica,Aqui discrepo de IA: hay inferencia relacional general sobre vacas desde seleccion no probabilistica.,codex_gpt
+11,1,1,1,FF con reconocimiento,"Aunque hay calculo muestral, la adhesion voluntaria de granjas rompe base probabilistica.",codex_gpt
+12,0,1,1,Debilidad importante,"Hay posible sesgo operativo, pero no A de muestreo no probabilistico.",codex_gpt
+13,0,0,0,Sin falla relevante,Caso retrospectivo clinico; no corresponde A&C aunque haya porcentajes.,codex_gpt
+14,0,0,0,Sin falla relevante,"Estudio animal controlado, no muestreo poblacional.",codex_gpt
+15,0,1,0,Sin falla relevante,Serie clinico-patologica retrospectiva; no A&C.,codex_gpt
+16,0,0,0,Sin falla relevante,Estudio experimental animal; no falla por muestreo poblacional.,codex_gpt
+17,1,0,1,FF clasica,Encuesta seroepidemiologica regional desde muestra no probabilistica.,codex_gpt
+18,1,1,1,FF con reconocimiento,Convenience sample con conclusiones comparativas por pais/genero.,codex_gpt
+19,1,1,0,No evaluable,No deberia integrar denominador auditable como falla A&C; es articulo teorico-interpretativo con datos secundarios/previos.,codex_gpt
+20,0,0,0,Sin falla relevante,Hay muestra aleatoria declarada y alcance local de diseno.,codex_gpt
+21,1,0,1,FF clasica,Encuesta online no probabilistica con perfilamiento de consumidores.,codex_gpt
+22,1,0,1,FF clasica,Muestra pequena no probabilistica con lectura municipal/cadena productiva.,codex_gpt
+23,1,1,0,No evaluable,No es inferencia estadistica poblacional; IA parece penalizar muestreo cualitativo intencional.,codex_gpt
+24,1,1,0,Debilidad importante,"Intervencion local; debilidad posible, pero no A&C fuerte.",codex_gpt
+25,1,0,1,FF clasica,Generaliza eficiencia productiva desde dos unidades seleccionadas.,codex_gpt
+26,1,1,1,FF con reconocimiento,Conveniencia hospitalaria con inferencia regional.,codex_gpt
+27,1,0,1,FF clasica,Lectura regional desde propiedades no probabilisticas.,codex_gpt
+28,0,0,1,Debilidad importante,No cumple A; por tanto no es falla fuerte A&C.,codex_gpt
+29,1,0,1,FF clasica,"Cobertura parcial relevante, pero no probabilistica y con lectura estatal.",codex_gpt
+30,1,0,1,FF clasica,Comparacion inferencial de razas desde animales seleccionados.,codex_gpt
+31,1,0,1,FF clasica,"Intento cercano a censo de asociación, pero la baja respuesta voluntaria introduce autoselección; mantiene inferencia al sistema productivo.",codex_gpt
+32,0,0,0,Sin falla relevante,No corresponde marcar A&C: el problema central no es extrapolación desde muestra no probabilística sino análisis de registros de concursos.,codex_gpt
+33,0,0,0,Sin falla relevante,Diseño experimental animal; no encaja en la falla A&C de encuesta/muestreo humano no probabilístico.,codex_gpt
+34,0,0,0,Sin falla relevante,No hay encuesta o muestreo no probabilístico con extrapolación poblacional.,codex_gpt
+35,1,0,1,FF clasica,No se documenta selección probabilística; los resultados se proyectan a la comunidad facultativa.,codex_gpt
+36,1,1,1,FF con reconocimiento,"Aunque reconoce la limitación de tamaño muestral, sí combina muestra acotada con inferencias/recomendaciones amplias.",codex_gpt
+37,1,1,0,Debilidad importante,"Hay A, pero no veo C suficientemente fuerte para clasificar A&C.",codex_gpt
+38,1,0,1,FF clasica,"La IA lo dejó pasar, pero el texto declara explícitamente muestra no probabilística y generaliza al perfil docente institucional.",codex_gpt
+39,1,0,1,FF clasica,Base local no probabilística con inferencia a desempeño de genotipos; A&C razonable.,codex_gpt
+40,1,0,1,FF clasica,"Aunque usa registros de faena, la inferencia sanitaria se proyecta al área de influencia; la selección depende de animales faenados en ese centro y periodo.",codex_gpt
+41,1,0,1,FF clasica,"Hay cálculo de tamaño muestral, pero no procedimiento probabilístico de selección; las conclusiones se proyectan al cantón.",codex_gpt
+42,1,0,1,FF clasica,Caso mixto con datos de encuesta no probabilística usados para caracterizar población barrial/política pública.,codex_gpt
+43,0,0,0,Sin falla relevante,"Puede tener límites de subregistro, pero no es la falla A&C definida: no hay muestreo no probabilístico de participantes con extrapolación.",codex_gpt
+44,0,0,0,No evaluable,"No aplicable a A&C; Gemini parece haber castigado extrapolación temática, pero el texto incluso advierte límites de representatividad.",codex_gpt
+45,1,1,1,FF con reconocimiento,"Reconoce limitaciones, pero mantiene afirmaciones de efectividad transferibles desde una muestra voluntaria de aula.",codex_gpt
+46,1,1,1,FF con reconocimiento,"Muestra de aula muy localizada con extrapolación pedagógica amplia, aunque se advierten limitaciones.",codex_gpt
+47,1,0,0,Debilidad importante,"Hay muestra escolar no probabilística, pero el encuadre explícito como estudio de caso reduce C; no clasifico A&C fuerte.",codex_gpt
+48,1,0,1,FF clasica,A explícita y conclusiones sobre constructos estudiantiles más allá del grupo intacto.,codex_gpt
+49,1,0,1,FF clasica,El propio método declara búsqueda de generalización pese a cuotas y autoselección.,codex_gpt
+50,1,0,1,FF clasica,Encuesta no probabilística con modelo confirmatorio y extrapolación institucional/regional.,codex_gpt
+51,1,0,1,FF clasica,Muestra empresarial documental no probabilística/por disponibilidad con inferencia sectorial.,codex_gpt
+52,1,0,1,FF clasica,Cinco casos/minas y trabajadores no seleccionados probabilísticamente sostienen conclusiones departamentales.,codex_gpt
+53,1,0,1,FF clasica,Diseño de aula por conveniencia con extrapolación pedagógica fuerte.,codex_gpt
+54,1,0,1,FF clasica,Componente participativo con agricultores seleccionados intencionalmente y recomendaciones productivas generales.,codex_gpt
+55,0,0,0,Sin falla relevante,"Experimento controlado con especies/forrajes, no encuesta o muestra humana no probabilística; las recomendaciones reconocen condiciones similares.",codex_gpt
+56,1,1,1,FF con reconocimiento,"El artículo reconoce que el muestreo por conveniencia afecta representatividad, pero aun así deriva recomendaciones generales.",codex_gpt
+57,1,1,1,FF con reconocimiento,"Reconoce que el muestreo restringe generalización, pero mantiene implicaciones para programa y salud mental infantil.",codex_gpt
+58,0,0,1,Debilidad importante,"Hay extrapolación pedagógica, pero no falla A porque trabaja con censo de la población definida; lo clasifico como no A&C fuerte.",codex_gpt
+59,1,0,1,FF clasica,El componente de campo no probabilístico se usa para sostener inferencias amplias sobre imaginarios territoriales.,codex_gpt
+60,1,1,1,FF con reconocimiento,"Reconoce pocos casos para T3/T4, pero generaliza a la ciudad y norma; A&C fuerte.",codex_gpt

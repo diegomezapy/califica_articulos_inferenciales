@@ -3,13 +3,14 @@
 > **🌐 App pública:** <https://script.google.com/macros/s/AKfycby-SQDUuxxpHl2ApM3xosLbFrxAvxxyZY7yFRhU7fytgqn_NS1MO0uqq5piKcHTc1fLvg/exec>
 > _(Cualquier usuario con cuenta de Google. Identifícate como revisor al entrar; las calificaciones se guardan por nombre)._
 
-App web de evaluación humana **doble ciego** para los 346 artículos auditables del estudio
+App web de evaluación humana **doble ciego** y comparación multi-modelo para los 346 artículos auditables del estudio
 **Errores Inferenciales Críticos en Estudios Cuantitativos Sudamericanos** (DOAJ 2025).
 
 Permite ir viendo cada PDF, calificarlo manualmente sobre las dimensiones operacionales
 del protocolo v4.1 (A, B, C) más un veredicto integral (D), y luego contrastar la
-calificación humana con la de la inteligencia artificial (Gemini 2.5 Flash) para obtener
-una medida de **acuerdo inter-rater** (porcentaje de coincidencia + Cohen's kappa).
+calificación humana o de modelo con la auditoría IA base. El dashboard compara además
+las revisiones completas de **Codex/GPT**, **Gemini 2.5 Flash** y **Claude Haiku** para obtener
+medidas de **acuerdo inter-rater** (porcentaje de coincidencia + Cohen's kappa).
 
 ## Stack
 
@@ -30,7 +31,11 @@ califica_articulos_inferenciales/
 │   ├── DashboardStats.html      # acuerdo, kappa, matriz de confusión
 │   └── styles.html              # CSS reutilizable
 ├── data/
-│   └── articulos_auditables_346.csv   # 346 PDFs con sus cifras IA (ground truth)
+│   ├── articulos_auditables_346.csv             # 346 PDFs con sus cifras IA base
+│   ├── evaluaciones_codex_gpt.csv               # 346 evaluaciones Codex/GPT
+│   ├── evaluaciones_gemini_flash.csv            # 345 evaluaciones Gemini 2.5 Flash
+│   ├── evaluaciones_claude_haiku_346.csv        # 346 evaluaciones Claude Haiku
+│   └── comparacion_codex_gemini_claude.csv      # cruce completo por pdf_id
 ├── docs/
 │   ├── arquitectura.md
 │   └── flujo_doble_ciego.md
@@ -45,21 +50,23 @@ califica_articulos_inferenciales/
 | **A** | ¿Muestreo no probabilístico? (conveniencia, voluntarios, bola de nieve, intencional, consecutivo) | binaria |
 | **B** | ¿Advierte la limitación del muestreo en cualquier parte del texto? | binaria |
 | **C** | ¿Extrapola a una población más amplia que la muestra observada? | binaria |
-| **D** | Veredicto integral del juez humano | categórica de 4 |
+| **D** | Veredicto integral del juez humano/modelo | categórica de 5 |
 
 Categorías de D:
 - `FF clasica` — Falla fuerte sin advertencia (A & ¬B & C).
 - `FF con reconocimiento` — Falla fuerte con advertencia pero generaliza igual (A & B & C).
 - `Debilidad importante` — problema metodológico que no cumple A & C.
 - `Sin falla relevante` — muestreo apropiado o conclusiones acotadas.
+- `No evaluable` — PDF/artículo no apto para computar el protocolo.
 
 ## Métricas reportadas en el dashboard
 
 - Acuerdo simple por dimensión (A, B, C, D).
 - Acuerdo global (D = veredicto integral).
 - **Cohen's kappa** sobre D, corregido por acuerdo esperado por azar.
-- Matriz de confusión 4×4 entre humano y IA.
-- Lista de artículos donde el desacuerdo es mayor.
+- Matriz de confusión 5×5 entre revisores.
+- Comparación directa Codex/GPT ↔ Gemini ↔ Claude.
+- Taxonomía de discrepancias: consenso triple, mayoría 2-vs-1 y tres distintos.
 
 ## Despliegue
 

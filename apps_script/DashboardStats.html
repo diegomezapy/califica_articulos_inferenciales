@@ -53,8 +53,42 @@
 
     let html = '';
 
+    if (s.comparacionModelos) {
+      const cm = s.comparacionModelos;
+      html += '<h3 style="margin-top:0;">Comparación Codex/GPT · Gemini · Claude</h3>';
+      html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">';
+      cm.cobertura.forEach(m => {
+        const faltan = m.faltantes && m.faltantes.length ? 'Falta: ' + m.faltantes.join(', ') : 'Cobertura completa';
+        html += tarjeta(nombreModelo(m.revisor), m.n + ' PDFs', faltan);
+      });
+      html += tarjeta('Consenso 3 modelos', cm.taxonomiaD.tres_acuerdo + ' PDFs',
+                      'sobre ' + cm.comunes3 + ' PDFs comunes en D');
+      html += '</div>';
+
+      html += '<table class="matriz" style="margin-top:12px;">';
+      html += '<thead><tr><th>Par</th><th>n comunes</th><th>Acuerdo D</th><th>Cohen\\'s κ D</th></tr></thead><tbody>';
+      cm.pares.forEach(p => {
+        html += '<tr><td>' + escape_(nombreModelo(p.revisorA)) + ' ↔ ' + escape_(nombreModelo(p.revisorB)) + '</td>' +
+                '<td>' + p.n + '</td><td>' + pct(p.acuerdoD) + '</td><td>' + num(p.kappaD) + '</td></tr>';
+      });
+      html += '</tbody></table>';
+
+      html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:12px;">' +
+              tarjeta('3 de acuerdo', cm.taxonomiaD.tres_acuerdo, 'mismo veredicto D') +
+              tarjeta('Gemini=Claude', cm.taxonomiaD.gemini_claude_contra_codex, 'contra Codex/GPT') +
+              tarjeta('Codex=Gemini', cm.taxonomiaD.codex_gemini_contra_claude, 'contra Claude') +
+              tarjeta('Codex=Claude', cm.taxonomiaD.codex_claude_contra_gemini, 'contra Gemini') +
+              tarjeta('3 distintos', cm.taxonomiaD.tres_distintos, 'sin mayoría') +
+              '</div>';
+
+      html += '<div style="background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;margin-top:16px;">';
+      html += '<h3 style="margin:0 0 10px;">Distribución de veredictos D por modelo</h3>';
+      html += renderDistribucionModelos(cm.cobertura, s.labelsD);
+      html += '</div>';
+    }
+
     // Resumen agregado por revisor
-    html += '<h3 style="margin-top:0;">Acuerdo humano vs IA por revisor</h3>';
+    html += '<h3 style="margin-top:24px;">Acuerdo revisor vs IA base por revisor</h3>';
     html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">';
     s.porRevisor.forEach(rv => {
       html += tarjeta(rv.revisor, rv.n + ' calificados',
@@ -113,6 +147,27 @@
       }
       h += '</tr>';
     }
+    h += '</tbody></table>';
+    return h;
+  }
+
+  function nombreModelo(x) {
+    return {
+      codex_gpt: 'Codex/GPT',
+      gemini_flash: 'Gemini 2.5 Flash',
+      claude_haiku: 'Claude Haiku'
+    }[x] || x;
+  }
+
+  function renderDistribucionModelos(cobertura, labels) {
+    let h = '<table class="matriz"><thead><tr><th>Modelo</th>';
+    labels.forEach(l => h += '<th>' + escape_(l) + '</th>');
+    h += '</tr></thead><tbody>';
+    cobertura.forEach(m => {
+      h += '<tr><th>' + escape_(nombreModelo(m.revisor)) + '</th>';
+      labels.forEach(l => h += '<td>' + (m.distribucionD[l] || 0) + '</td>');
+      h += '</tr>';
+    });
     h += '</tbody></table>';
     return h;
   }

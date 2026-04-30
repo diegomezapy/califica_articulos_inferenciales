@@ -1,0 +1,51 @@
+pdf_id,A,B,C,D,notas,revisor
+151,0,0,0,Sin falla relevante,Muestreo probabilistico por conglomerados; no hay falla A&C.,codex_gpt
+152,1,0,0,Debilidad importante,Unidades lecheras seleccionadas por ruta de recoleccion; comparacion antes-despues acotada sin extrapolacion fuerte.,codex_gpt
+153,0,0,0,Sin falla relevante,Experimento zootecnico con diseno completamente aleatorizado; no aplica falla A&C de muestreo poblacional.,codex_gpt
+154,0,0,0,Sin falla relevante,Analisis ambiental/ecologico con registros de material particulado e IRA; no hay muestra no probabilistica de participantes.,codex_gpt
+155,1,0,1,FF clasica,Muestra de empleados de una filial sin diseno probabilistico y regresiones usadas para sostener conclusiones generales de talento humano.,codex_gpt
+156,1,0,0,Debilidad importante,Muestra de graduados para PSM sin marco probabilistico claro; estimacion acotada al programa y sin salto poblacional fuerte.,codex_gpt
+157,0,0,0,Sin falla relevante,Muestreo estratificado de empresas informales; no se configura A&C.,codex_gpt
+158,1,0,1,FF clasica,Muestra autoseleccionada de seguidores/clientes y correlaciones usadas para afirmar impacto del modelo 4F en posicionamiento de marca.,codex_gpt
+159,0,0,0,Sin falla relevante,Muestreo probabilistico aleatorio simple con representatividad declarada; no hay A&C.,codex_gpt
+160,0,0,0,Sin falla relevante,Instituciones y escolares seleccionados aleatoriamente; intervencion educativa sin falla A&C.,codex_gpt
+161,1,0,0,Debilidad importante,Muestreo por conveniencia de estudiantes de enfermeria; inferencia local sin extrapolacion poblacional fuerte.,codex_gpt
+162,1,1,1,FF con reconocimiento,Muestreo por conveniencia en mujeres mayores de 35; reconoce no representatividad pero deriva factores asociados al retorno laboral.,codex_gpt
+163,0,0,0,Sin falla relevante,Historias clinicas seleccionadas mediante muestreo aleatorio sistematico; no hay A&C.,codex_gpt
+164,1,1,1,FF con reconocimiento,Participacion voluntaria/no probabilistica; reconoce baja generalizabilidad pero afirma efecto significativo del programa gatekeeper.,codex_gpt
+165,1,0,0,Debilidad importante,Muestreo por criterio y referido de cuidadores; descripcion local sin extrapolacion inferencial fuerte.,codex_gpt
+166,0,0,0,Sin falla relevante,Censo/local de 44 estudiantes de odontologia en un curso; conclusion acotada al simulador y no falla A&C.,codex_gpt
+167,1,1,1,FF con reconocimiento,Muestreo por conveniencia con tamano reducido reconocido; inferencia y conclusion amplia sobre QuimAR en secundaria.,codex_gpt
+168,1,0,1,FF clasica,Muestreo intencional de docentes/estudiantes universitarios y evaluacion usada para validar una herramienta patrimonial de alcance amplio.,codex_gpt
+169,1,0,1,FF clasica,Muestra intencional de preescolares y prueba Wilcoxon usada para recomendar la intervencion educativa.,codex_gpt
+170,1,1,0,Debilidad importante,Muestreo por conveniencia en dos instituciones; reconoce condicionamiento contextual y no obtiene relacion significativa fuerte.,codex_gpt
+171,1,0,0,Debilidad importante,Censo/conveniencia de 36 estudiantes de una unidad; base local sin extrapolacion A&C fuerte.,codex_gpt
+172,0,0,1,Debilidad importante,No declara claramente base muestral; usa chi-cuadrado para sostener mejora en primaria; problema de reporte mas que A&C demostrada.,codex_gpt
+173,1,0,1,FF clasica,Baja respuesta a cuestionario parlamentario y muestra de iniciativas; concluye uso generalizado de IA en la camara.,codex_gpt
+174,0,0,0,Sin falla relevante,Muestra censal de docentes de cuatro instituciones; no hay muestreo no probabilistico inferencial A&C.,codex_gpt
+175,0,0,0,Sin falla relevante,Muestreo probabilistico de beneficiarios con representatividad declarada; no hay falla A&C.,codex_gpt
+176,0,0,0,Sin falla relevante,Muestreo aleatorio simple de usuarios con representatividad declarada; no hay A&C.,codex_gpt
+177,1,0,1,FF clasica,Muestra intencional de consumidores y Spearman usado para validar relacion general entre 4C y preferencia del consumidor.,codex_gpt
+178,0,0,0,Sin falla relevante,Muestreo probabilistico de comerciantes; correlaciones con base representativa local.,codex_gpt
+179,0,0,0,Sin falla relevante,Muestreo aleatorio simple de trabajadores con representatividad declarada; no hay A&C.,codex_gpt
+180,1,0,1,FF clasica,Encuesta a participantes sin procedimiento probabilistico claro y conclusiones sobre acogida/desarrollo agroturistico local.,codex_gpt
+181,0,0,0,Sin falla relevante,Muestreo probabilistico aleatorio simple de usuarios del mercado; no hay A&C.,codex_gpt
+182,1,1,1,FF con reconocimiento,Muestra finita de emprendimientos sin seleccion probabilistica clara; generaliza a Manabi y pide extender para confirmar generalizacion.,codex_gpt
+183,0,0,0,Sin falla relevante,Muestreo probabilistico aleatorio simple de clientes; no se configura A&C.,codex_gpt
+184,0,0,0,Sin falla relevante,Analisis de corpus de publicaciones en X mediante KDD; no hay muestreo no probabilistico de unidades humanas encuestadas.,codex_gpt
+185,0,0,0,No evaluable,Compilacion de comunicaciones orales; no es articulo auditable autonomo.,codex_gpt
+186,0,0,0,No evaluable,Compilacion de posters/resumenes; no es articulo auditable autonomo.,codex_gpt
+187,0,0,0,Sin falla relevante,Estudio cualitativo con entrevistas; no busca inferencia estadistica poblacional A&C.,codex_gpt
+188,0,0,0,Sin falla relevante,Estudio cualitativo exploratorio; no corresponde a inferencia estadistica poblacional A&C.,codex_gpt
+189,1,1,1,FF con reconocimiento,Encuesta/seguimiento con respuesta parcial; reconoce restriccion de generalizacion pero deriva implicancias de salud publica.,codex_gpt
+190,1,0,0,Debilidad importante,Muestra clinica pequena de pacientes con angioedema; asociaciones exploratorias acotadas a la muestra.,codex_gpt
+191,1,1,1,FF con reconocimiento,Participantes reclutadas por redes sociales; reconoce limitaciones pero modela sintomas post-COVID como predictores de incontinencia.,codex_gpt
+192,1,0,1,FF clasica,Muestra clinica/adolescente no probabilistica con ANOVA y conclusion preventiva general sobre ejercicio y polimorfismo ACE.,codex_gpt
+193,0,0,0,Sin falla relevante,Muestra aleatoria simple calculada para poblacion penitenciaria; generalizacion justificada por diseno probabilistico.,codex_gpt
+194,1,1,1,FF con reconocimiento,Serie retrospectiva pequena sin aleatorizacion; reconoce sesgos y aun sostiene efectividad del tratamiento artroscopico.,codex_gpt
+195,0,1,0,Sin falla relevante,"Ensayo prospectivo randomizado; aunque reconoce baja generalizabilidad, no hay falla A&C de muestreo observacional.",codex_gpt
+196,1,1,1,FF con reconocimiento,Muestra clinica de obesos/control no pareada; reconoce limitaciones y generaliza diferencias funcionales en obesidad morbida.,codex_gpt
+197,1,1,1,FF con reconocimiento,Cohorte retrospectiva de conveniencia; reconoce tamano pequeno y aun infiere beneficio quirurgico para DMD.,codex_gpt
+198,1,0,1,FF clasica,Serie hospitalaria retrospectiva usada para describir perfil epidemiologico y riesgos de fracturas de tibia sin advertencia clara.,codex_gpt
+199,1,1,0,Debilidad importante,Serie hospitalaria pequena con sesgos y perdida de seguimiento; conclusiones principalmente descriptivas del servicio.,codex_gpt
+200,1,1,0,Debilidad importante,Muestra clinica homogenea de primiparas; reconoce limites de generalizacion y no identifica asociaciones en regresion.,codex_gpt

@@ -1,0 +1,51 @@
+pdf_id,A,B,C,D,notas,revisor
+201,0,0,0,Sin falla relevante,Estudio cualitativo con enfermeros; no hay inferencia estadistica poblacional que active falla A&C.,codex_gpt
+202,1,0,1,FF clasica,Cohorte retrospectiva unicentrica de pacientes Takayasu; usa regresiones y proyecta indicador pronostico sin reconocimiento claro de generalizacion.,codex_gpt
+203,1,0,0,Debilidad importante,Submuestra de participantes con insuficiencia cardiaca dentro de ELSA-Brasil; conclusiones mayormente acotadas a la cohorte.,codex_gpt
+204,1,0,1,FF clasica,Cohorte prospectiva hospitalaria pequena en HFpEF; propone puntaje pronostico con alcance clinico amplio sin advertencia visible.,codex_gpt
+205,1,1,1,FF con reconocimiento,"Cuentas de cardiologos identificadas por autodescripcion en Twitter/X; reconoce corte temporal y cobertura limitada, pero concluye sobre cardiologos brasilenos.",codex_gpt
+206,1,1,1,FF con reconocimiento,Muestra prospectiva pequena de cardiomiopatia chagasica y controles; reconoce limitaciones metodologicas y concluye mecanismo hemodinamico general.,codex_gpt
+207,1,1,1,FF con reconocimiento,Analisis bibliometrico/CV de investigadoras seleccionadas; reconoce restricciones de cobertura y aun infiere disparidades de genero.,codex_gpt
+208,1,0,1,FF clasica,Encuesta/grupos sobre whistleblowing con participantes reclutados no probabilisticamente; extrapola barreras en academia sin cautela suficiente.,codex_gpt
+209,0,0,0,No evaluable,"PDF corresponde a anales/resumenes de simposio, no a un articulo empirico unico auditable.",codex_gpt
+210,1,1,1,FF con reconocimiento,Estudio transversal en 111 pacientes de hemodialisis; reconoce necesidad de estudios longitudinales y aun concluye sobre pacientes ESRD en HD.,codex_gpt
+211,1,1,1,FF con reconocimiento,Cohorte prospectiva unicentrica de COVID-19 critico con AKI; declara limites de generalizacion y mantiene conclusion clinica amplia.,codex_gpt
+212,1,1,1,FF con reconocimiento,Encuesta a nefrologos con muestreo no probabilistico/snowball; reconoce representatividad regional limitada y concluye sobre MR en Brasil.,codex_gpt
+213,1,0,1,FF clasica,Estudio prospectivo pequeno de biomarcadores en CABG; infiere asociacion del procedimiento con cambios biologicos sin limitacion clara.,codex_gpt
+214,0,0,0,Sin falla relevante,"Serie retrospectiva de tumores en un centro, con descripcion del perfil atendido; no hay extrapolacion fuerte fuera del servicio.",codex_gpt
+215,1,1,0,Debilidad importante,Serie retrospectiva pediatrica pequena sobre VPS por residentes; explora factores y resultados sin convertirlos en inferencia poblacional fuerte.,codex_gpt
+216,1,0,0,Debilidad importante,"Evaluacion documental/descriptiva de libretas de gestantes; muestra institucional incompleta, pero conclusiones principalmente descriptivas.",codex_gpt
+217,1,0,0,Debilidad importante,Registros retrospectivos de STEMI/PCI de hospital; estima mortalidad y asociaciones del servicio sin extrapolacion poblacional fuerte.,codex_gpt
+218,1,1,1,FF con reconocimiento,Muestra de conveniencia en un hospital de emergencia; reconoce limite de generalizacion y recomienda programas/protocolos en servicios.,codex_gpt
+219,0,0,0,Sin falla relevante,Cuasi-experimento con seleccion aleatoria simple desde elegibles; no se observa falla A&C relevante.,codex_gpt
+220,1,1,1,FF con reconocimiento,Muestreo snowball con poblacion trans via ONG; reconoce la estrategia de captacion y concluye sobre barreras institucionales amplias.,codex_gpt
+221,1,1,0,Debilidad importante,Corte transversal de profesionales de enfermeria con limite de generalizacion reconocido; conclusiones se mantienen en asociaciones descriptivas.,codex_gpt
+222,1,1,0,Debilidad importante,Cohorte retrospectiva de 47 pacientes de columna; compara costo-efectividad por edad con alcance principalmente del grupo tratado.,codex_gpt
+223,1,0,0,Debilidad importante,Serie retrospectiva de 404 cirugias AIS para clasificacion; muestra hospitalaria pero conclusion no fuerza extrapolacion poblacional.,codex_gpt
+224,1,1,1,FF con reconocimiento,Encuesta voluntaria no aleatorizada de 95 cirujanos de columna; concluye alta prevalencia en cirujanos de columna.,codex_gpt
+225,1,0,0,Debilidad importante,Serie retrospectiva de 41 lesionados medulares; resultados no significativos y conclusion acotada al seguimiento clinico.,codex_gpt
+226,1,1,1,FF con reconocimiento,"Cohorte historica unicentrica; reconoce tamano pequeno, sesgo retrospectivo y falta de generalizacion, pero formula pronostico clinico amplio.",codex_gpt
+227,1,1,1,FF con reconocimiento,Encuesta retrospectiva con respuesta parcial tras discectomia; reconoce limites y aun deriva orientaciones para practica deportiva.,codex_gpt
+228,0,0,0,Sin falla relevante,"Ensayo in vivo con asignacion aleatorizada de grupos; la pregunta es experimental, no de inferencia poblacional por muestra no probabilistica.",codex_gpt
+229,1,1,1,FF con reconocimiento,Estudio longitudinal de pacientes ortodonticos de programa/consulta; reconoce restricciones y concluye diferencias entre alineadores y brackets.,codex_gpt
+230,1,0,1,FF clasica,Caso-control prospectivo pequeno de pacientes CLP; concluye mejora estetica por lip filling con muestra clinica no probabilistica.,codex_gpt
+231,1,1,1,FF con reconocimiento,Cohorte prospectiva pequena de pacientes pediatricos odontologicos; reconoce caracter preliminar y aun infiere efecto de perdida prematura.,codex_gpt
+232,1,1,1,FF con reconocimiento,Estudio transversal de casos ortodonticos aprobados por junta; reconoce restricciones de muestra y generaliza errores/prediccion.,codex_gpt
+233,0,0,0,Sin falla relevante,Ensayo cruzado aleatorizado con calculo muestral; inferencia principal es experimental interna.,codex_gpt
+234,1,0,1,FF clasica,Estudio transversal con ortodoncistas que evaluan casos; muestra profesional no probabilistica y conclusiones sobre decisiones terapeuticas.,codex_gpt
+235,1,0,0,Debilidad importante,"Comparacion retrospectiva pareada de 42 pacientes; sugiere menor reabsorcion con LIPUS, pero el alcance queda relativamente clinico-local.",codex_gpt
+236,1,1,1,FF con reconocimiento,Encuesta transversal digital en estudiantes de una universidad; reconoce ausencia de causalidad/seguimiento y recomienda estrategias institucionales.,codex_gpt
+237,0,0,0,No evaluable,Protocolo de ensayo clinico sin resultados empiricos observados; no permite auditar A&C en conclusiones de resultados.,codex_gpt
+238,0,0,0,Sin falla relevante,"Analisis retrospectivo de registros de pruebas virales del laboratorio; funciona como serie/censo de registros, sin sobreinferencia muestral clara.",codex_gpt
+239,1,1,1,FF con reconocimiento,Muestra de conveniencia de insuficiencia cardiaca y controles; reconoce limitaciones y concluye diferencias de actividad frente a sanos.,codex_gpt
+240,1,1,1,FF con reconocimiento,Estudio prospectivo no aleatorizado de tecnicas BSSO; reconoce sesgos por sexo/edad/genioplastia y concluye recuperacion sensorial superior.,codex_gpt
+241,1,1,0,Debilidad importante,"Notificaciones espontaneas de RAM en hospital de ensenanza; reconoce subnotificacion/clasificacion, con conclusion institucional acotada.",codex_gpt
+242,1,0,1,FF clasica,Intervencion educativa en 123 pacientes hipertensos de servicio; compara grupos y recomienda uso de folder sin limite de generalizacion claro.,codex_gpt
+243,1,0,1,FF clasica,Analisis retrospectivo/cualitativo con participantes sobre azitromicina en pandemia; infiere uso significativo y necesidad educativa sin cautela muestral.,codex_gpt
+244,1,1,0,Debilidad importante,Registro multicentrico consecutivo de cinco hospitales; reconoce limitaciones del registro y las conclusiones se centran en diferencias observadas.,codex_gpt
+245,1,0,1,FF clasica,Encuesta electronica a corredores de asesorias/grupos; identifica predictores y recomienda prevencion para corredores brasilenos sin reconocimiento visible.,codex_gpt
+246,1,0,1,FF clasica,Retrospectivo longitudinal de 35 pacientes en hospital de referencia; asocia complicaciones con clasificacion AO/OTA y resultados funcionales.,codex_gpt
+247,1,0,1,FF clasica,Cohorte retrospectiva TriNetX con PSM; base amplia pero no probabilistica y concluye mayor riesgo de fallo por artrodesis.,codex_gpt
+248,1,1,1,FF con reconocimiento,Estudio retrospectivo de solo 10 carcaras de vida libre; reconoce tamano pequeno y propone valores de referencia diagnosticos.,codex_gpt
+249,1,1,1,FF con reconocimiento,Duplicado aparente del estudio de carcaras; misma muestra pequena y reconocimiento de limitaciones antes de proponer referencia radiografica.,codex_gpt
+250,1,0,0,Debilidad importante,"Estudio en 89 vacas de tres granjas; compara grupos con pruebas estadisticas, pero conclusion se limita a hallazgos diagnosticos observados.",codex_gpt

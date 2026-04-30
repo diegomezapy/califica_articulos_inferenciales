@@ -11,6 +11,7 @@ Uso:
 """
 import argparse, json, os, sys, csv, time, re
 from pathlib import Path
+import urllib.error
 import urllib.request
 
 # ── Config ───────────────────────────────────────────────────────────────────
@@ -96,7 +97,17 @@ def extraer_texto(pdf_path: Path) -> str:
         return ""
 
 
-def llamar_gpt(texto: str, modelo: str, api_key: str, max_retries: int = 2) -> dict:
+def _leer_error_http(err: urllib.error.HTTPError) -> str:
+    try:
+        raw = err.read().decode("utf-8", errors="replace")
+        data = json.loads(raw)
+        msg = data.get("error", {}).get("message") or raw
+    except Exception:
+        msg = str(err)
+    return f"HTTP {err.code}: {msg}"
+
+
+def llamar_gpt(texto: str, modelo: str, api_key: str, max_retries: int = 5) -> dict:
     body = {
         "model": modelo,
         "messages": [
@@ -121,6 +132,14 @@ def llamar_gpt(texto: str, modelo: str, api_key: str, max_retries: int = 2) -> d
                 data = json.loads(r.read())
             content = data["choices"][0]["message"]["content"]
             return json.loads(content)
+        except urllib.error.HTTPError as e:
+            detalle = _leer_error_http(e)
+            if e.code == 429 and intento < max_retries:
+                espera = int(e.headers.get("retry-after") or min(120, 15 * (intento + 1)))
+                print(f"\n    429 OpenAI; esperando {espera}s...", file=sys.stderr, flush=True)
+                time.sleep(espera)
+                continue
+            raise RuntimeError(detalle)
         except Exception as e:
             if intento == max_retries:
                 raise

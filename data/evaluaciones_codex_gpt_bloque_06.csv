@@ -1,0 +1,51 @@
+pdf_id,A,B,C,D,notas,revisor
+251,1,0,1,FF clasica,Prevalencia serologica en comunidades especificas; extrapola riesgo/prevalencia sin reconocimiento visible de muestreo.,codex_gpt
+252,1,1,0,Debilidad importante,Muestras vegetales de zonas seleccionadas; reconoce alcance descriptivo y no fuerza inferencia poblacional.,codex_gpt
+253,1,1,1,FF con reconocimiento,Serie retrospectiva secuencial post-COVID; reconoce limitaciones y concluye deterioro funcional en la poblacion estudiada.,codex_gpt
+254,1,1,1,FF con reconocimiento,Encuesta online de conveniencia a universitarios; reconoce sesgos de representacion y asocia actividad fisica con autopercepcion de salud.,codex_gpt
+255,1,1,0,Sin falla relevante,Muestra por conveniencia de adultos mayores; reconoce que no permite extrapolar y concluye acotado al grupo estudiado.,codex_gpt
+256,0,0,0,Sin falla relevante,"Ensayo fase II doble ciego controlado con placebo; inferencia experimental interna, sin falla A&C de muestreo poblacional.",codex_gpt
+257,1,0,1,FF clasica,Encuesta virtual transversal a trabajadores remotos; concluye impacto de pandemia y uso de PICS con alcance amplio sin cautela muestral clara.,codex_gpt
+258,1,1,1,FF con reconocimiento,Muestra por conveniencia de 62 mayores; reconoce limitaciones y concluye influencia del miedo a caer en desempeno funcional.,codex_gpt
+259,1,0,1,FF clasica,Estudio transversal de 61 conductores mayores; deriva conclusiones generales sobre conduccion y bienestar sin limite muestral claro.,codex_gpt
+260,1,0,0,Debilidad importante,Prontuarios de clinica-escuela; reconoce datos autorreferidos y conclusion principalmente sobre necesidad de pesquisa geriatrica.,codex_gpt
+261,1,0,1,FF clasica,Muestra clinica de primer atendimento psiquiatrico; usa asociaciones y concluye relevancia clinica general de contratransferencia.,codex_gpt
+262,1,0,1,FF clasica,Prontuarios de hospital de media complejidad; estima prevalencias y riesgos en mayores hospitalizados con alcance amplio.,codex_gpt
+263,1,1,1,FF con reconocimiento,Entrevistas a 171 mayores con espacio amostral limitado reconocido; concluye agravamiento de salud mental y habitos durante pandemia.,codex_gpt
+264,1,1,0,Debilidad importante,Caso-control de adultos mayores pareados; reconoce predominio femenino/baja escolaridad y no encuentra diferencias significativas.,codex_gpt
+265,1,1,1,FF con reconocimiento,Cuestionario online a dentistas/estudiantes; muestra voluntaria y conclusiones sobre decisiones restauradoras en Brasil.,codex_gpt
+266,1,1,1,FF con reconocimiento,Estudio ecologico con datos secundarios; reconoce sesgos ecologicos/calidad de datos y concluye baja resolucion municipal.,codex_gpt
+267,1,1,0,Debilidad importante,"Cuasi-experimento educativo; reconoce falta de aleatorizacion completa y limita generalizacion, con conclusion de mejora de conocimiento.",codex_gpt
+268,1,0,1,FF clasica,Analisis retrospectivo pequeno de 35 ninos en UCI; concluye que cavidad oral sirve como reservorio respiratorio sin cautela visible.,codex_gpt
+269,1,1,1,FF con reconocimiento,Corte transversal de 55 ninos autistas en una asociacion; concluye necesidad de programas preventivos para ninos y padres.,codex_gpt
+270,1,1,1,FF con reconocimiento,"Muestra clinica de ninos obesos; reconoce ausencia de grupo control y recomienda estudios mayores, aunque concluye sobre maloclusion.",codex_gpt
+271,1,0,1,FF clasica,Encuesta a 37 dentistas de una ciudad; infiere comprension profesional de desafios post-oncologicos sin cautela muestral.,codex_gpt
+272,1,1,1,FF con reconocimiento,"Encuesta online a beneficiarios de transferencia de renta; reconoce baja participacion y barreras digitales, pero concluye sobre SAN.",codex_gpt
+273,1,1,0,Debilidad importante,Experimento observacional con solo cuatro ninos; advierte necesidad de mas estudios y mantiene conclusion preliminar.,codex_gpt
+274,1,1,1,FF con reconocimiento,"Cohorte prospectiva en dos hospitales; reconoce heterogeneidad y mediciones no padronizadas, pero infiere riesgo de estancia/muerte.",codex_gpt
+275,1,1,1,FF con reconocimiento,Retrospectivo de 60 pacientes COVID en UCI unica; reconoce sesgo de seleccion/muestra limitada y concluye utilidad pronostica.,codex_gpt
+276,1,1,1,FF con reconocimiento,Encuesta a discentes de medicina de una universidad; reconoce limites y concluye necesidad formativa en comunicacion de malas noticias.,codex_gpt
+277,1,0,0,Debilidad importante,Encuesta exploratoria a medicos de hospital oncologico; conclusiones se restringen a percepciones y conducta institucional.,codex_gpt
+278,1,0,1,FF clasica,Estudio retrospectivo de gestantes con HIV; compara metodos y concluye insuficiente adherencia/riesgo de transmision sin cautela muestral clara.,codex_gpt
+279,0,0,0,Sin falla relevante,"Estudio cualitativo con 17 personas con lesion medular; conclusiones se formulan como experiencias de participantes, no inferencia estadistica.",codex_gpt
+280,1,0,1,FF clasica,Conveniencia de madres en unidades/escuelas; asocia factores sociodemograficos con CAP y recomienda politicas educativas amplias.,codex_gpt
+281,0,0,0,Sin falla relevante,Estudio cualitativo sobre clima etico hospitalario; no hay inferencia estadistica poblacional A&C.,codex_gpt
+282,1,0,1,FF clasica,Prontuarios retrospectivos de gestantes con sepsis; concluye contribucion del sistema de alerta/protocolos sin reconocimiento visible.,codex_gpt
+283,1,1,1,FF con reconocimiento,Muestra no probabilistica de 31 madres en una unidad neonatal; reconoce generalizacion limitada y recomienda educacion permanente.,codex_gpt
+284,1,0,0,Debilidad importante,"Pesquisa-accion municipal local; resultados orientan construccion del nucleo, sin extrapolacion inferencial fuerte.",codex_gpt
+285,1,1,1,FF con reconocimiento,Evaluacion de usabilidad con pocos usuarios directos; reconoce falta de participacion de publico objetivo y concluye utilidad de plataforma.,codex_gpt
+286,1,0,1,FF clasica,Retrospectivo unicentrico de 81 fracturas; concluye superioridad/beneficios de tecnica MIPO sin cautela de seleccion.,codex_gpt
+287,1,1,1,FF con reconocimiento,"Corte transversal en escuelas publicas; reconoce autorreporte, causalidad y generalizacion limitada, pero concluye factores asociados en adolescentes.",codex_gpt
+288,1,1,1,FF con reconocimiento,Cohorte prospectiva de prematuros de hospital universitario; reconoce limitaciones y concluye determinantes del crecimiento.,codex_gpt
+289,1,1,1,FF con reconocimiento,Encuesta transversal de familias SMA reclutadas; conclusiones sobre percepcion paciente/cuidador con muestra de participantes elegibles.,codex_gpt
+290,1,1,1,FF con reconocimiento,Corte transversal escolar con tiempo de pantalla autorreportado; concluye asociacion con sintomas psicologicos en adolescentes.,codex_gpt
+291,1,1,0,Debilidad importante,Revision retrospectiva de intentos suicidas en dos emergencias; reconoce no causalidad/subregistro y conclusion comparativa acotada.,codex_gpt
+292,1,1,1,FF con reconocimiento,Corte transversal en hospital terciario; reconoce concentracion regional y concluye religiosidad asociada a menor uso de alcohol.,codex_gpt
+293,1,1,1,FF con reconocimiento,Dentistas captados en redes sociales; reconoce limitacion de busqueda/seleccion y concluye necesidad de protocolos.,codex_gpt
+294,1,1,1,FF con reconocimiento,Muestra no probabilistica de hemodialisis; reconoce falta de validez externa/control y concluye factores asociados a edentulismo.,codex_gpt
+295,1,1,1,FF con reconocimiento,Datos secundarios SINAN; reconoce limites de vigilancia/servicios y concluye factores sociodemograficos-clinicos de dengue grave.,codex_gpt
+296,1,1,1,FF con reconocimiento,"Muestra pequena de una escuela; reconoce no generalizacion y autorreporte, pero recomienda programas preventivos escolares.",codex_gpt
+297,0,0,0,Sin falla relevante,"Articulo metodologico sobre poblaciones de dificil acceso; el foco es estrategia de reclutamiento, no extrapolacion inferencial de resultados.",codex_gpt
+298,1,1,1,FF con reconocimiento,Cohorte RPS con perdidas de seguimiento reconocidas; concluye determinantes tempranos de masa libre de grasa.,codex_gpt
+299,1,1,1,FF con reconocimiento,"Corte transversal en APS de una ciudad; reconoce respuesta/refusos y alcance local, pero concluye diferencias de cultura de seguridad.",codex_gpt
+300,1,1,1,FF con reconocimiento,RDS en 10 ciudades; reconoce controversias/agregacion/no representatividad y concluye alta discriminacion en HSH de Brasil.,codex_gpt

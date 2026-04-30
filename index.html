@@ -79,10 +79,10 @@
   <div class="container">
     <h1>Califica artículos inferenciales</h1>
     <p class="subtitle">
-      Evaluación humana doble ciego de los <b>346 artículos cuantitativos auditables</b>
+      Evaluación doble ciego y comparación multi-modelo de los <b>346 artículos cuantitativos auditables</b>
       del estudio <em>Errores Inferenciales Críticos en Estudios Cuantitativos Sudamericanos</em>.
-      Contrasta el juicio del lector humano con la auditoría asistida por IA
-      (Gemini 2.5 Flash, protocolo v4.1) y reporta el acuerdo inter-rater.
+      Contrasta revisiones humanas y auditorías asistidas por IA
+      (Codex/GPT, Gemini 2.5 Flash y Claude Haiku, protocolo v4.1) y reporta el acuerdo inter-rater.
     </p>
 
     <div class="cta">
@@ -104,8 +104,30 @@
       <div class="stat"><div class="num">277</div><div class="lbl">Muestra estratificada</div></div>
       <div class="stat"><div class="num">2 062</div><div class="lbl">Auditados con IA</div></div>
       <div class="stat"><div class="num">346</div><div class="lbl">Auditables (denominador)</div></div>
-      <div class="stat"><div class="num">59,8 %</div><div class="lbl">Falla fuerte (A &amp; C)</div></div>
-      <div class="stat"><div class="num">[52,7 — 66,9]</div><div class="lbl">IC 95 % Wald-DEFF</div></div>
+      <div class="stat"><div class="num">346</div><div class="lbl">Revisión Codex/GPT completa</div></div>
+      <div class="stat"><div class="num">99</div><div class="lbl">Consenso 3 modelos en D</div></div>
+      <div class="stat"><div class="num">63,5 %</div><div class="lbl">Acuerdo Gemini-Claude</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Comparación de modelos</h2>
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>Comparación</th><th class="right">n</th><th class="right">Acuerdo D</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Codex/GPT vs Gemini 2.5 Flash</td><td class="right">345</td><td class="right">44,1 %</td></tr>
+          <tr><td>Codex/GPT vs Claude Haiku</td><td class="right">346</td><td class="right">35,0 %</td></tr>
+          <tr><td>Gemini 2.5 Flash vs Claude Haiku</td><td class="right">345</td><td class="right">63,5 %</td></tr>
+          <tr><td>Los tres modelos</td><td class="right">345</td><td class="right">28,7 %</td></tr>
+        </tbody>
+      </table>
+      <p style="margin:12px 0 0;color:var(--muted);font-size:13px;">
+        Gemini tiene 345/346 filas importadas en el corte actual: falta <code>pdf_id 123</code>.
+        El dashboard de la app muestra cobertura, distribución por veredicto, matrices y kappa.
+      </p>
     </div>
   </section>
 
@@ -132,8 +154,8 @@
       <ul style="margin: 0; padding-left: 18px;">
         <li>Acuerdo simple por dimensión (A, B, C, D).</li>
         <li><b>Cohen's κ</b> sobre el veredicto integral, corregido por acuerdo esperado por azar.</li>
-        <li>Matriz de confusión 4 × 4 entre humano e IA.</li>
-        <li>Lista de artículos donde el desacuerdo es mayor.</li>
+        <li>Matriz de confusión 5 × 5 entre revisores, incluyendo <code>No evaluable</code>.</li>
+        <li>Comparación directa Codex/GPT ↔ Gemini ↔ Claude y taxonomía de discrepancias.</li>
       </ul>
     </div>
   </section>
@@ -145,7 +167,8 @@
       <ul style="margin: 8px 0 0; padding-left: 18px;">
         <li>PDFs leídos directamente de una <b>carpeta privada de Google Drive</b>.</li>
         <li>Calificaciones guardadas en un <b>Google Sheet privado</b> (append-only).</li>
-        <li>Ground truth de la IA (346 filas) cargado desde <code>data/articulos_auditables_346.csv</code> de este repo.</li>
+        <li>Ground truth de la IA base (346 filas) cargado desde <code>data/articulos_auditables_346.csv</code>.</li>
+        <li>Revisiones multi-modelo cargadas desde <code>evaluaciones_codex_gpt.csv</code>, <code>evaluaciones_gemini_flash.csv</code> y <code>evaluaciones_claude_haiku_346.csv</code>.</li>
         <li>Doble ciego: la calificación IA queda <b>oculta</b> hasta que el humano envía la suya.</li>
         <li>Código sincronizado entre GitHub y Apps Script vía <code>clasp</code>.</li>
       </ul>
@@ -174,6 +197,14 @@
       <a class="link-card" href="https://github.com/diegomezapy/califica_articulos_inferenciales/blob/main/data/articulos_auditables_346.csv">
         <div class="title">CSV de ground truth →</div>
         <div class="desc">346 PDFs auditables con sus binarios A, B, C y veredicto IA.</div>
+      </a>
+      <a class="link-card" href="https://github.com/diegomezapy/califica_articulos_inferenciales/blob/main/data/comparacion_codex_gemini_claude.csv">
+        <div class="title">Comparación Codex/Gemini/Claude →</div>
+        <div class="desc">Tabla completa por pdf_id con A, B, C, D y estado de acuerdo.</div>
+      </a>
+      <a class="link-card" href="https://github.com/diegomezapy/califica_articulos_inferenciales/blob/main/data/discrepancias_D_codex_gemini_claude.csv">
+        <div class="title">Discrepancias en D →</div>
+        <div class="desc">Solo los casos donde no hay acuerdo pleno entre modelos.</div>
       </a>
       <a class="link-card" href="https://github.com/diegomezapy/inferencia.audit">
         <div class="title">Paquete inferencia.audit →</div>

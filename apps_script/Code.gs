@@ -196,6 +196,33 @@ function _adminEndpoint(p) {
       );
       out.importadas = r.ok;
       out.saltadas = r.skipped;
+    } else if (p.fn === 'importar_modelos_346') {
+      // Atomico para la app web: refresca las tres revisiones IA externas
+      // que se comparan en el dashboard.
+      const modelos = [
+        {
+          revisor: 'codex_gpt',
+          url: 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_codex_gpt.csv'
+        },
+        {
+          revisor: 'gemini_flash',
+          url: 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_gemini_flash.csv'
+        },
+        {
+          revisor: 'claude_haiku',
+          url: 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_claude_haiku_346.csv'
+        }
+      ];
+      out.modelos = {};
+      modelos.forEach(m => {
+        const borradas = _borrarFilasRevisor_(m.revisor);
+        const r = importarEvaluacionesIA(m.url, m.revisor);
+        out.modelos[m.revisor] = {
+          borradas: borradas,
+          importadas: r.ok,
+          saltadas: r.skipped
+        };
+      });
     } else if (p.fn === 'reimportar_claude') {
       // Atomico: borra filas claude existentes y reimporta el CSV corregido
       const ss = SpreadsheetApp.openById(SHEET_ID);
@@ -472,6 +499,24 @@ function getURLSheet() {
   return 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/edit';
 }
 
+function _borrarFilasRevisor_(revisor) {
+  const target = String(revisor || '').trim();
+  if (!target) return 0;
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+  if (!sh || sh.getLastRow() < 2) return 0;
+  const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  const idxRev = head.indexOf('revisor');
+  if (idxRev < 0) return 0;
+  const lastRow = sh.getLastRow();
+  const lastCol = sh.getLastColumn();
+  const vals = sh.getRange(2, 1, lastRow - 1, lastCol).getValues();
+  const keep = vals.filter(row => String(row[idxRev] || '').trim() !== target);
+  sh.getRange(2, 1, lastRow - 1, lastCol).clearContent();
+  if (keep.length) sh.getRange(2, 1, keep.length, lastCol).setValues(keep);
+  return vals.length - keep.length;
+}
+
 /**
  * Resumen por revisor para el panel de la app: nombre, total de filas
  * (calificaciones), PDFs únicos calificados y última fecha. Ordenado
@@ -566,8 +611,96 @@ function getEstadisticas() {
     revisores: revisores,
     porRevisor: porRevisor,
     kappasHumanos: kappasHumanos,
+    comparacionModelos: _comparacionModelos(cal, labelsD),
     labelsD: labelsD
   };
+}
+
+/**
+ * Comparacion directa entre revisores-modelo sobre los 346 PDFs.
+ * No usa la IA base del CSV auditables como verdad, sino cada fila importada
+ * como una lectura independiente del mismo protocolo.
+ */
+function _comparacionModelos(cal, labelsD) {
+  const modelos = ['codex_gpt', 'gemini_flash', 'claude_haiku'];
+  const porModelo = {};
+  modelos.forEach(m => {
+    const filas = cal.filter(r => String(r.revisor) === m);
+    const ids = {};
+    filas.forEach(r => { ids[String(r.pdf_id)] = r; });
+    porModelo[m] = ids;
+  });
+
+  const cobertura = modelos.map(m => {
+    const ids = Object.keys(porModelo[m]).map(Number).sort((a, b) => a - b);
+    const faltantes = [];
+    for (var i = 1; i <= 346; i++) if (!porModelo[m][String(i)]) faltantes.push(i);
+    return {
+      revisor: m,
+      n: ids.length,
+      faltantes: faltantes,
+      distribucionD: _conteoD(Object.values(porModelo[m]), labelsD)
+    };
+  });
+
+  const pares = [];
+  for (var a = 0; a < modelos.length; a++) {
+    for (var b = a + 1; b < modelos.length; b++) {
+      const ma = modelos[a], mb = modelos[b];
+      const comunes = Object.keys(porModelo[ma]).filter(pid => porModelo[mb][pid]).sort((x, y) => Number(x) - Number(y));
+      const paresD = comunes.map(pid => [porModelo[ma][pid].D_humano, porModelo[mb][pid].D_humano]);
+      const acuerdoD = paresD.length ? paresD.filter(p => String(p[0]) === String(p[1])).length / paresD.length : null;
+      pares.push({
+        revisorA: ma,
+        revisorB: mb,
+        n: paresD.length,
+        acuerdoD: acuerdoD,
+        kappaD: _kappa(paresD, labelsD),
+        matriz: _matrizPares(paresD, labelsD)
+      });
+    }
+  }
+
+  const comunes3 = [];
+  for (var pid = 1; pid <= 346; pid++) {
+    const k = String(pid);
+    if (modelos.every(m => porModelo[m][k])) comunes3.push(k);
+  }
+  const taxonomia = {
+    tres_acuerdo: 0,
+    gemini_claude_contra_codex: 0,
+    codex_gemini_contra_claude: 0,
+    codex_claude_contra_gemini: 0,
+    tres_distintos: 0
+  };
+  comunes3.forEach(pid => {
+    const cd = porModelo.codex_gpt[pid].D_humano;
+    const gd = porModelo.gemini_flash[pid].D_humano;
+    const ld = porModelo.claude_haiku[pid].D_humano;
+    if (cd === gd && gd === ld) taxonomia.tres_acuerdo++;
+    else if (gd === ld && gd !== cd) taxonomia.gemini_claude_contra_codex++;
+    else if (cd === gd && cd !== ld) taxonomia.codex_gemini_contra_claude++;
+    else if (cd === ld && cd !== gd) taxonomia.codex_claude_contra_gemini++;
+    else taxonomia.tres_distintos++;
+  });
+
+  return {
+    modelos: modelos,
+    cobertura: cobertura,
+    pares: pares,
+    comunes3: comunes3.length,
+    taxonomiaD: taxonomia
+  };
+}
+
+function _conteoD(filas, labelsD) {
+  const out = {};
+  labelsD.forEach(l => out[l] = 0);
+  filas.forEach(r => {
+    const d = String(r.D_humano || '');
+    out[d] = (out[d] || 0) + 1;
+  });
+  return out;
 }
 
 /**

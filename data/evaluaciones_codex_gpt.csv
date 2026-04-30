@@ -89,3 +89,63 @@ pdf_id,A,B,C,D,notas,revisor
 88,1,0,1,FF clasica,Falla A&C: muestreo por referencias y conclusiones municipales/cadena productiva.,codex_gpt
 89,0,1,0,Sin falla relevante,No A&C: estudio genetico/biomedico con cautela explicita y metaanalisis complementario.,codex_gpt
 90,0,0,0,Sin falla relevante,"Falso positivo IA: experimento zootecnico aleatorizado, fuera de la falla A&C humana/social.",codex_gpt
+91,0,0,0,Sin falla relevante,"Falso positivo IA: muestra biologica de murcielagos/hongos, fuera de la falla A&C humana/social.",codex_gpt
+92,1,0,1,FF clasica,Falla A&C: sujetos humanos/pacientes por muestra intencional y asociaciones clinicas extrapoladas.,codex_gpt
+93,0,0,0,Sin falla relevante,"Falso positivo IA: estudio molecular con tejidos/celulas, no A&C humano-social.",codex_gpt
+94,0,0,0,Sin falla relevante,"Falso positivo IA: estudio oncologico de bases/celulas, no la falla A&C que estamos midiendo.",codex_gpt
+95,0,0,0,Sin falla relevante,"Falso positivo IA: muestra clinica/biomolecular, fuera del blanco A&C social.",codex_gpt
+96,0,0,0,Sin falla relevante,"Falso positivo IA: estudio proteomico infantil, no A&C humano-social.",codex_gpt
+97,0,0,0,Sin falla relevante,Acuerdo: no aplica falla A&C por ausencia de muestra empirica.,codex_gpt
+98,1,0,0,Debilidad importante,"No falla fuerte: muestra cualitativa pequena, pero alcance exploratorio/caso.",codex_gpt
+99,1,0,0,Debilidad importante,"No falla fuerte: caso educativo institucional, sin C fuerte.",codex_gpt
+100,1,1,1,FF con reconocimiento,Falla A&C con B=1: reclutamiento online de conveniencia y recomendaciones generales para cuidadores.,codex_gpt
+101,1,1,1,FF con reconocimiento,Falla A&C con reconocimiento: muestra pequena/conveniencia y generalizacion preliminar clinica.,codex_gpt
+102,1,0,1,FF clasica,Falla A&C: muestra pequena por invitacion/referencia y conclusion general sobre adultos mayores.,codex_gpt
+103,0,0,0,Sin falla relevante,"Falso positivo IA: muestra de insectos, no falla A&C humana/social.",codex_gpt
+104,0,0,0,Sin falla relevante,"Acuerdo: base oficial PNADC, no falla A&C.",codex_gpt
+105,1,0,1,FF clasica,Falla A&C: entrevistas no probabilisticas y conclusiones sobre moradores/barrios y desigualdad social local.,codex_gpt
+106,0,0,0,Sin falla relevante,"No activa falla A&C: hay encuesta humana, pero con diseño probabilístico/estratificado documentado.",codex_gpt
+107,0,0,0,Sin falla relevante,"Falso positivo de Gemini: estudio econométrico de empresas, fuera del blanco A&C humano-social.",codex_gpt
+108,1,0,1,FF clasica,Activa A&C por entrevistas comunitarias no probabilísticas y afirmación general sobre migración y conocimiento etnobotánico.,codex_gpt
+109,1,0,1,FF clasica,"Duplicado temático del 108; Gemini lo marcó como no falla, pero sí hay A&C fuerte.",codex_gpt
+110,1,1,1,FF con reconocimiento,"Falla A&C: muestra voluntaria universitaria y conclusiones tecnológicas generales; el abstract pide estudios más amplios, por eso B=1.",codex_gpt
+111,1,1,1,FF con reconocimiento,"A&C fuerte, aunque el artículo reconoce limitaciones de experiencia/perfil muestral.",codex_gpt
+112,1,0,1,FF clasica,Falso negativo de Gemini: muestra escolar acotada/no probabilística con conclusión pedagógica general.,codex_gpt
+113,1,0,1,FF clasica,A&C fuerte por encuesta online de conveniencia y recomendación/diagnóstico de mercado-servicio.,codex_gpt
+114,1,0,1,FF clasica,A&C fuerte: muestra voluntaria en tema sensible con conclusiones sociales amplias.,codex_gpt
+115,1,0,1,FF clasica,A&C fuerte muy claro: el propio artículo declara muestreo no probabilístico intencional y luego afirma efectividad educativa.,codex_gpt
+116,0,1,0,Sin falla relevante,No falla A&C: fuente secundaria armonizada y advertencia de no causalidad.,codex_gpt
+117,0,0,0,Sin falla relevante,No activa A&C: base oficial poblacional/probabilística.,codex_gpt
+118,1,0,1,FF clasica,A&C fuerte por sostener inferencias nacionales/políticas con encuesta online no probabilística como evidencia central.,codex_gpt
+119,0,1,0,Sin falla relevante,"No falla A&C: fuente oficial representativa, aunque con limitaciones analíticas reconocidas.",codex_gpt
+120,1,1,1,FF con reconocimiento,Falso negativo de Gemini: muestra local no probabilística con inferencia de política/cuidado infantil; el artículo reconoce tamaño muestral limitado.,codex_gpt
+121,1,1,1,FF con reconocimiento,Falso negativo de Gemini: muestra voluntaria local y conclusiones sanitarias generales; el artículo reconoce limitación por recolección virtual y posible exclusión.,codex_gpt
+122,1,0,1,FF clasica,"Falso negativo de Gemini: aunque cualitativo, la base es extremadamente pequeña e intencional y sostiene inferencias sociales amplias.",codex_gpt
+123,0,1,0,Sin falla relevante,"No falla A&C: diseño probabilístico por conglomerados, aunque con limitaciones analíticas.",codex_gpt
+124,1,0,1,FF clasica,A&C fuerte: respuestas parciales/autoseleccionadas de UFAs y conclusiones regionales/organizacionales amplias.,codex_gpt
+125,0,0,0,Sin falla relevante,No activa A&C: estudio de caso arquitectónico/material.,codex_gpt
+126,1,0,1,FF clasica,Falso negativo de Gemini: encuesta profesional no aleatoria con inferencias generales sobre diseño hospitalario.,codex_gpt
+127,0,0,0,Sin falla relevante,No falla A&C: análisis teórico-iconográfico de arquitectura.,codex_gpt
+128,0,0,0,Sin falla relevante,"Falso positivo de Gemini: análisis documental/arquitectónico, fuera del blanco A&C.",codex_gpt
+129,0,0,0,Sin falla relevante,No falla A&C: ensayo/revisión histórica de arquitectura.,codex_gpt
+130,0,1,0,Sin falla relevante,Falso positivo de Gemini: estudio econométrico con datos de proyectos/estadística agrícola; no A&C muestral humano-social clásico.,codex_gpt
+131,0,0,0,Sin falla relevante,No falla A&C: datos secundarios WVS y desarrollo metodológico de análisis de redes.,codex_gpt
+132,1,0,1,FF clasica,"A&C fuerte: corpus documental institucional no probabilístico con inferencia amplia sobre clase, raza y sistema penal.",codex_gpt
+133,0,0,0,Sin falla relevante,"No falla A&C: estudio biomédico de laboratorio, fuera del blanco social de muestreo/opinión.",codex_gpt
+134,1,0,1,FF clasica,Falso negativo de Gemini: muestra cualitativa no probabilística con conclusiones antropológicas generales sobre mercados costeros.,codex_gpt
+135,1,1,1,FF con reconocimiento,"A&C fuerte con reconocimiento explícito: muestra no representativa, pero sostiene diagnóstico exploratorio nacional del colectivo.",codex_gpt
+136,1,0,1,FF clasica,Falso negativo de Gemini: muestra incidental de perfiles/publicaciones y conclusiones generales sobre estilos de comunicación política.,codex_gpt
+137,1,1,1,FF con reconocimiento,Falso negativo de Gemini: n=9 no probabilístico sostiene una propuesta metodológica general; reconoce necesidad de más validación.,codex_gpt
+138,0,0,0,Sin falla relevante,"No falla A&C: revisión biomédica con experiencia clínica, fuera del blanco social de muestreo no probabilístico.",codex_gpt
+139,0,1,0,Sin falla relevante,"No falla A&C: estudio de fauna urbana, no encuesta humana/social.",codex_gpt
+140,1,1,1,FF con reconocimiento,Falso negativo de Gemini: muestra local voluntaria con recomendaciones clínicas generales; el artículo reconoce límites de causalidad y generalización.,codex_gpt
+141,1,1,1,FF con reconocimiento,"Falso negativo de Gemini: muestreo por conveniencia explícito y conclusiones de reducción de daños/locales, aunque reconoce no representatividad.",codex_gpt
+142,0,0,0,Sin falla relevante,No falla A&C: análisis secundario de encuesta regional establecida.,codex_gpt
+143,1,0,1,FF clasica,Falso negativo de Gemini: el artículo declara ausencia de muestreo y sostiene implicaciones de política/intervención.,codex_gpt
+144,1,0,1,FF clasica,A&C fuerte: encuesta estudiantil institucional sin muestreo probabilístico documentado y conclusiones generales sobre estudiantes universitarios.,codex_gpt
+145,0,1,0,No evaluable,"No evaluable: carta/respuesta editorial, no artículo auditable autónomo.",codex_gpt
+146,1,0,1,FF clasica,A&C fuerte: muestra hospitalaria no probabilística con conclusión poblacional sobre gestantes.,codex_gpt
+147,0,0,0,No evaluable,"No evaluable: respuesta editorial, excluir de acuerdo IA-humano.",codex_gpt
+148,0,1,0,Sin falla relevante,"Falso positivo de Gemini: muestra probabilística representativa por ciudad, no falla A&C.",codex_gpt
+149,0,0,0,Sin falla relevante,No falla A&C: estudio institucional/censal de cohortes universitarias con alcance acotado.,codex_gpt
+150,1,1,1,FF con reconocimiento,A&C fuerte con reconocimiento explícito: no hay muestreo aleatorio y se derivan recomendaciones curriculares/laborales.,codex_gpt

@@ -59,3 +59,33 @@ pdf_id,A,B,C,D,notas,revisor
 58,0,0,1,Debilidad importante,"Hay extrapolación pedagógica, pero no falla A porque trabaja con censo de la población definida; lo clasifico como no A&C fuerte.",codex_gpt
 59,1,0,1,FF clasica,El componente de campo no probabilístico se usa para sostener inferencias amplias sobre imaginarios territoriales.,codex_gpt
 60,1,1,1,FF con reconocimiento,"Reconoce pocos casos para T3/T4, pero generaliza a la ciudad y norma; A&C fuerte.",codex_gpt
+61,1,1,1,FF con reconocimiento,Falla A&C con reconocimiento de limite: muestra no probabilistica/particular y conclusiones/recomendaciones territoriales sobre comunidades mineras.,codex_gpt
+62,1,1,1,FF con reconocimiento,"Falla A&C con B=1: el articulo reconoce la limitacion, pero sostiene inferencia laboral/organizacional desde muestra no probabilistica.",codex_gpt
+63,0,0,0,Sin falla relevante,No configura A&C: base oficial y diseno muestral institucional.,codex_gpt
+64,1,1,0,Debilidad importante,"Hay muestra institucional, pero no C fuerte: el articulo funciona como estudio de caso/gestion educativa.",codex_gpt
+65,1,0,1,FF clasica,Falla A&C: seleccion espacial no probabilistica/dirigida de hogares y extrapolacion ambiental/territorial.,codex_gpt
+66,1,0,0,Debilidad importante,"No A&C fuerte: aunque usa informantes clave no probabilisticos, el nucleo no es inferencia muestral a poblacion sino mapeo cualitativo.",codex_gpt
+67,1,0,1,FF clasica,Falla A&C: encuesta voluntaria a hoteles/directivos y lectura sectorial/organizacional amplia.,codex_gpt
+68,1,1,0,Debilidad importante,"No falla fuerte: hay muestra pequena, pero el articulo acota el alcance como casos/indicios y evita una extrapolacion poblacional dura.",codex_gpt
+69,1,0,0,Debilidad importante,"No A&C fuerte: experiencia educativa exploratoria, sin pretension central de representatividad poblacional.",codex_gpt
+70,1,0,1,FF clasica,Falla A&C: encuesta urbana no probabilistica/no claramente aleatoria y extrapolacion a adopcion de vehiculos electricos.,codex_gpt
+71,0,0,0,Sin falla relevante,No configura A&C: base oficial y estimacion compatible con su diseno.,codex_gpt
+72,0,0,0,Sin falla relevante,No falla fuerte A&C: muestreo probabilistico local.,codex_gpt
+73,0,0,0,Sin falla relevante,"Falso positivo IA: datos administrativos/operativos de pesqueria, no encuesta inferencial humana A&C.",codex_gpt
+74,0,1,0,Sin falla relevante,"No aplica como A&C humano; si hay limitacion muestral biologica, no es la falla fuerte de muestreo no probabilistico + extrapolacion poblacional humana.",codex_gpt
+75,1,0,0,Debilidad importante,"No falla fuerte: caso escolar localizado, sin C fuerte.",codex_gpt
+76,1,0,1,FF clasica,Falla A&C: encuesta mixta no probabilistica a ciclistas y recomendaciones de infraestructura para usuarios/parques.,codex_gpt
+77,0,0,0,Sin falla relevante,No falla fuerte: caso local con calculo muestral y cobertura completa de comercios.,codex_gpt
+78,0,0,0,Sin falla relevante,No A&C: fuente estadistica/OD apropiada para comparacion metropolitana.,codex_gpt
+79,0,0,0,Sin falla relevante,No falla fuerte: muestra representativa/aleatoria para poblacion local definida.,codex_gpt
+80,1,0,1,FF clasica,Falla A&C: observacion no probabilistica en puntos/horarios y conclusiones sobre conductas urbanas.,codex_gpt
+81,1,1,1,FF con reconocimiento,Falla A&C con B=1: muestra online no probabilistica y lectura general sobre ciclistas urbanos.,codex_gpt
+82,0,0,0,Sin falla relevante,No A&C: base muestral calculada y estratificada.,codex_gpt
+83,1,0,0,Debilidad importante,"No falla fuerte: muestra escolar por consentimiento, pero el articulo se mantiene como intervencion/contexto especifico.",codex_gpt
+84,1,1,1,FF con reconocimiento,Falla A&C con B=1: seleccion oportunista de sesiones/registros y conclusion causal/pedagogica amplia.,codex_gpt
+85,0,0,0,Sin falla relevante,"Falso positivo IA: muestra ambiental/biologica, no falla A&C de muestreo humano.",codex_gpt
+86,0,0,0,Sin falla relevante,No falla fuerte: hay seleccion aleatoria y analisis tecnico ambiental.,codex_gpt
+87,0,0,0,Sin falla relevante,"Falso positivo IA: datos de inspeccion de carcasas, no A&C humano.",codex_gpt
+88,1,0,1,FF clasica,Falla A&C: muestreo por referencias y conclusiones municipales/cadena productiva.,codex_gpt
+89,0,1,0,Sin falla relevante,No A&C: estudio genetico/biomedico con cautela explicita y metaanalisis complementario.,codex_gpt
+90,0,0,0,Sin falla relevante,"Falso positivo IA: experimento zootecnico aleatorizado, fuera de la falla A&C humana/social.",codex_gpt

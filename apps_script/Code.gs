@@ -142,7 +142,8 @@ function _adminEndpoint(p) {
         out.quedan = keep.length;
         out.revisor = target;
       }
-    } else if (p.fn === 'importar_codex_60') {
+    } else if (p.fn === 'importar_codex_gpt') {
+      // Atomico: borra filas codex_gpt y reimporta CSV (nombre estable)
       const ss = SpreadsheetApp.openById(SHEET_ID);
       const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
       const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
@@ -154,8 +155,26 @@ function _adminEndpoint(p) {
       if (keep.length) sh.getRange(2, 1, keep.length, sh.getLastColumn()).setValues(keep);
       out.codex_borradas = vals.length - keep.length;
       const r = importarEvaluacionesIA(
-        'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_codex_60.csv',
+        'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_codex_gpt.csv',
         'codex_gpt'
+      );
+      out.importadas = r.ok;
+      out.saltadas = r.skipped;
+    } else if (p.fn === 'importar_gemini_flash') {
+      // Atomico: borra filas gemini_flash y reimporta CSV (nombre estable)
+      const ss = SpreadsheetApp.openById(SHEET_ID);
+      const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+      const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+      const idxRev = head.indexOf('revisor');
+      const lastRow = sh.getLastRow();
+      const vals = sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).getValues();
+      const keep = vals.filter(row => String(row[idxRev] || '').trim() !== 'gemini_flash');
+      sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).clearContent();
+      if (keep.length) sh.getRange(2, 1, keep.length, sh.getLastColumn()).setValues(keep);
+      out.gemini_flash_borradas = vals.length - keep.length;
+      const r = importarEvaluacionesIA(
+        'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_gemini_flash.csv',
+        'gemini_flash'
       );
       out.importadas = r.ok;
       out.saltadas = r.skipped;

@@ -73,6 +73,9 @@ function _adminEndpoint(p) {
     } else if (p.fn === 'comparacion_humano_ia') {
       const r = comparar_humanos_con_ias_guardadas();
       Object.keys(r).forEach(k => out[k] = r[k]);
+    } else if (p.fn === 'tasas_guardadas') {
+      const r = calcular_tasas_guardadas();
+      Object.keys(r).forEach(k => out[k] = r[k]);
     } else if (p.fn === 'diagnostico') {
       const ss = SpreadsheetApp.openById(SHEET_ID);
       const cal = _leerHoja(ss, HOJA_CALIFICACIONES);
@@ -656,6 +659,70 @@ function comparar_humanos_con_ias_guardadas() {
     modelos: Object.keys(modelos),
     filas: filas
   };
+}
+
+function calcular_tasas_guardadas() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const auditables = _leerHoja(ss, HOJA_AUDITABLES);
+  const cal = _leerHoja(ss, HOJA_CALIFICACIONES);
+  const porRevisor = {};
+  cal.forEach(r => {
+    const rev = String(r.revisor || '').trim();
+    if (!porRevisor[rev]) porRevisor[rev] = [];
+    porRevisor[rev].push({
+      pdf_id: String(r.pdf_id),
+      A: String(r.A_humano),
+      B: String(r.B_humano),
+      C: String(r.C_humano),
+      D: String(r.D_humano)
+    });
+  });
+  porRevisor['IA base'] = auditables.map(a => ({
+    pdf_id: String(a.pdf_id),
+    A: String(a.A_ia),
+    B: String(a.B_ia),
+    C: String(a.C_ia),
+    D: String(a.veredicto_ia)
+  }));
+
+  const revisores = Object.keys(porRevisor).sort();
+  const filas = revisores.map(rev => _tasasFilas_(rev, porRevisor[rev]));
+  const humanos = [];
+  Object.keys(porRevisor).forEach(rev => {
+    if (rev !== 'IA base' && _tipoRevisor_(rev) === 'humano') {
+      porRevisor[rev].forEach(r => humanos.push(r));
+    }
+  });
+  const modelos = [];
+  ['IA base','codex_gpt','gemini_flash','claude_haiku'].forEach(rev => {
+    if (porRevisor[rev]) porRevisor[rev].forEach(r => modelos.push(r));
+  });
+
+  return {
+    total_calificaciones: cal.length,
+    filas: filas,
+    agregado_humanos: _tasasFilas_('Humanos agregados', humanos),
+    agregado_ias: _tasasFilas_('IAs agregadas', modelos)
+  };
+}
+
+function _tasasFilas_(nombre, rows) {
+  const n = rows.length;
+  const c = pred => rows.filter(pred).length;
+  const out = {
+    revisor: nombre,
+    n: n,
+    A: c(r => r.A === '1'),
+    B: c(r => r.B === '1'),
+    C: c(r => r.C === '1'),
+    AC: c(r => r.A === '1' && r.C === '1'),
+    A_noB_C: c(r => r.A === '1' && r.B !== '1' && r.C === '1'),
+    A_B_C: c(r => r.A === '1' && r.B === '1' && r.C === '1')
+  };
+  ['A','B','C','AC','A_noB_C','A_B_C'].forEach(k => {
+    out[k + '_tasa'] = n ? out[k] / n : null;
+  });
+  return out;
 }
 
 /** Devuelve la URL del Sheet para el botón "Ir al libro". */

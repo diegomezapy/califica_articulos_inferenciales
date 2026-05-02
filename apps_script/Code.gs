@@ -70,6 +70,9 @@ function _adminEndpoint(p) {
       unificar_revisor(p.revisor || 'DIEGO MEZA');
       importar_pilotos_claude_y_gemini2();
       out.ok = true; out.fn = 'setup_completo';
+    } else if (p.fn === 'comparacion_humano_ia') {
+      const r = comparar_humanos_con_ias_guardadas();
+      Object.keys(r).forEach(k => out[k] = r[k]);
     } else if (p.fn === 'diagnostico') {
       const ss = SpreadsheetApp.openById(SHEET_ID);
       const cal = _leerHoja(ss, HOJA_CALIFICACIONES);
@@ -573,6 +576,86 @@ function _tipoRevisor_(revisor) {
     return 'modelo';
   }
   return 'humano';
+}
+
+function comparar_humanos_con_ias_guardadas() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const auditables = _leerHoja(ss, HOJA_AUDITABLES);
+  const cal = _leerHoja(ss, HOJA_CALIFICACIONES);
+  const labelsD = CATEGORIAS_D.slice();
+  const modelos = {
+    'IA base': {},
+    'Codex/GPT': {},
+    'Gemini 2.5 Flash': {},
+    'Claude Haiku': {}
+  };
+  auditables.forEach(a => {
+    modelos['IA base'][String(a.pdf_id)] = {
+      A: String(a.A_ia), B: String(a.B_ia), C: String(a.C_ia), D: String(a.veredicto_ia)
+    };
+  });
+  const mapaRevisores = {};
+  cal.forEach(r => {
+    const rev = String(r.revisor || '').trim();
+    const pid = String(r.pdf_id);
+    if (!mapaRevisores[rev]) mapaRevisores[rev] = {};
+    // Si hay duplicados, conservar la ultima fila leida.
+    mapaRevisores[rev][pid] = {
+      A: String(r.A_humano), B: String(r.B_humano), C: String(r.C_humano), D: String(r.D_humano)
+    };
+  });
+  if (mapaRevisores.codex_gpt) modelos['Codex/GPT'] = mapaRevisores.codex_gpt;
+  if (mapaRevisores.gemini_flash) modelos['Gemini 2.5 Flash'] = mapaRevisores.gemini_flash;
+  if (mapaRevisores.claude_haiku) modelos['Claude Haiku'] = mapaRevisores.claude_haiku;
+
+  const revisoresHumanos = Object.keys(mapaRevisores)
+    .filter(r => _tipoRevisor_(r) === 'humano')
+    .sort();
+
+  const filas = [];
+  revisoresHumanos.forEach(h => {
+    const hmap = mapaRevisores[h];
+    Object.keys(modelos).forEach(modelo => {
+      const mmap = modelos[modelo];
+      const comunes = Object.keys(hmap).filter(pid => mmap[pid]).sort((a, b) => Number(a) - Number(b));
+      const n = comunes.length;
+      const fila = {
+        humano: h,
+        ia: modelo,
+        n: n,
+        acuerdoA: null,
+        acuerdoB: null,
+        acuerdoC: null,
+        acuerdoD: null,
+        kappaD: null,
+        d_discrepancias: 0,
+        pdfs_discrepantes_D: []
+      };
+      if (n) {
+        ['A','B','C','D'].forEach(dim => {
+          fila['acuerdo' + dim] = comunes.filter(pid => hmap[pid][dim] === mmap[pid][dim]).length / n;
+        });
+        const paresD = comunes.map(pid => [hmap[pid].D, mmap[pid].D]);
+        fila.kappaD = _kappa(paresD, labelsD);
+        fila.d_discrepancias = comunes.filter(pid => hmap[pid].D !== mmap[pid].D).length;
+        fila.pdfs_discrepantes_D = comunes
+          .filter(pid => hmap[pid].D !== mmap[pid].D)
+          .map(pid => ({
+            pdf_id: Number(pid),
+            humano_D: hmap[pid].D,
+            ia_D: mmap[pid].D
+          }));
+      }
+      filas.push(fila);
+    });
+  });
+
+  return {
+    total_calificaciones: cal.length,
+    revisores_humanos: revisoresHumanos,
+    modelos: Object.keys(modelos),
+    filas: filas
+  };
 }
 
 /** Devuelve la URL del Sheet para el botón "Ir al libro". */

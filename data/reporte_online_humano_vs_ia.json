@@ -1,0 +1,1224 @@
+{
+  "total_calificaciones": 1157,
+  "revisores_humanos": [
+    "DIEGO MEZA",
+    "JulioVelotto"
+  ],
+  "modelos": [
+    "IA base",
+    "Codex/GPT",
+    "Gemini 2.5 Flash",
+    "Claude Haiku"
+  ],
+  "filas": [
+    {
+      "humano": "DIEGO MEZA",
+      "ia": "IA base",
+      "n": 80,
+      "acuerdoA": 0.75,
+      "acuerdoB": 0.675,
+      "acuerdoC": 0.625,
+      "acuerdoD": 0.35,
+      "kappaD": 0.15687069314957433,
+      "d_discrepancias": 52,
+      "pdfs_discrepantes_D": [
+        {
+          "pdf_id": 1,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 2,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 4,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 9,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 10,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 11,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 12,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 13,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 35,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 37,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 38,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 43,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 47,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 48,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 56,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 58,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 74,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 90,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 132,
+          "humano_D": "No evaluable",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 135,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 156,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 157,
+          "humano_D": "FF clasica",
+          "ia_D": "Sin falla relevante"
+        },
+        {
+          "pdf_id": 158,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 160,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 161,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 164,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 224,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 225,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 228,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 229,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 236,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 241,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 268,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 284,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 310,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 312,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 313,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 314,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 315,
+          "humano_D": "FF clasica",
+          "ia_D": "Sin falla relevante"
+        },
+        {
+          "pdf_id": 317,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 318,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 319,
+          "humano_D": "No evaluable",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 320,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 321,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 323,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 324,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 326,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 327,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 328,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 329,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 331,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 332,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        }
+      ]
+    },
+    {
+      "humano": "DIEGO MEZA",
+      "ia": "Codex/GPT",
+      "n": 80,
+      "acuerdoA": 0.7125,
+      "acuerdoB": 0.6875,
+      "acuerdoC": 0.525,
+      "acuerdoD": 0.425,
+      "kappaD": 0.24248662000823387,
+      "d_discrepancias": 46,
+      "pdfs_discrepantes_D": [
+        {
+          "pdf_id": 1,
+          "humano_D": "Debilidad importante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 2,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 5,
+          "humano_D": "Debilidad importante",
+          "ia_D": "Sin falla relevante"
+        },
+        {
+          "pdf_id": 7,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 10,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 11,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 12,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 35,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 37,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 38,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 43,
+          "humano_D": "FF clasica",
+          "ia_D": "Sin falla relevante"
+        },
+        {
+          "pdf_id": 47,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 48,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 58,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 68,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 87,
+          "humano_D": "FF clasica",
+          "ia_D": "Sin falla relevante"
+        },
+        {
+          "pdf_id": 132,
+          "humano_D": "No evaluable",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 135,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 156,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 157,
+          "humano_D": "FF clasica",
+          "ia_D": "Sin falla relevante"
+        },
+        {
+          "pdf_id": 161,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 224,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 225,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 228,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Sin falla relevante"
+        },
+        {
+          "pdf_id": 229,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 236,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 241,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 268,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 284,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 307,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 310,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 311,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 312,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 313,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 314,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 315,
+          "humano_D": "FF clasica",
+          "ia_D": "Sin falla relevante"
+        },
+        {
+          "pdf_id": 317,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 318,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 321,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 323,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 326,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 327,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 328,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 329,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 331,
+          "humano_D": "FF clasica",
+          "ia_D": "Sin falla relevante"
+        },
+        {
+          "pdf_id": 332,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        }
+      ]
+    },
+    {
+      "humano": "DIEGO MEZA",
+      "ia": "Gemini 2.5 Flash",
+      "n": 80,
+      "acuerdoA": 0.8,
+      "acuerdoB": 0.725,
+      "acuerdoC": 0.7,
+      "acuerdoD": 0.425,
+      "kappaD": 0.22526315789473683,
+      "d_discrepancias": 46,
+      "pdfs_discrepantes_D": [
+        {
+          "pdf_id": 1,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 2,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 5,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 6,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 9,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 10,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 11,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 12,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 13,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 34,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 35,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 37,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 38,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 47,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 58,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 74,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 90,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 132,
+          "humano_D": "No evaluable",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 135,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 156,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 160,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 162,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 163,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 164,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 225,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 228,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 229,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 236,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 241,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 268,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 284,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 312,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 313,
+          "humano_D": "FF clasica",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 317,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 319,
+          "humano_D": "No evaluable",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 320,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 321,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 323,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 324,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 325,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 326,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 327,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 328,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 329,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 330,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 332,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "No evaluable"
+        }
+      ]
+    },
+    {
+      "humano": "DIEGO MEZA",
+      "ia": "Claude Haiku",
+      "n": 80,
+      "acuerdoA": 0.725,
+      "acuerdoB": 0.65,
+      "acuerdoC": 0.6625,
+      "acuerdoD": 0.2875,
+      "kappaD": 0.07128309572301422,
+      "d_discrepancias": 57,
+      "pdfs_discrepantes_D": [
+        {
+          "pdf_id": 1,
+          "humano_D": "Debilidad importante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 2,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 5,
+          "humano_D": "Debilidad importante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 6,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 7,
+          "humano_D": "FF clasica",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 9,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 10,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 11,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 12,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 13,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 34,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 35,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 37,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 38,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 39,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 43,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 47,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 48,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 58,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 74,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 90,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 131,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 132,
+          "humano_D": "No evaluable",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 135,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 156,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 159,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 160,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 162,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 163,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 164,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 226,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 227,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 228,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 229,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 236,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 241,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 268,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 284,
+          "humano_D": "FF clasica",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 309,
+          "humano_D": "FF clasica",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 312,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 313,
+          "humano_D": "FF clasica",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 315,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 316,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 317,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 318,
+          "humano_D": "FF clasica",
+          "ia_D": "Sin falla relevante"
+        },
+        {
+          "pdf_id": 319,
+          "humano_D": "No evaluable",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 320,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 321,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 323,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 324,
+          "humano_D": "FF con reconocimiento",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 325,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 326,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 327,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 328,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 329,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 330,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 332,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        }
+      ]
+    },
+    {
+      "humano": "JulioVelotto",
+      "ia": "IA base",
+      "n": 10,
+      "acuerdoA": 0.8,
+      "acuerdoB": 0.8,
+      "acuerdoC": 0.8,
+      "acuerdoD": 0.6,
+      "kappaD": 0.3939393939393939,
+      "d_discrepancias": 4,
+      "pdfs_discrepantes_D": [
+        {
+          "pdf_id": 2,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 4,
+          "humano_D": "FF clasica",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 5,
+          "humano_D": "No evaluable",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 9,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        }
+      ]
+    },
+    {
+      "humano": "JulioVelotto",
+      "ia": "Codex/GPT",
+      "n": 10,
+      "acuerdoA": 0.7,
+      "acuerdoB": 0.7,
+      "acuerdoC": 0.8,
+      "acuerdoD": 0.5,
+      "kappaD": 0.2424242424242424,
+      "d_discrepancias": 5,
+      "pdfs_discrepantes_D": [
+        {
+          "pdf_id": 1,
+          "humano_D": "FF clasica",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 2,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 5,
+          "humano_D": "No evaluable",
+          "ia_D": "Sin falla relevante"
+        },
+        {
+          "pdf_id": 7,
+          "humano_D": "FF clasica",
+          "ia_D": "Debilidad importante"
+        },
+        {
+          "pdf_id": 10,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        }
+      ]
+    },
+    {
+      "humano": "JulioVelotto",
+      "ia": "Gemini 2.5 Flash",
+      "n": 10,
+      "acuerdoA": 0.8,
+      "acuerdoB": 0.9,
+      "acuerdoC": 0.7,
+      "acuerdoD": 0.5,
+      "kappaD": 0.16666666666666663,
+      "d_discrepancias": 5,
+      "pdfs_discrepantes_D": [
+        {
+          "pdf_id": 2,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 5,
+          "humano_D": "No evaluable",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 6,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 9,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 10,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        }
+      ]
+    },
+    {
+      "humano": "JulioVelotto",
+      "ia": "Claude Haiku",
+      "n": 10,
+      "acuerdoA": 0.7,
+      "acuerdoB": 0.8,
+      "acuerdoC": 0.6,
+      "acuerdoD": 0.4,
+      "kappaD": 0.1044776119402986,
+      "d_discrepancias": 6,
+      "pdfs_discrepantes_D": [
+        {
+          "pdf_id": 1,
+          "humano_D": "FF clasica",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 2,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 6,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF con reconocimiento"
+        },
+        {
+          "pdf_id": 7,
+          "humano_D": "FF clasica",
+          "ia_D": "No evaluable"
+        },
+        {
+          "pdf_id": 9,
+          "humano_D": "Sin falla relevante",
+          "ia_D": "FF clasica"
+        },
+        {
+          "pdf_id": 10,
+          "humano_D": "Debilidad importante",
+          "ia_D": "FF clasica"
+        }
+      ]
+    }
+  ]
+}

@@ -187,3 +187,36 @@ Tasas NotebookLM importadas:
 | A y C | 247 | 71.4% |
 | A sin B y C | 88 | 25.4% |
 | A, B y C | 159 | 46.0% |
+
+## 2026-05-03 - Imputacion proporcional DIEGO MEZA con NotebookLM
+
+Se asumio explicitamente el costo del sesgo y se completo el faltante de DIEGO MEZA usando un escenario imputado proporcional a la coincidencia observada Diego vs NotebookLM.
+
+Implementacion:
+
+- Archivo generado: `data/imputacion_diego_meza_notebooklm_proporcional.csv`.
+- Filas imputadas: 241.
+- Revisor usado en el libro online: `DIEGO MEZA`.
+- Marca de auditoria en `notas`: `IMPUTADO_NOTEBOOKLM_PROPORCIONAL`.
+- No se borraron evaluaciones reales de DIEGO MEZA.
+- Apps Script publicado como v32 (`v32 diego notebooklm imputation`).
+- Endpoint ejecutado: `fn=importar_imputacion_diego_notebooklm`.
+- Resultado online: 241 importadas, 0 saltadas.
+
+Estado final verificado en el libro online:
+
+| Tipo DIEGO MEZA | PDFs unicos |
+|---|---:|
+| Evaluaciones reales observadas | 105 |
+| Evaluaciones imputadas | 241 |
+| Total DIEGO MEZA | 346 |
+
+Proporcion final Diego vs NotebookLM despues de imputar:
+
+| Criterio | coincidencias | porcentaje |
+|---|---:|---:|
+| A | 293 / 346 | 84.7% |
+| B | 211 / 346 | 61.0% |
+| C | 257 / 346 | 74.3% |
+| D | 191 / 346 | 55.2% |
+| ABCD exacto | 135 / 346 | 39.0% |

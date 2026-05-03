@@ -229,6 +229,16 @@ function _adminEndpoint(p) {
       );
       out.importadas = r.ok;
       out.saltadas = r.skipped;
+    } else if (p.fn === 'importar_imputacion_diego_notebooklm') {
+      // Escenario imputado: completa faltantes de DIEGO MEZA a partir de
+      // NotebookLM, marcado en notas para no confundir con observaciones reales.
+      out.imputadas_borradas = _borrarFilasImputadasDiegoNotebookLM_();
+      const r = importarEvaluacionesIA(
+        'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/imputacion_diego_meza_notebooklm_proporcional.csv',
+        'DIEGO MEZA'
+      );
+      out.importadas = r.ok;
+      out.saltadas = r.skipped;
     } else if (p.fn === 'importar_modelos_346') {
       // Atomico para la app web: refresca las revisiones IA externas
       // que se comparan en el dashboard.
@@ -780,6 +790,27 @@ function _borrarFilasRevisor_(revisor) {
   const lastCol = sh.getLastColumn();
   const vals = sh.getRange(2, 1, lastRow - 1, lastCol).getValues();
   const keep = vals.filter(row => String(row[idxRev] || '').trim() !== target);
+  sh.getRange(2, 1, lastRow - 1, lastCol).clearContent();
+  if (keep.length) sh.getRange(2, 1, keep.length, lastCol).setValues(keep);
+  return vals.length - keep.length;
+}
+
+function _borrarFilasImputadasDiegoNotebookLM_() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+  if (!sh || sh.getLastRow() < 2) return 0;
+  const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  const idxRev = head.indexOf('revisor');
+  const idxNotas = head.indexOf('notas');
+  if (idxRev < 0 || idxNotas < 0) return 0;
+  const lastRow = sh.getLastRow();
+  const lastCol = sh.getLastColumn();
+  const vals = sh.getRange(2, 1, lastRow - 1, lastCol).getValues();
+  const keep = vals.filter(row => {
+    const rev = String(row[idxRev] || '').trim();
+    const notas = String(row[idxNotas] || '').trim();
+    return !(rev === 'DIEGO MEZA' && notas.indexOf('IMPUTADO_NOTEBOOKLM_PROPORCIONAL') === 0);
+  });
   sh.getRange(2, 1, lastRow - 1, lastCol).clearContent();
   if (keep.length) sh.getRange(2, 1, keep.length, lastCol).setValues(keep);
   return vals.length - keep.length;

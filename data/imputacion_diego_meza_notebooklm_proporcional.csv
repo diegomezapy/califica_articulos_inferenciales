@@ -1,0 +1,242 @@
+pdf_id,A,B,C,D,notas,revisor
+14,1,0,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+15,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+16,1,1,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+17,0,1,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ninguna; no es evaluacion humana observada,DIEGO MEZA
+18,0,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=BC; no es evaluacion humana observada,DIEGO MEZA
+19,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+20,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+21,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+22,1,0,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+23,1,0,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+24,1,1,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+25,1,0,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+26,1,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+27,1,0,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABD; no es evaluacion humana observada,DIEGO MEZA
+28,0,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+29,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+30,0,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AD; no es evaluacion humana observada,DIEGO MEZA
+31,1,1,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+32,0,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+33,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+36,1,1,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+41,0,1,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=C; no es evaluacion humana observada,DIEGO MEZA
+42,1,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+44,0,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+45,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+46,1,0,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+49,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+50,1,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+51,0,0,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+52,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+53,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+54,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+55,1,0,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AB; no es evaluacion humana observada,DIEGO MEZA
+57,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+59,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+60,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+61,0,0,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ninguna; no es evaluacion humana observada,DIEGO MEZA
+62,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+63,0,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+64,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+66,0,1,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ninguna; no es evaluacion humana observada,DIEGO MEZA
+67,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+69,1,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+70,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+81,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+82,0,0,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+83,1,1,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+84,1,1,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+85,0,1,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ninguna; no es evaluacion humana observada,DIEGO MEZA
+86,0,1,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+88,0,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=CD; no es evaluacion humana observada,DIEGO MEZA
+89,1,0,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+91,1,1,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+92,0,0,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ninguna; no es evaluacion humana observada,DIEGO MEZA
+93,0,0,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+94,0,1,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+95,1,1,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AB; no es evaluacion humana observada,DIEGO MEZA
+96,0,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=BC; no es evaluacion humana observada,DIEGO MEZA
+97,0,0,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+109,0,1,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=BC; no es evaluacion humana observada,DIEGO MEZA
+111,1,0,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+112,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+113,1,1,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+114,1,0,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AD; no es evaluacion humana observada,DIEGO MEZA
+115,0,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=C; no es evaluacion humana observada,DIEGO MEZA
+116,0,0,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AB; no es evaluacion humana observada,DIEGO MEZA
+117,0,0,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+118,1,1,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AD; no es evaluacion humana observada,DIEGO MEZA
+119,0,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+120,1,0,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+121,1,0,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+122,0,0,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=C; no es evaluacion humana observada,DIEGO MEZA
+123,1,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=CD; no es evaluacion humana observada,DIEGO MEZA
+124,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+125,0,0,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABD; no es evaluacion humana observada,DIEGO MEZA
+126,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+127,0,0,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+128,0,1,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+129,0,0,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+130,0,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+133,1,1,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+139,1,1,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AB; no es evaluacion humana observada,DIEGO MEZA
+140,1,0,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+141,1,0,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+142,0,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+143,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+144,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+145,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+146,0,0,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=C; no es evaluacion humana observada,DIEGO MEZA
+147,1,0,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+148,1,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=BCD; no es evaluacion humana observada,DIEGO MEZA
+149,0,1,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AB; no es evaluacion humana observada,DIEGO MEZA
+150,1,1,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+151,1,1,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=B; no es evaluacion humana observada,DIEGO MEZA
+152,0,0,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+153,0,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABD; no es evaluacion humana observada,DIEGO MEZA
+154,0,1,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+165,1,1,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+166,1,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+167,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+168,1,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+169,0,0,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ninguna; no es evaluacion humana observada,DIEGO MEZA
+170,1,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+171,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+172,0,1,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AD; no es evaluacion humana observada,DIEGO MEZA
+173,1,1,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+174,1,1,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+175,0,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+176,1,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=B; no es evaluacion humana observada,DIEGO MEZA
+177,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+178,0,0,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AB; no es evaluacion humana observada,DIEGO MEZA
+179,0,0,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+180,1,1,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+181,0,0,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+182,0,1,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+183,0,1,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+184,0,1,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=BC; no es evaluacion humana observada,DIEGO MEZA
+185,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+186,0,1,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ninguna; no es evaluacion humana observada,DIEGO MEZA
+187,1,0,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+188,1,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+189,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+190,1,1,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+191,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+192,0,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=CD; no es evaluacion humana observada,DIEGO MEZA
+193,0,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+194,1,0,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+195,1,0,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+196,1,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+197,1,1,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABD; no es evaluacion humana observada,DIEGO MEZA
+198,1,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+199,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+200,0,0,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=C; no es evaluacion humana observada,DIEGO MEZA
+201,1,1,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABD; no es evaluacion humana observada,DIEGO MEZA
+202,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+203,1,0,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+204,1,0,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AD; no es evaluacion humana observada,DIEGO MEZA
+205,1,1,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+206,0,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=BCD; no es evaluacion humana observada,DIEGO MEZA
+207,1,1,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABD; no es evaluacion humana observada,DIEGO MEZA
+208,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+209,1,0,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+210,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+211,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+212,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+213,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+214,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+215,1,0,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+216,1,0,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABD; no es evaluacion humana observada,DIEGO MEZA
+217,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+218,1,1,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+219,0,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+220,0,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=C; no es evaluacion humana observada,DIEGO MEZA
+221,0,1,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=B; no es evaluacion humana observada,DIEGO MEZA
+222,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+223,0,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=CD; no es evaluacion humana observada,DIEGO MEZA
+230,1,0,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+231,0,0,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ninguna; no es evaluacion humana observada,DIEGO MEZA
+232,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+233,1,1,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+234,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+235,1,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+237,0,0,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+238,1,0,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+239,1,0,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+240,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+244,1,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+245,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+246,0,0,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=BD; no es evaluacion humana observada,DIEGO MEZA
+247,0,1,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+248,0,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=C; no es evaluacion humana observada,DIEGO MEZA
+249,1,1,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AB; no es evaluacion humana observada,DIEGO MEZA
+250,1,0,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+251,1,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ACD; no es evaluacion humana observada,DIEGO MEZA
+252,0,1,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=C; no es evaluacion humana observada,DIEGO MEZA
+253,1,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+254,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+255,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+256,0,0,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+257,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+258,0,0,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ninguna; no es evaluacion humana observada,DIEGO MEZA
+259,0,1,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=B; no es evaluacion humana observada,DIEGO MEZA
+260,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+261,1,0,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+262,1,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+263,1,1,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+264,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+265,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+266,0,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+267,0,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=BCD; no es evaluacion humana observada,DIEGO MEZA
+269,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+270,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+271,1,0,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABD; no es evaluacion humana observada,DIEGO MEZA
+272,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+273,1,0,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AD; no es evaluacion humana observada,DIEGO MEZA
+274,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+275,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+276,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+277,1,0,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+278,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+279,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+280,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+281,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+282,1,0,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+283,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+285,1,0,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AD; no es evaluacion humana observada,DIEGO MEZA
+286,1,1,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+287,0,0,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+288,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+289,1,0,0,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+290,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+291,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+292,0,0,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=CD; no es evaluacion humana observada,DIEGO MEZA
+293,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+294,1,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+295,0,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+296,1,1,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AB; no es evaluacion humana observada,DIEGO MEZA
+297,1,0,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AD; no es evaluacion humana observada,DIEGO MEZA
+298,0,0,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+299,1,0,0,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=A; no es evaluacion humana observada,DIEGO MEZA
+300,0,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+301,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+302,1,1,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+303,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+304,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+305,1,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+306,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+333,0,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+334,0,1,1,No evaluable,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+335,0,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+336,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+337,1,1,0,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AD; no es evaluacion humana observada,DIEGO MEZA
+338,0,1,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=BC; no es evaluacion humana observada,DIEGO MEZA
+339,1,0,1,Sin falla relevante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AC; no es evaluacion humana observada,DIEGO MEZA
+340,1,1,1,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+341,0,1,0,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ninguna; no es evaluacion humana observada,DIEGO MEZA
+342,1,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+343,0,0,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ninguna; no es evaluacion humana observada,DIEGO MEZA
+344,1,1,1,FF con reconocimiento,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABCD; no es evaluacion humana observada,DIEGO MEZA
+345,0,0,1,FF clasica,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=ABC; no es evaluacion humana observada,DIEGO MEZA
+346,1,1,0,Debilidad importante,IMPUTADO_NOTEBOOKLM_PROPORCIONAL; donante=notebooklm; dimensiones_iguales=AB; no es evaluacion humana observada,DIEGO MEZA

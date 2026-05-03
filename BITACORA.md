@@ -151,3 +151,39 @@ Notas tecnicas:
 
 - Actualizar la app web si se desea incluir NotebookLM como cuarto revisor IA en el dashboard.
 - Revisar prioritariamente `data/discrepancias_notebooklm_vs_humanos_activos.csv` y `data/discrepancias_notebooklm_codex_gemini_claude.csv`.
+
+## 2026-05-03 - App web actualizada con NotebookLM
+
+- Se genero `data/evaluaciones_notebooklm.csv` con las 346 evaluaciones NotebookLM normalizadas al formato importable de la app: `pdf_id,A,B,C,D,notas,revisor`.
+- Se agrego `notebooklm` como revisor tipo modelo en Apps Script.
+- Se actualizo el importador admin:
+  - `fn=importar_notebooklm`
+  - `fn=importar_modelos_346` ahora refresca Codex/GPT, Gemini, Claude y NotebookLM.
+- Se actualizo el dashboard para comparar 4 modelos: Codex/GPT, Gemini 2.5 Flash, Claude Haiku y NotebookLM.
+- Se publico Apps Script v31 (`v31 notebooklm model import`) sobre el despliegue web activo.
+- Se importo NotebookLM al libro online con resultado: 346 importadas, 0 saltadas.
+- GitHub quedo actualizado en `main`, commit `6f490d5`.
+
+Diagnostico online despues de importar NotebookLM:
+
+| Revisor | filas | PDFs |
+|---|---:|---:|
+| codex_gpt | 346 | 346 |
+| claude_haiku | 346 | 346 |
+| notebooklm | 346 | 346 |
+| gemini_flash | 345 | 345 |
+| DIEGO MEZA | 113 | pendiente deduplicar |
+| gemini_v2 | 12 | 12 |
+| claude | 12 | 12 |
+| JulioVelotto | 10 | 10 |
+
+Tasas NotebookLM importadas:
+
+| Indicador | n | tasa |
+|---|---:|---:|
+| A = 1 | 270 | 78.0% |
+| B = 1 | 224 | 64.7% |
+| C = 1 | 292 | 84.4% |
+| A y C | 247 | 71.4% |
+| A sin B y C | 88 | 25.4% |
+| A, B y C | 159 | 46.0% |

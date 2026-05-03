@@ -55,14 +55,14 @@
 
     if (s.comparacionModelos) {
       const cm = s.comparacionModelos;
-      html += '<h3 style="margin-top:0;">Comparación Codex/GPT · Gemini · Claude</h3>';
+      html += '<h3 style="margin-top:0;">Comparación Codex/GPT · Gemini · Claude · NotebookLM</h3>';
       html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">';
       cm.cobertura.forEach(m => {
         const faltan = m.faltantes && m.faltantes.length ? 'Falta: ' + m.faltantes.join(', ') : 'Cobertura completa';
         html += tarjeta(nombreModelo(m.revisor), m.n + ' PDFs', faltan);
       });
-      html += tarjeta('Consenso 3 modelos', cm.taxonomiaD.tres_acuerdo + ' PDFs',
-                      'sobre ' + cm.comunes3 + ' PDFs comunes en D');
+      html += tarjeta('Unanimidad 4 modelos', cm.consensoD.unanimidad + ' PDFs',
+                      'sobre ' + cm.comunesTodos + ' PDFs comunes en D');
       html += '</div>';
 
       html += '<table class="matriz" style="margin-top:12px;">';
@@ -74,11 +74,10 @@
       html += '</tbody></table>';
 
       html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:12px;">' +
-              tarjeta('3 de acuerdo', cm.taxonomiaD.tres_acuerdo, 'mismo veredicto D') +
-              tarjeta('Gemini=Claude', cm.taxonomiaD.gemini_claude_contra_codex, 'contra Codex/GPT') +
-              tarjeta('Codex=Gemini', cm.taxonomiaD.codex_gemini_contra_claude, 'contra Claude') +
-              tarjeta('Codex=Claude', cm.taxonomiaD.codex_claude_contra_gemini, 'contra Gemini') +
-              tarjeta('3 distintos', cm.taxonomiaD.tres_distintos, 'sin mayoría') +
+              tarjeta('Unanimidad', cm.consensoD.unanimidad, '4 modelos iguales') +
+              tarjeta('Mayoría', cm.consensoD.mayoria, '3 de 4 iguales') +
+              tarjeta('Empate', cm.consensoD.empate, '2 de 4 como máximo') +
+              tarjeta('4 distintos', cm.consensoD.todos_distintos, 'sin mayoría') +
               '</div>';
 
       html += '<div style="background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;margin-top:16px;">';
@@ -155,7 +154,8 @@
     return {
       codex_gpt: 'Codex/GPT',
       gemini_flash: 'Gemini 2.5 Flash',
-      claude_haiku: 'Claude Haiku'
+      claude_haiku: 'Claude Haiku',
+      notebooklm: 'NotebookLM'
     }[x] || x;
   }
 

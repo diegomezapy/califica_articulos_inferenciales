@@ -35,6 +35,8 @@ califica_articulos_inferenciales/
 │   ├── evaluaciones_codex_gpt.csv               # 346 evaluaciones Codex/GPT
 │   ├── evaluaciones_gemini_flash.csv            # 345 evaluaciones Gemini 2.5 Flash
 │   ├── evaluaciones_claude_haiku_346.csv        # 346 evaluaciones Claude Haiku
+│   ├── evaluaciones_notebooklm.csv              # 346 evaluaciones NotebookLM para importar
+│   ├── evaluaciones_notebooklm_muestreo.csv     # 346 evaluaciones NotebookLM con evidencias A/B/C
 │   └── comparacion_codex_gemini_claude.csv      # cruce completo por pdf_id
 ├── docs/
 │   ├── arquitectura.md

@@ -76,6 +76,15 @@ function _adminEndpoint(p) {
     } else if (p.fn === 'tasas_guardadas') {
       const r = calcular_tasas_guardadas();
       Object.keys(r).forEach(k => out[k] = r[k]);
+    } else if (p.fn === 'export_calificaciones') {
+      const ss = SpreadsheetApp.openById(SHEET_ID);
+      let cal = _leerHoja(ss, HOJA_CALIFICACIONES);
+      if (p.revisor) {
+        const target = String(p.revisor).trim();
+        cal = cal.filter(r => String(r.revisor || '').trim() === target);
+      }
+      out.total = cal.length;
+      out.filas = cal;
     } else if (p.fn === 'diagnostico') {
       const ss = SpreadsheetApp.openById(SHEET_ID);
       const cal = _leerHoja(ss, HOJA_CALIFICACIONES);
@@ -202,8 +211,26 @@ function _adminEndpoint(p) {
       );
       out.importadas = r.ok;
       out.saltadas = r.skipped;
+    } else if (p.fn === 'importar_notebooklm') {
+      // Borra filas notebooklm previas y reimporta el CSV normalizado de los 346
+      const ss = SpreadsheetApp.openById(SHEET_ID);
+      const sh = ss.getSheetByName(HOJA_CALIFICACIONES);
+      const head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+      const idxRev = head.indexOf('revisor');
+      const lastRow = sh.getLastRow();
+      const vals = sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).getValues();
+      const keep = vals.filter(row => String(row[idxRev] || '').trim() !== 'notebooklm');
+      sh.getRange(2, 1, lastRow - 1, sh.getLastColumn()).clearContent();
+      if (keep.length) sh.getRange(2, 1, keep.length, sh.getLastColumn()).setValues(keep);
+      out.notebooklm_borradas = vals.length - keep.length;
+      const r = importarEvaluacionesIA(
+        'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_notebooklm.csv',
+        'notebooklm'
+      );
+      out.importadas = r.ok;
+      out.saltadas = r.skipped;
     } else if (p.fn === 'importar_modelos_346') {
-      // Atomico para la app web: refresca las tres revisiones IA externas
+      // Atomico para la app web: refresca las revisiones IA externas
       // que se comparan en el dashboard.
       const modelos = [
         {
@@ -217,6 +244,10 @@ function _adminEndpoint(p) {
         {
           revisor: 'claude_haiku',
           url: 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_claude_haiku_346.csv'
+        },
+        {
+          revisor: 'notebooklm',
+          url: 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_notebooklm.csv'
         }
       ];
       out.modelos = {};
@@ -275,6 +306,10 @@ function importar_modelos_346() {
     {
       revisor: 'claude_haiku',
       url: 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_claude_haiku_346.csv'
+    },
+    {
+      revisor: 'notebooklm',
+      url: 'https://raw.githubusercontent.com/diegomezapy/califica_articulos_inferenciales/main/data/evaluaciones_notebooklm.csv'
     }
   ];
   const out = {};
@@ -575,7 +610,7 @@ function submitCalificacion(payload) {
 function _tipoRevisor_(revisor) {
   const r = String(revisor || '').toLowerCase();
   if (r === 'codex_gpt' || r === 'gemini_flash' || r === 'gemini_v2' ||
-      r === 'claude_haiku' || r === 'claude') {
+      r === 'claude_haiku' || r === 'claude' || r === 'notebooklm') {
     return 'modelo';
   }
   return 'humano';
@@ -590,7 +625,8 @@ function comparar_humanos_con_ias_guardadas() {
     'IA base': {},
     'Codex/GPT': {},
     'Gemini 2.5 Flash': {},
-    'Claude Haiku': {}
+    'Claude Haiku': {},
+    'NotebookLM': {}
   };
   auditables.forEach(a => {
     modelos['IA base'][String(a.pdf_id)] = {
@@ -610,6 +646,7 @@ function comparar_humanos_con_ias_guardadas() {
   if (mapaRevisores.codex_gpt) modelos['Codex/GPT'] = mapaRevisores.codex_gpt;
   if (mapaRevisores.gemini_flash) modelos['Gemini 2.5 Flash'] = mapaRevisores.gemini_flash;
   if (mapaRevisores.claude_haiku) modelos['Claude Haiku'] = mapaRevisores.claude_haiku;
+  if (mapaRevisores.notebooklm) modelos['NotebookLM'] = mapaRevisores.notebooklm;
 
   const revisoresHumanos = Object.keys(mapaRevisores)
     .filter(r => _tipoRevisor_(r) === 'humano')
@@ -694,7 +731,7 @@ function calcular_tasas_guardadas() {
     }
   });
   const modelos = [];
-  ['IA base','codex_gpt','gemini_flash','claude_haiku'].forEach(rev => {
+  ['IA base','codex_gpt','gemini_flash','claude_haiku','notebooklm'].forEach(rev => {
     if (porRevisor[rev]) porRevisor[rev].forEach(r => modelos.push(r));
   });
 
@@ -853,7 +890,7 @@ function getEstadisticas() {
  * como una lectura independiente del mismo protocolo.
  */
 function _comparacionModelos(cal, labelsD) {
-  const modelos = ['codex_gpt', 'gemini_flash', 'claude_haiku'];
+  const modelos = ['codex_gpt', 'gemini_flash', 'claude_haiku', 'notebooklm'];
   const porModelo = {};
   modelos.forEach(m => {
     const filas = cal.filter(r => String(r.revisor) === m);
@@ -892,35 +929,36 @@ function _comparacionModelos(cal, labelsD) {
     }
   }
 
-  const comunes3 = [];
+  const comunesTodos = [];
   for (var pid = 1; pid <= 346; pid++) {
     const k = String(pid);
-    if (modelos.every(m => porModelo[m][k])) comunes3.push(k);
+    if (modelos.every(m => porModelo[m][k])) comunesTodos.push(k);
   }
-  const taxonomia = {
-    tres_acuerdo: 0,
-    gemini_claude_contra_codex: 0,
-    codex_gemini_contra_claude: 0,
-    codex_claude_contra_gemini: 0,
-    tres_distintos: 0
+  const consensoD = {
+    unanimidad: 0,
+    mayoria: 0,
+    empate: 0,
+    todos_distintos: 0
   };
-  comunes3.forEach(pid => {
-    const cd = porModelo.codex_gpt[pid].D_humano;
-    const gd = porModelo.gemini_flash[pid].D_humano;
-    const ld = porModelo.claude_haiku[pid].D_humano;
-    if (cd === gd && gd === ld) taxonomia.tres_acuerdo++;
-    else if (gd === ld && gd !== cd) taxonomia.gemini_claude_contra_codex++;
-    else if (cd === gd && cd !== ld) taxonomia.codex_gemini_contra_claude++;
-    else if (cd === ld && cd !== gd) taxonomia.codex_claude_contra_gemini++;
-    else taxonomia.tres_distintos++;
+  comunesTodos.forEach(pid => {
+    const conteo = {};
+    modelos.forEach(m => {
+      const d = String(porModelo[m][pid].D_humano);
+      conteo[d] = (conteo[d] || 0) + 1;
+    });
+    const frecs = Object.keys(conteo).map(k => conteo[k]).sort((a, b) => b - a);
+    if (frecs[0] === modelos.length) consensoD.unanimidad++;
+    else if (frecs[0] >= 3) consensoD.mayoria++;
+    else if (frecs[0] === 2) consensoD.empate++;
+    else consensoD.todos_distintos++;
   });
 
   return {
     modelos: modelos,
     cobertura: cobertura,
     pares: pares,
-    comunes3: comunes3.length,
-    taxonomiaD: taxonomia
+    comunesTodos: comunesTodos.length,
+    consensoD: consensoD
   };
 }
 

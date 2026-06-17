@@ -1,5 +1,214 @@
 # Bitacora del proyecto
 
+## 2026-06-16 22:15
+
+### Proyecto
+
+* Nombre: califica_articulos_inferenciales
+* Cliente o institucion: FACEN / articulo para DADOS
+* Ruta local: `/Users/diegobernardomezabogado/Library/CloudStorage/GoogleDrive-dmeza.py@gmail.com/Mi unidad/DECENA_FACEN/califica_articulos_inferenciales`
+* Repositorio: `https://github.com/diegomezapy/califica_articulos_inferenciales`
+* URL publica: pendiente de publicar/actualizar en GitHub Pages
+* Responsable: Codex + usuario
+* Version: pipeline de anonimización reproducible
+
+### Objetivo de la intervencion
+
+* Implementar una forma robusta, por lote y auditable de anonimizar los PDFs antes de compartirlos en abierto.
+
+### Diagnostico inicial
+
+* Los `346` PDFs publicos dejaban visible titulo, autores, revista, afiliaciones, DOI, correos y metadatos embebidos.
+* Una solucion manual archivo por archivo no era sostenible ni trazable.
+* La app publica ya estaba funcional, pero aun servia los PDFs no anonimizados.
+
+### Acciones realizadas
+
+* Se creo `scripts/anonymize_public_pdfs.py`.
+* Se definio una estrategia hibrida:
+  * multipagina: se reemplaza la primera pagina por una portada sintetica neutra;
+  * paginas internas: se redaccionan bandas superiores, esquina superior izquierda y pie para reducir encabezados y logos repetidos;
+  * una sola pagina: se aplica redaccion parcial y se deja bandera de revision manual.
+* Se limpiaron metadatos embebidos de salida.
+* Se generaron nombres publicos neutros `case_0001.pdf` ... `case_0346.pdf`.
+* Se genero manifiesto:
+  * `public_data/anonymized_pdf_manifest.csv`
+  * `public_data/anonymized_pdf_manifest.json`
+* Se corrio el pipeline completo sobre los 346 casos.
+* Se actualizo `scripts/build_public_catalog.py` para preferir automaticamente `anonymized_pdfs/` cuando existe el manifiesto.
+* Se ajusto el catalogo publico para exponer `case_XXXX`, nombre publico del PDF y fuente editorial suprimida en lugar de titulo, revista y nombre original del archivo cuando existe copia anonimizada.
+* Se actualizo `.gitignore` para evitar subir por accidente `public_pdfs/` y artefactos temporales de verificacion.
+* Se actualizaron `README.md` y `DEPLOY.md` con el flujo de anonimización.
+
+### Archivos modificados
+
+* `scripts/anonymize_public_pdfs.py`
+* `scripts/build_public_catalog.py`
+* `.gitignore`
+* `README.md`
+* `DEPLOY.md`
+* `BITACORA.md`
+* `public_data/anonymized_pdf_manifest.csv`
+* `public_data/anonymized_pdf_manifest.json`
+* `anonymized_pdfs/*`
+* `public_data/auditables_346.json`
+
+### Comandos o scripts ejecutados
+
+* `python3 -m py_compile scripts/anonymize_public_pdfs.py`
+* `python3 scripts/anonymize_public_pdfs.py`
+* `python3 scripts/build_public_catalog.py`
+* pruebas parciales con `--limit` y `--match`
+
+### Resultados verificados
+
+* Pipeline completo procesado: `346` PDFs.
+* Estrategias aplicadas:
+  * `cover_swap_first_page = 343`
+  * `first_page_block_redaction = 2`
+  * `first_page_fallback_band = 1`
+* Tres casos quedaron como `single_page`.
+* La carpeta `anonymized_pdfs/` pesa aproximadamente `228 MB`.
+* `public_data/auditables_346.json` ahora apunta preferentemente a rutas `anonymized_pdfs/case_XXXX.pdf`.
+* La UI publica ya no muestra titulo ni revista original cuando existe la copia anonimizada.
+
+### Pruebas realizadas
+
+* Render de primeras paginas antes y despues sobre muestras.
+* Spot checks en casos de inicio, medio y final del lote.
+* Verificacion de metadatos vacios en muestras.
+* Relectura del JSON publico para confirmar rutas anonimizadas.
+
+### Errores o incidentes
+
+* Un PDF dio error de colorspace al aplicar redacciones de imagen con MuPDF.
+* Algunos PDFs emitieron avisos `skipping bad link / annot item ...` por enlaces o anotaciones defectuosas del original.
+
+### Soluciones aplicadas
+
+* Se agrego `safe_apply_redactions()` con fallback a `PDF_REDACT_IMAGE_NONE` cuando la redaccion de pixeles falla por colorspace.
+* Se eligio una portada sintetica para multipagina por ser mas estable que intentar limpiar en sitio cada portada editorial heterogenea.
+
+### Pendientes
+
+* Si la publicacion sera totalmente abierta, evaluar tambien ocultar en la UI publica campos como `titulo`, `revista` y `pdf_nombre`, porque hoy la anonimización fuerte esta aplicada al PDF, no a todos los metadatos del catalogo.
+* Publicar en GitHub Pages una vez decidido el nivel deseado de anonimato del catalogo.
+
+### Riesgos
+
+* Los casos de una sola pagina siguen siendo los mas delicados y deben revisarse manualmente.
+* Algunas paginas internas pueden perder una pequena franja superior o inferior de contenido por seguridad.
+* La UI publica todavia expone metadatos textuales de los casos, aunque el PDF servido ya sea anonimizado.
+
+### Recomendaciones
+
+* Antes del push publico final, revisar manualmente los `3` casos `single_page` del manifiesto.
+* Si se requiere anonimización total del sitio, preparar una segunda pasada que enmascare tambien los metadatos del catalogo y de la lista lateral.
+
+## 2026-06-16 21:20
+
+### Proyecto
+
+* Nombre: califica_articulos_inferenciales
+* Cliente o institucion: FACEN / articulo para DADOS
+* Ruta local: `/Users/diegobernardomezabogado/Library/CloudStorage/GoogleDrive-dmeza.py@gmail.com/Mi unidad/DECENA_FACEN/califica_articulos_inferenciales`
+* Repositorio: `https://github.com/diegomezapy/califica_articulos_inferenciales`
+* URL publica: pendiente de publicar/actualizar en GitHub Pages
+* Responsable: Codex + usuario
+* Version: verificador publico estatico inicial
+
+### Objetivo de la intervencion
+
+* Dejar operativa una app web publica de verificacion que muestre los 346 PDFs auditados, con catalogo navegable, trazabilidad por caso y base lista para compartir con terceros.
+
+### Diagnostico inicial
+
+* El repositorio tenia una app privada basada en Google Apps Script y un `index.html` insuficiente para verificacion publica.
+* Los metadatos auditables ya existian en `../04_INVESTIGACION_REPO/tabla_validacion_humano_vs_ia_auditables_346.csv`.
+* Los PDFs auditables estaban disponibles localmente en dos carpetas fuente y faltaba empaquetarlos en una superficie publica verificable.
+
+### Acciones realizadas
+
+* Se genero el catalogo publico con `scripts/build_public_catalog.py`.
+* Se copiaron los 346 PDFs a `public_pdfs/`.
+* Se genero `public_data/auditables_346.json`.
+* Se reemplazo `index.html` por una app publica utilizable con filtros, resumen y visor PDF.
+* Se agrego `app.js` para carga del catalogo, filtros globales, detalle por caso y visor.
+* Se ajusto la UI segun criterios del repositorio maestro consultado:
+  * boton visible adicional para limpiar filtros;
+  * mejor legibilidad movil;
+  * control de tamano del visor PDF;
+  * tabla resumen desplazable en pantallas angostas.
+* Se actualizaron `README.md` y `DEPLOY.md` con el flujo del verificador publico estatico.
+* Se consulto la carpeta maestra:
+  * `/Users/diegobernardomezabogado/Library/CloudStorage/GoogleDrive-dmeza.py@gmail.com/Mi unidad/MANUAL_MAESTRO_FORMATOS_FUNCIONES_APPWEB`
+
+### Archivos modificados
+
+* `index.html`
+* `app.js`
+* `scripts/build_public_catalog.py`
+* `README.md`
+* `DEPLOY.md`
+* `BITACORA.md`
+* `public_data/auditables_346.json`
+* `public_pdfs/*`
+
+### Comandos o scripts ejecutados
+
+* `python3 scripts/build_public_catalog.py`
+* `node --check app.js`
+* `python3 -m http.server 8016`
+* `curl -I http://localhost:8016/`
+* `npx playwright install chromium`
+* `npx playwright screenshot --device='Desktop Chrome' http://localhost:8016/ playwright_home.png`
+* `npx playwright screenshot --browser=chromium --viewport-size=390,844 http://localhost:8016/ playwright_mobile.png`
+
+### Resultados verificados
+
+* Resultado del generador: `records=346 pdfs=346 missing=0`.
+* `public_data/auditables_346.json` responde correctamente y contiene 346 registros.
+* Un PDF de prueba en `public_pdfs/00033_Praxis_Educativa_2025.pdf` respondio `HTTP 200`.
+* La captura desktop muestra catalogo, KPIs y panel de detalle cargados.
+* La captura angosta tipo movil muestra encabezado, KPIs y acciones sin desborde visual en la primera vista.
+
+### Pruebas realizadas
+
+* Validacion sintactica de JavaScript con `node --check`.
+* Prueba HTTP local del sitio estatico.
+* Prueba HTTP local del JSON publico.
+* Prueba HTTP local de un PDF real.
+* Capturas Playwright en escritorio y vista angosta.
+
+### Errores o incidentes
+
+* El entorno no tenia navegadores de Playwright descargados; se resolvio con `npx playwright install chromium`.
+* La captura con dispositivo movil predefinido intento usar WebKit no instalado; se resolvio usando Chromium con viewport angosto.
+
+### Soluciones aplicadas
+
+* Se uso una arquitectura completamente estatica para la verificacion publica.
+* Se concentro la logica de filtros en una sola cadena de datos para que lista, detalle y resumen partan del mismo catalogo.
+* Se agrego un boton visible de reseteo global fuera del panel lateral para mejorar usabilidad.
+
+### Pendientes
+
+* Publicar o actualizar GitHub Pages del repositorio con `index.html`, `app.js`, `public_data/` y `public_pdfs/`.
+* Evaluar anonimizar los 346 PDFs antes del push final si la publicacion sera abierta.
+* Revisar si conviene agregar una portada explicita del paquete de replicacion dentro del sitio.
+
+### Riesgos
+
+* Subir los PDFs tal como estan puede exponer metadatos o nombres que luego se prefiera anonimizar.
+* El repo crecera de forma importante al incorporar `public_pdfs/`.
+* Si se actualiza la tabla fuente, el sitio debe regenerarse para no quedar desalineado.
+
+### Recomendaciones
+
+* No publicar el branch final sin antes decidir si los PDFs deben pasar por una capa de anonimizado o limpieza de metadatos.
+* Mantener `scripts/build_public_catalog.py` como paso obligatorio previo a cada despliegue.
+* Cuando se publique en Pages, verificar manualmente varios PDFs al azar desde la URL publica, no solo localmente.
+
 ## 2026-05-03 - Cierre NotebookLM y comparaciones
 
 ### Estado de cobertura

@@ -1,5 +1,6 @@
 # califica_articulos_inferenciales
 
+> **Verificador publico estatico:** GitHub Pages del mismo repositorio, con `index.html`, `app.js`, `public_data/auditables_346.json` y `public_pdfs/`.
 > **🌐 App pública:** <https://script.google.com/macros/s/AKfycby-SQDUuxxpHl2ApM3xosLbFrxAvxxyZY7yFRhU7fytgqn_NS1MO0uqq5piKcHTc1fLvg/exec>
 > _(Cualquier usuario con cuenta de Google. Identifícate como revisor al entrar; las calificaciones se guardan por nombre)._
 
@@ -11,6 +12,34 @@ del protocolo v4.1 (A, B, C) más un veredicto integral (D), y luego contrastar 
 calificación humana o de modelo con la auditoría IA base. El dashboard compara además
 las revisiones completas de **Codex/GPT**, **Gemini 2.5 Flash** y **Claude Haiku** para obtener
 medidas de **acuerdo inter-rater** (porcentaje de coincidencia + Cohen's kappa).
+
+## Dos superficies distintas
+
+### 1. Verificador publico estatico
+
+Esta es la superficie pensada para compartir evidencia verificable a terceros, incluida la revista:
+
+- no requiere Google Apps Script;
+- no requiere login;
+- expone los `346` registros auditables;
+- permite abrir y descargar cada PDF copiado al sitio;
+- muestra metadatos, veredictos IA, contraste humano y trazabilidad;
+- se alimenta desde `04_INVESTIGACION_REPO/tabla_validacion_humano_vs_ia_auditables_346.csv`.
+
+Archivos clave:
+
+- `index.html`
+- `app.js`
+- `scripts/build_public_catalog.py`
+- `scripts/anonymize_public_pdfs.py`
+- `public_data/auditables_346.json`
+- `public_pdfs/*.pdf`
+- `anonymized_pdfs/*.pdf`
+- `public_data/anonymized_pdf_manifest.csv`
+
+### 2. App privada de calificacion
+
+La Web App de Google Apps Script sigue siendo la superficie para captura y comparacion interactiva de revisores.
 
 ## Stack
 
@@ -41,9 +70,57 @@ califica_articulos_inferenciales/
 ├── docs/
 │   ├── arquitectura.md
 │   └── flujo_doble_ciego.md
+├── public_data/
+│   └── auditables_346.json                 # catalogo publico generado
+├── public_pdfs/
+│   └── *.pdf                               # 346 PDFs auditables copiados para verificacion
+├── scripts/
+│   └── build_public_catalog.py             # genera JSON y copia PDFs al sitio publico
 ├── DEPLOY.md
 └── README.md
 ```
+
+## Generar o refrescar el verificador publico
+
+Desde la raiz del repo:
+
+```bash
+python3 scripts/anonymize_public_pdfs.py
+python3 scripts/build_public_catalog.py
+python3 -m http.server 8016
+```
+
+Luego abre `http://localhost:8016/`.
+
+Resultado esperado del script:
+
+```text
+records=346 pdfs=346 missing=0
+```
+
+Si la fuente cambia, vuelve a generar antes de publicar en GitHub Pages.
+
+## Anonimizacion de PDFs
+
+El pipeline publico ya incluye una capa de anonimización reproducible.
+
+```bash
+python3 scripts/anonymize_public_pdfs.py
+```
+
+Salida principal:
+
+- `anonymized_pdfs/case_0001.pdf` ... `case_0346.pdf`
+- `public_data/anonymized_pdf_manifest.csv`
+- `public_data/anonymized_pdf_manifest.json`
+
+Criterio actual:
+
+- PDFs de varias paginas: se reemplaza la primera pagina por una portada sintetica neutra y se redaccionan bandas de encabezado/pie en paginas internas.
+- PDFs de una sola pagina: se aplica redaccion parcial de la primera pagina y quedan marcados para revision manual en el manifiesto.
+- Siempre se eliminan metadatos embebidos del PDF.
+
+`build_public_catalog.py` ahora prefiere automaticamente estas copias anonimizadas cuando el manifiesto existe.
 
 ## Variables operacionales calificadas
 
@@ -74,6 +151,15 @@ Categorías de D:
 
 Ver [DEPLOY.md](DEPLOY.md) para los pasos paso a paso. En resumen:
 
+### Sitio publico de verificacion
+
+1. Ejecutar `python3 scripts/build_public_catalog.py`.
+2. Confirmar que `public_data/auditables_346.json` y `public_pdfs/` quedaron actualizados.
+3. Subir `index.html`, `app.js`, `public_data/` y `public_pdfs/` al branch publicado.
+4. Activar GitHub Pages sobre ese branch.
+
+### App privada de Google Apps Script
+
 1. Subir `data/articulos_auditables_346.csv` a Google Drive y copiar su file ID.
 2. Crear un proyecto Apps Script vacío vinculado a tu cuenta de Google.
 3. `clasp clone <SCRIPT_ID>` o `clasp push` desde la carpeta `apps_script/`.
@@ -85,6 +171,8 @@ Ver [DEPLOY.md](DEPLOY.md) para los pasos paso a paso. En resumen:
 
 ## Privacidad y acceso
 
+- El verificador publico estatico expone PDFs y trazabilidad para replicacion.
+- Antes de publicar en abierto, ejecutar `scripts/anonymize_public_pdfs.py`; el catalogo ya enlaza preferentemente `anonymized_pdfs/`.
 - La app se despliega con `access: MYSELF` — solo tu cuenta puede entrar.
 - No se exponen los PDFs públicamente.
 - Las calificaciones se guardan en tu propio Google Sheet privado.

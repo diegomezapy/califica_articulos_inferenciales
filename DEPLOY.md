@@ -2,6 +2,58 @@
 
 Pasos para tener la app funcionando desde cero, sincronizada con este repo de GitHub.
 
+## 0. Sitio publico de verificacion para la revista
+
+Antes de pensar en Apps Script, el repositorio ya puede publicar un sitio estatico con los `346` casos y sus PDFs.
+
+### Generacion
+
+Desde la raiz del repo:
+
+```bash
+python3 scripts/anonymize_public_pdfs.py
+python3 scripts/build_public_catalog.py
+```
+
+Salida esperada:
+
+```text
+records=346 pdfs=346 missing=0
+```
+
+Esto genera:
+
+- `public_data/auditables_346.json`
+- `public_pdfs/*.pdf`
+- `anonymized_pdfs/*.pdf`
+- `public_data/anonymized_pdf_manifest.csv`
+
+Si el manifiesto de anonimización existe, el catalogo publico usa esos PDFs anonimizados como destino visible del visor.
+
+### Prueba local
+
+```bash
+python3 -m http.server 8016
+```
+
+Abrir:
+
+```text
+http://localhost:8016/
+```
+
+### Publicacion en GitHub Pages
+
+1. Confirmar que `index.html`, `app.js`, `public_data/` y `public_pdfs/` quedaron actualizados.
+2. Hacer commit y push del branch correspondiente.
+3. En GitHub: `Settings -> Pages`.
+4. Publicar desde `main` y `/root`, o desde el branch que uses para Pages.
+5. Verificar en la URL publica que:
+   - cargan `346` casos;
+   - cargan `346` PDFs publicos;
+   - `0` faltantes;
+   - se puede abrir al menos un PDF.
+
 ## 1. Pre-requisitos
 
 - Cuenta de Google con la carpeta de Drive de los 346 PDFs ya accesible.
